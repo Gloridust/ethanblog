@@ -13,10 +13,14 @@ export function getAllPosts(): Post[] {
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const matterResult = matter(fileContents)
 
+    // Convert tags string to array
+    const tags = matterResult.data.tags ? matterResult.data.tags.split(' ') : []
+
     return {
       slug,
-      ...(matterResult.data as Omit<Post, 'slug'>),
-    }
+      ...matterResult.data,
+      tags,
+    } as Post
   })
 
   return allPostsData.sort((a, b) => {

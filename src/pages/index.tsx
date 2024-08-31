@@ -29,8 +29,10 @@ export default function Home({ posts, allTags }: HomeProps) {
         <title>Ethan Zou's Blog</title>
         <meta name="description" content="Personal blog of Ethan Zou" />
       </Head>
-      <Profile />
-      <TagFilter tags={allTags} onFilterChange={handleFilterChange} />
+      <div className="max-w-4xl mx-auto">
+        <Profile />
+        <TagFilter tags={allTags} onFilterChange={handleFilterChange} />
+      </div>
       <PostGrid posts={filteredPosts} />
     </Layout>
   )

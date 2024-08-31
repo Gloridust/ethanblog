@@ -15,21 +15,20 @@ const TagFilter: React.FC<TagFilterProps> = ({ tags, onFilterChange }) => {
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-bold mb-4">Filter by Tag</h2>
       <div className="flex flex-wrap gap-2">
         <button
-          className={`px-3 py-1 rounded-full ${
-            activeTag === 'All' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+            activeTag === 'All' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
           onClick={() => handleTagClick('All')}
         >
-          All
+          全部
         </button>
         {tags.map((tag) => (
           <button
             key={tag}
-            className={`px-3 py-1 rounded-full ${
-              activeTag === tag ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+              activeTag === tag ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
             onClick={() => handleTagClick(tag)}
           >

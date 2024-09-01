@@ -18,6 +18,7 @@ const config: Config = {
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/typography'),
   ],
 };
 

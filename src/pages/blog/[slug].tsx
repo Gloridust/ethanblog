@@ -1,5 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Head from 'next/head'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import Layout from '@/components/Layout'
 import { getAllPosts, getPostData } from '@/lib/posts'
 import { Post } from '@/types'
@@ -31,10 +33,14 @@ export default function PostPage({ postData }: PostPageProps) {
         <title>{postData.title}</title>
         <meta name="description" content={postData.describe} />
       </Head>
-      <article className="max-w-2xl mx-auto mt-8">
-        <h1 className="text-3xl font-bold mb-4">{postData.title}</h1>
+      <article className="max-w-3xl mx-auto mt-8 px-4">
+        <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
         <p className="text-gray-500 mb-4">{t.postedOn}: {postData.date}</p>
-        <div className="prose dark:prose-dark" dangerouslySetInnerHTML={{ __html: postData.content }} />
+        <div className="prose dark:prose-dark max-w-none">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {postData.content}
+          </ReactMarkdown>
+        </div>
       </article>
     </Layout>
   )

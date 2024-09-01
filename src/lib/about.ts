@@ -1,15 +1,15 @@
-import fs from 'fs/promises'
+import fs from 'fs'
 import path from 'path'
 
-const aboutDirectory = path.join(process.cwd(), 'src/content/about')
+const contentDirectory = path.join(process.cwd(), 'src/content')
 
-export async function getAboutContent(locale: string): Promise<string> {
-  const fullPath = path.join(aboutDirectory, `${locale}.md`)
+export function getAboutContent(locale: string): string {
+  const fullPath = path.join(contentDirectory, locale, 'about.md')
   try {
-    const content = await fs.readFile(fullPath, 'utf8')
-    return content
+    const fileContents = fs.readFileSync(fullPath, 'utf8')
+    return fileContents
   } catch (error) {
     console.error(`Error reading about content for locale ${locale}:`, error)
-    return ''
+    return `# About content not found\n\nSorry, the about content for ${locale} is not available.`
   }
 }

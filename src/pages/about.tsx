@@ -1,5 +1,6 @@
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Layout from '@/components/Layout'
@@ -18,12 +19,27 @@ export default function AboutPage({ content }: AboutPageProps) {
       <Head>
         <title>{t.aboutTitle}</title>
       </Head>
-      <div className="max-w-3xl mx-auto mt-8 px-4">
-        <h1 className="text-4xl font-bold mb-8">{t.aboutTitle}</h1>
-        <div className="prose dark:prose-dark max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {content}
-          </ReactMarkdown>
+      <div className="max-w-4xl mx-auto mt-12 px-4">
+        <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+          <div className="relative h-64 sm:h-80 md:h-96">
+            <Image
+              src="/images/about-banner.jpg"
+              alt="About Me Banner"
+              layout="fill"
+              objectFit="cover"
+              priority
+            />
+          </div>
+          <div className="p-8">
+            <h1 className="text-4xl font-bold mb-6 text-center text-gray-900 dark:text-white">
+              {t.aboutTitle}
+            </h1>
+            <div className="prose dark:prose-dark max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {content}
+              </ReactMarkdown>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>
@@ -31,7 +47,7 @@ export default function AboutPage({ content }: AboutPageProps) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const content = await getAboutContent(locale || 'zh')
+  const content = getAboutContent(locale || 'en')
   return {
     props: {
       content,

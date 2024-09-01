@@ -34,9 +34,9 @@ export default function PostPage({ postData }: PostPageProps) {
         <meta name="description" content={postData.describe} />
       </Head>
       <article className="max-w-3xl mx-auto mt-8 px-4">
-        <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
-        <p className="text-gray-500 mb-4">{t.postedOn}: {postData.date}</p>
-        <div className="prose dark:prose-dark max-w-none">
+        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{postData.title}</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">{t.postedOn}: {postData.date}</p>
+        <div className="prose dark:prose-dark">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {postData.content}
           </ReactMarkdown>

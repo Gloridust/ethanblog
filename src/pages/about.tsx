@@ -31,10 +31,10 @@ export default function AboutPage({ content }: AboutPageProps) {
             />
           </div>
           <div className="p-8">
-            <h1 className="text-4xl font-bold mb-6 text-center text-gray-900 dark:text-white">
+            <h1 className="text-4xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
               {t.aboutTitle}
             </h1>
-            <div className="prose dark:prose-dark max-w-none">
+            <div className="prose dark:prose-dark">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {content}
               </ReactMarkdown>

@@ -52,23 +52,32 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
 export const getStaticProps: GetStaticProps = async () => {
   const friends = [
     {
-      name: "江村暮ReneWang",
-      avatar: "/images/friends/renewang.png",
+      name: "Rene Wang",
+      avatar: "/images/friends/ReneWang.png",
       description: {
         zh: "全栈开发大佬，天才少年，...",
         en: "Full-stack developer, genius, ..."
       },
-      link: "https://example.com/renewang"
+      link: "https://rene.wang"
     },
     {
-      name: "CharlesSu",
-      avatar: "/images/friends/charlessu.png",
+      name: "Charles Su",
+      avatar: "/images/friends/CharlesSu.jpg",
       description: {
         zh: "乐于折腾，擅长刷机、黑苹果...",
         en: "Tech enthusiast, expert in custom ROMs, Hackintosh..."
       },
-      link: "https://example.com/charlessu"
+      link: "https://charles.su"
     },
+    {
+        name: "YGeeker",
+        avatar: "/images/friends/YGeeker.png",
+        description: {
+          zh: "创业公司，我在此担任联合创始人",
+          en: "Start-up company. I serve as a co-founder here. "
+        },
+        link: "https://ygeeker.com"
+      },
     // 添加更多朋友...
   ]
 

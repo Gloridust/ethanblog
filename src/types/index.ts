@@ -5,4 +5,6 @@ export interface Post {
   tags: string[] | string;
   img: string;
   describe: string;
+  language: string;
+  content: string;
 }

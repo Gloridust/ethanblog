@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Layout from '@/components/Layout'
 import Profile from '@/components/Profile'
 import TagFilter from '@/components/TagFilter'
 import PostGrid from '@/components/PostGrid'
-import { getAllPosts } from '@/lib/posts'
+import { getPostsByLanguage } from '@/lib/posts'
 import { Post } from '@/types'
+import useTranslation from '@/hooks/useTranslation'
 
 interface HomeProps {
   posts: Post[]
@@ -13,34 +15,40 @@ interface HomeProps {
 }
 
 export default function Home({ posts, allTags }: HomeProps) {
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts)
+  const { t } = useTranslation()
+  const [activeTag, setActiveTag] = useState<string>('All')
+
+  const filteredPosts = useMemo(() => {
+    if (activeTag === 'All') {
+      return posts
+    }
+    return posts.filter((post) => post.tags.includes(activeTag))
+  }, [posts, activeTag])
 
   const handleFilterChange = (tag: string) => {
-    if (tag === 'All') {
-      setFilteredPosts(posts)
-    } else {
-      setFilteredPosts(posts.filter((post) => post.tags.includes(tag)))
-    }
+    setActiveTag(tag)
   }
 
   return (
     <Layout>
       <Head>
-        <title>Ethan Zou's Blog</title>
-        <meta name="description" content="Personal blog of Ethan Zou" />
+        <title>{t.blogTitle}</title>
+        <meta name="description" content={t.bio} />
       </Head>
       <div className="max-w-4xl mx-auto">
         <Profile />
-        <TagFilter tags={allTags} onFilterChange={handleFilterChange} />
+        <TagFilter tags={['All', ...allTags]} activeTag={activeTag} onFilterChange={handleFilterChange} />
       </div>
       <PostGrid posts={filteredPosts} />
     </Layout>
   )
 }
 
-export async function getStaticProps() {
-  const posts = getAllPosts()
+export const getStaticProps: GetStaticProps<HomeProps> = async (context) => {
+  const locale = context.locale || 'zh' // Provide a default value
+  const posts = getPostsByLanguage(locale)
   const allTags = Array.from(new Set(posts.flatMap((post) => post.tags)))
+  
   return {
     props: {
       posts,

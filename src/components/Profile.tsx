@@ -1,7 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
+import useTranslation from '../hooks/useTranslation'
 
 const Profile: React.FC = () => {
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col items-center text-center mb-12">
       <div className="w-32 h-32 relative mb-4 ring-4 ring-blue-500 dark:ring-blue-400 rounded-full">
@@ -13,8 +16,8 @@ const Profile: React.FC = () => {
           objectFit="cover"
         />
       </div>
-      <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Ethan Zou (Gloridust)</h1>
-      <p className="text-gray-600 dark:text-gray-300 mb-4 max-w-2xl">Chinese/English/Français (learning) | Big data major trainee | Learning React/NextJS, Flutter/Python, Machine Learning and big data | Co-founder of YGeeker</p>
+      <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">{t.name}</h1>
+      <p className="text-gray-600 dark:text-gray-300 mb-4 max-w-2xl">{t.bio}</p>
       <div className="flex justify-center space-x-4">
         <a href="mailto:contact@gloridust.xyz" aria-label="Email" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200" target="_blank" rel="noopener noreferrer">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

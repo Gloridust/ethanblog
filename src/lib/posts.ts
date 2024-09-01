@@ -5,42 +5,49 @@ import { Post } from '@/types'
 
 const postsDirectory = path.join(process.cwd(), 'src/posts')
 
+function formatDate(dateString: string | undefined): string {
+  if (!dateString) return ''
+  try {
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) {
+      console.warn(`Invalid date: ${dateString}`)
+      return ''
+    }
+    // Use the local timezone when formatting the date
+    return date.toLocaleDateString('en-CA') // 'en-CA' uses YYYY-MM-DD format
+  } catch (error) {
+    console.error(`Error parsing date: ${dateString}`, error)
+    return ''
+  }
+}
+
 export function getAllPosts(): Post[] {
   const fileNames = fs.readdirSync(postsDirectory)
   const allPostsData = fileNames
-    .filter(fileName => fileName.endsWith('.md')) // Only process markdown files
+    .filter(fileName => fileName.endsWith('.md'))
     .map((fileName) => {
       const slug = fileName.replace(/\.md$/, '')
       const fullPath = path.join(postsDirectory, fileName)
       const fileContents = fs.readFileSync(fullPath, 'utf8')
       const matterResult = matter(fileContents)
 
-      // Convert tags string to array
       const tags = matterResult.data.tags ? matterResult.data.tags.split(' ') : []
 
-      // Ensure all required fields are present
       const post: Post = {
         slug,
         title: matterResult.data.title || '',
-        date: matterResult.data.date || '',
+        date: formatDate(matterResult.data.date),
         tags,
         img: matterResult.data.img || '',
         describe: matterResult.data.describe || '',
-        language: matterResult.data.language || 'zh', // Default to Chinese if not specified
+        language: matterResult.data.language || 'zh',
         content: matterResult.content
       }
 
       return post
     })
 
-  // Sort posts by date
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1
-    } else {
-      return -1
-    }
-  })
+  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1))
 }
 
 export function getPostsByLanguage(language: string): Post[] {
@@ -63,7 +70,7 @@ export function getPostData(slug: string, language: string): Post | undefined {
   const post: Post = {
     slug,
     title: matterResult.data.title || '',
-    date: matterResult.data.date || '',
+    date: formatDate(matterResult.data.date),
     tags,
     img: matterResult.data.img || '',
     describe: matterResult.data.describe || '',

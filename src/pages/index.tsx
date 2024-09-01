@@ -45,7 +45,7 @@ export default function Home({ posts, allTags }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async (context) => {
-  const locale = context.locale || 'zh' // Provide a default value
+  const locale = context.locale || 'zh'
   const posts = getPostsByLanguage(locale)
   const allTags = Array.from(new Set(posts.flatMap((post) => post.tags)))
   

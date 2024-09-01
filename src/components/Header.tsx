@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import useTranslation from '../hooks/useTranslation'
+import { useRouter } from 'next/router'
+import useTranslation from '@/hooks/useTranslation'
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const languageDropdownRef = useRef<HTMLDivElement>(null);
   const { t, locale, setLocale } = useTranslation()
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +17,23 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+        setIsLanguageDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleLanguageChange = (newLocale: string) => {
+    setLocale(newLocale);
+    setIsLanguageDropdownOpen(false);
+  };
 
   return (
     <header className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-5xl transition-all duration-300 ${isScrolled ? 'top-2' : 'top-4'}`}>
@@ -29,14 +50,32 @@ const Header: React.FC = () => {
             <li><Link href="/about" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t.about}</Link></li>
             <li><Link href="/friends" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t.friends}</Link></li>
             <li>
-              <select 
-                className="bg-gray-100 dark:bg-gray-700 border-none rounded-full px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200"
-                value={locale}
-                onChange={(e) => setLocale(e.target.value)}
-              >
-                <option value="zh">中文</option>
-                <option value="en">English</option>
-              </select>
+              <div className="relative" ref={languageDropdownRef}>
+                <button
+                  onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                  className="bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200"
+                >
+                  {t.language}
+                </button>
+                {isLanguageDropdownOpen && (
+                  <div className="absolute right-0 mt-2 py-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-xl z-20">
+                    <a
+                      href="#"
+                      onClick={() => handleLanguageChange('zh')}
+                      className={`block px-4 py-2 text-sm ${locale === 'zh' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'} hover:bg-gray-100 dark:hover:bg-gray-700`}
+                    >
+                      中文
+                    </a>
+                    <a
+                      href="#"
+                      onClick={() => handleLanguageChange('en')}
+                      className={`block px-4 py-2 text-sm ${locale === 'en' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'} hover:bg-gray-100 dark:hover:bg-gray-700`}
+                    >
+                      English
+                    </a>
+                  </div>
+                )}
+              </div>
             </li>
           </ul>
         </nav>

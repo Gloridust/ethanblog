@@ -27,8 +27,8 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {friends.map((friend) => (
           <a href={friend.link} key={friend.name} target="_blank" rel="noopener noreferrer" className="block">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 flex items-center">
-              <div className="w-16 h-16 relative mr-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 flex items-center h-32">
+              <div className="w-20 h-20 relative flex-shrink-0 mr-4">
                 <Image 
                   src={friend.avatar} 
                   alt={friend.name} 
@@ -37,9 +37,11 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
                   objectFit="cover"
                 />
               </div>
-              <div>
-                <h2 className="text-xl font-semibold mb-1">{friend.name}</h2>
-                <p className="text-gray-600 dark:text-gray-300">{friend.description[locale as 'zh' | 'en']}</p>
+              <div className="overflow-hidden">
+                <h2 className="text-xl font-semibold mb-1 truncate">{friend.name}</h2>
+                <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
+                  {friend.description[locale as 'zh' | 'en']}
+                </p>
               </div>
             </div>
           </a>
@@ -70,14 +72,14 @@ export const getStaticProps: GetStaticProps = async () => {
       link: "https://charles.su"
     },
     {
-        name: "YGeeker",
-        avatar: "/images/friends/YGeeker.png",
-        description: {
-          zh: "创业公司，我在此担任联合创始人",
-          en: "Start-up company. I serve as a co-founder here. "
-        },
-        link: "https://ygeeker.com"
+      name: "YGeeker",
+      avatar: "/images/friends/YGeeker.png",
+      description: {
+        zh: "创业公司，我在此担任联合创始人",
+        en: "Start-up company. I serve as a co-founder here. "
       },
+      link: "https://ygeeker.com"
+    },
     // 添加更多朋友...
   ]
 

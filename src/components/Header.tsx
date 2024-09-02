@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import useTranslation from '@/hooks/useTranslation'
 
 const Header: React.FC = () => {
@@ -8,7 +7,6 @@ const Header: React.FC = () => {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const languageDropdownRef = useRef<HTMLDivElement>(null);
   const { t, locale, setLocale } = useTranslation()
-  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {

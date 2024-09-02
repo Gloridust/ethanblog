@@ -1,4 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -12,7 +13,12 @@ interface PostPageProps {
 }
 
 export default function PostPage({ postData }: PostPageProps) {
+  const router = useRouter()
   const { t } = useTranslation()
+
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
 
   if (!postData) {
     return (
@@ -59,7 +65,7 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
 
   return {
     paths,
-    fallback: 'blocking'
+    fallback: true
   }
 }
 

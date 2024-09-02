@@ -37,9 +37,3 @@ Monk只是Apple团队的一个缩影。Apple对教育的支持以及知识付费
 
 
 写完这些，我也要迫不及待地体验SwiftPlayground了。希望我们有一天也能在AppleStore的课堂上相见。  
-
-
-<video width="70%" controls>
-  <source src="/images/posts/2023-06-10/drawpic1.mp4" type="video/mp4">
-您的浏览器不支持 video 标签。
-</video>

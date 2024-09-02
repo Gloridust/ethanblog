@@ -27,8 +27,6 @@ describe: 本文适合黑苹果毫无了解的小白。本文转载已经原作�
 
 参考 [笔记本](https://github.com/daliansky/Hackintosh) [台式机](https://macx.top/18202.html)
 
-
-
 **文章会用到的表达方式**:
 
 一、搜索 **XXX+中文(括号内是英文，在谷歌搜)**

@@ -1,10 +1,9 @@
 ---
 title: 转载:黑苹果指南
-tags: 转载 黑苹果 折腾
+tags: 转载 黑苹果 技术
 img: /images/posts/2022-09-17/images.png
 date: 2022-9-17
 categories: 技术
-layout: post
 author: CharlesSu
 describe: 本文适合黑苹果毫无了解的小白。本文转载已经原作者@CharlesSu同意，如二次转载请联系作者并标明出处。文章封面来源于网络。  
 ---

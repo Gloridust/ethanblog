@@ -1,9 +1,7 @@
 ---
 title: 因为找不到压缩包密码做了一款密码破解软件：EasyZipDecryptor
-tags: Python 干货
-layout: post
-date: 2023-08-03 16:30:00
-categories: 技术
+tags: 技术
+date: 2023-08-03
 img: /images/posts/2023-08-03/cover.png
 describe: 今天在网络上下载了一个没有提供密码的压缩包，于是，我尝试用Python开发了一款密码破解脚本...
 ---

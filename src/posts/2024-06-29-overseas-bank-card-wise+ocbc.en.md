@@ -1,9 +1,7 @@
 ---
 title: Apply and Fund a Foreign Card, OCBC Physical Card + Wise Virtual Card, No Address Proof, No Income Proof Required  
-tags: Foreign Card Guide  
-layout: post  
+tags:  Experience 
 date: 2024-6-29  
-categories: Life  
 img: /images/posts/2024-06-29/cover.jpg  
 describe: A tutorial for mainland China residents on how to apply for a foreign bank card, OCBC physical card + Wise virtual card, without address proof or income proof, and how to fund it.
 language: en

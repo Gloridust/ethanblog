@@ -1,9 +1,7 @@
 ---
 title: 我和云极客，还有ClipMemo
-tags: 云极客 ClipMemo
-layout: post
-date: 2023-09-19 12:30:00
-categories: 工作
+tags: YGeeker 随笔
+date: 2023-09-19
 img: /images/posts/2023-09-19/cover.png
 describe: 这是一个关于我和云极客团队的故事，还有我们今天正式发布的ClipMemo...
 ---

@@ -1,9 +1,7 @@
 ---
 title: 我不想写 README_en ,所以我写了一个 README_en 自动生成软件：ReadmeTranslator
-tags: Python
-layout: post
-date: 2023-10-08 12:30:00
-categories: 技术
+tags: 技术
+date: 2023-10-08
 img: /images/posts/2023-10-08/cover.png
 describe: 也许，我们不应该把大量的精力放在写文档上面，而是集中精力在开发上面。也许，我们不必每次再写一次英文README文件...
 ---

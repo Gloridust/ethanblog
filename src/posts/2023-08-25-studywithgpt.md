@@ -1,9 +1,7 @@
 ---
 title: 解决编程自学痛点：配合 GPT 类大模型高效学习
-tags: ChatGPT 干货
-layout: post
-date: 2023-08-25 01:30:00
-categories: 技术
+tags: 经验
+date: 2023-08-25
 img: /images/posts/2023-08-25/cover.png
 describe: ChatGPT 这类大模型对于处理普通问题应该是十分在行的，它们有问必答，随时问随时答，写错了它还能帮你修改，还不会吐槽我代码写得烂....
 ---

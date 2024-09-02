@@ -1,11 +1,9 @@
 ---
-title: 如何经营一个文案馆？频道+网页  
-tags: 前端 干货 CloudFlare 域名
-layout: post
+title: 如何创建一个网络文案馆？频道+网页  
+tags: 技术
 date: 2022-1-24
-categories: 技术
 img: /images/posts/2022-01-24/3762306_a9d119d0_1200_2482_418@1080x485.jpeg
-# describe: 如何经营一个文案馆？频道+网页
+describe: 如何经营一个文案馆？频道+网页。我能不能也开一家文案馆呢？(正好把我写了一年的网抑云小本本拿出来用)
 ---
 
 ![image.png](/images/posts/2022-01-24/3762306_a9d119d0_1200_2482_418@1080x485.jpeg)  

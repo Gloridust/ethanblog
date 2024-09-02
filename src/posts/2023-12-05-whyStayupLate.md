@@ -1,9 +1,7 @@
 ---
 title: 天亮了，时间就不属于我们了
-tags: 人生 成长
-layout: post
+tags: 随笔
 date: 2023-12-05
-categories: 生活
 img: /images/posts/2023-12-05/cover.jpg
 describe: 早上是一天的的开始，却不是生活的开始。白昼解不开的结，黑夜慢慢耗。天亮了，时间久不属于我们了。
 ---

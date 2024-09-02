@@ -1,9 +1,7 @@
 ---
 title: 不再忙于统计文档提交情况！写个程序一键统计出结果
-tags: Python 干货
-layout: post
+tags: 技术
 date: 2024-2-10
-categories: 技术
 img: /images/posts/2024-02-10/cover.png
 describe:  现在，你可以使用这个程序来大幅度减轻工作量...
 ---

@@ -1,9 +1,7 @@
 ---
 title: Commit2023：2024的元旦和5部电影
-tags: 人生 成长
-layout: post
+tags: 随笔
 date: 2024-1-9
-categories: 生活
 img: /images/posts/2024-01-01/cover.jpg
 describe: 一个平淡无奇的元旦，然后看了几部电影...
 ---

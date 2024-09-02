@@ -1,9 +1,7 @@
 ---
-layout: post
 title: 永远的我们：致第五届校团委宣传部
-date: 2022-10-23 11:03:44
-categories: 工作
-tags: 学校 校团委 学生会 宣传部
+date: 2022-10-23
+tags: 随笔
 img: /images/posts/2022-10-23/us_forever.png
 ---
 

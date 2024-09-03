@@ -66,7 +66,8 @@ const Layout: React.FC<LayoutProps> = ({
         {date && <meta name="date" content={date} />}
       </Head>
       <Header />
-      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
+      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl pt-24">
+        {/* Added pt-24 class to create space for the fixed header */}
         {children}
       </main>
       <Footer />

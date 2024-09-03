@@ -13,7 +13,6 @@ function formatDate(dateString: string | undefined): string {
       console.warn(`Invalid date: ${dateString}`)
       return ''
     }
-    // Use the local timezone when formatting the date
     return date.toLocaleDateString('en-CA') // 'en-CA' uses YYYY-MM-DD format
   } catch (error) {
     console.error(`Error parsing date: ${dateString}`, error)
@@ -98,5 +97,5 @@ export function getAllTags(): string[] {
 
 export function getPostsByTag(tag: string, language: string): Post[] {
   const posts = getPostsByLanguage(language)
-  return posts.filter(post => post.tags.includes(tag))
+  return posts.filter(post => Array.isArray(post.tags) && post.tags.includes(tag))
 }

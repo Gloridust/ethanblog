@@ -1,6 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Layout from '@/components/Layout'
@@ -22,10 +21,7 @@ export default function PostPage({ postData }: PostPageProps) {
 
   if (!postData) {
     return (
-      <Layout>
-        <Head>
-          <title>{t.postNotFound}</title>
-        </Head>
+      <Layout title={t.postNotFound}>
         <div className="text-center mt-8">
           <h1 className="text-2xl font-bold">{t.postNotFound}</h1>
         </div>
@@ -33,12 +29,17 @@ export default function PostPage({ postData }: PostPageProps) {
     )
   }
 
+  const metadata = {
+    title: postData.title,
+    description: postData.describe || postData.content.slice(0, 160),
+    keywords: Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags,
+    image: postData.img || 'https://gloridust.xyz/default-post-image.jpg',
+    date: postData.date,
+    type: 'article' as const
+  }
+
   return (
-    <Layout>
-      <Head>
-        <title>{postData.title}</title>
-        <meta name="description" content={postData.describe} />
-      </Head>
+    <Layout {...metadata}>
       <article className="max-w-3xl mx-auto mt-8 px-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{postData.title}</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-4">{t.postedOn}: {postData.date}</p>
@@ -54,7 +55,7 @@ export default function PostPage({ postData }: PostPageProps) {
 
 export const getStaticPaths: GetStaticPaths = async (context) => {
   const posts = getAllPosts()
-  const locales = context.locales || ['zh'] // Provide a default value
+  const locales = context.locales || ['zh']
 
   const paths = locales.flatMap((locale) => 
     posts.map((post) => ({

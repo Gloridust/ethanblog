@@ -2,7 +2,7 @@
 title: 申请并入金境外卡,OCBC实体卡+Wise虚拟卡,无地址证明、无收入证明
 tags: 经验
 date: 2024-6-29  
-img: /images/posts/2024-06-29/cover.jpg
+img: /images/posts/2024-06-29/cover.png
 describe:  大陆居民，一篇教程教会你无地址证明、无收入证明申请境外银行卡,OCBC实体卡+Wise虚拟卡，附带入金方式。
 ---
 

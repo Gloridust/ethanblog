@@ -80,6 +80,15 @@ export const getStaticProps: GetStaticProps = async () => {
       },
       link: "https://ygeeker.com"
     },
+    {
+      name: "Apply links",
+      avatar: "/images/friends/github.ico",
+      description: {
+        zh: "点击此处申请友链",
+        en: "Click here to apply friend-links"
+      },
+      link: "https://github.com/Gloridust/ethanblog/issues/1"
+    },
     // 添加更多朋友...
   ]
 

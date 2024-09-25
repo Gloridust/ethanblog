@@ -45,8 +45,8 @@ Google Search 不必多说，是绝对的业界标杆，是最优雅的搜索引
 
 而 inSearch 得益于 React/NextJS 的组件化编写，代码可读性很高，维护和更新也十分方便。语言和技术栈上也体现了一些技术进步：TS, React, NextJS, Workers...这些都是帮助我创造 inSearch 的必要得力工具。
 
-![inSearch-github](/images/posts/2024-09-25/inSearch-github.jpg)
+![inSearch-github](/images/posts/2024-09-25/insearch-github.jpg)
 
-![inSearch-language](/images/posts/2024-09-25/inSearch-language.jpg)
+![inSearch-language](/images/posts/2024-09-25/insearch-language.jpg)
 
 我一直以为四年间我没什么进步，但对比这两个项目，我已经很好了。我现在已经把它作为日常搜索引擎使用了。它非常优雅、体面，你一定会爱上它。

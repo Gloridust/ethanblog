@@ -2,7 +2,7 @@
 title: My Four Years of Frontend Career, Obsession with Search Engines
 tags: Essay
 date: 2024-9-25  
-img: /images/posts/2024-09-25/insearch-webui.jpg
+img: /images/posts/2024-09-25/inSearch-webui.jpg
 describe: From Gleandu to inSearch, my four years of frontend career have always been obsessed with search engines.
 language: en
 ---

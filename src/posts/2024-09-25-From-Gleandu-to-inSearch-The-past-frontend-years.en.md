@@ -4,6 +4,7 @@ tags: Essay
 date: 2024-8-28  
 img: /images/posts/2024-09-25/insearch-webui.jpg
 describe: From Gleandu to inSearch, my four years of frontend career have always been obsessed with search engines.
+language: en
 ---
 Time flies, and it has been four years since I started my journey as a frontend developer. From my first independent frontend project "Gleandu" to my latest project "inSearch," all of them revolve around search engines. It seems that I have always had an obsession with search engines throughout my career: **I am not satisfied with the existing search engine experience and want to bring the ultimate search experience to everyone.**
 

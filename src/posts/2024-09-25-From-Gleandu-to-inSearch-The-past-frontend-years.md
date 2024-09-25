@@ -1,7 +1,7 @@
 ---
 title: 对搜索引擎的偏执与我的四年前端生涯
 tags: 随笔
-date: 2024-8-28  
+date: 2024-9-25  
 img: /images/posts/2024-09-25/insearch-webui.jpg
 describe: 从 Gleandu 到 inSearch，我的四年前端生涯从始至终都对搜索引擎有一种偏执。
 ---

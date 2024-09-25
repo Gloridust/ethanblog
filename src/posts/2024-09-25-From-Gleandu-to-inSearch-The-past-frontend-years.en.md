@@ -46,8 +46,8 @@ I have to mention the relevant technologies used in these projects. When I built
 
 On the other hand, inSearch, thanks to the component-based development of React/NextJS, has highly readable code, making maintenance and updates much easier. The choice of languages and technology stacks also reflects some technological progress: TypeScript, React, NextJS, Workers... These are the powerful tools that helped me create inSearch.
 
-![inSearch-github](/images/posts/2024-09-25/inSearch-github.jpg)
+![inSearch-github](/images/posts/2024-09-25/insearch-github.jpg)
 
-![inSearch-language](/images/posts/2024-09-25/inSearch-language.jpg)
+![inSearch-language](/images/posts/2024-09-25/insearch-language.jpg)
 
 I used to think that I hadn't made much progress in the past four years, but comparing these two projects, I can see that I have come a long way. I now use inSearch as my daily search engine. It is elegant and decent, and I'm sure you will love it.

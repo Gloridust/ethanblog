@@ -52,44 +52,44 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const friends = [
+  const friends = 
+  [
     {
-      name: "Rene Wang",
-      avatar: "/images/friends/ReneWang.png",
-      description: {
-        zh: "全栈开发大佬，天才少年，...",
-        en: "Full-stack developer, genius, ..."
+      "name": "Rene Wang",
+      "avatar": "/images/friends/ReneWang.png",
+      "description": {
+        "zh": "全栈开发大佬，天才少年，...",
+        "en": "Full-stack developer, genius, ..."
       },
-      link: "https://rene.wang"
+      "link": "https://rene.wang"
     },
     {
-      name: "Charles Su",
-      avatar: "/images/friends/CharlesSu.jpg",
-      description: {
-        zh: "乐于折腾，擅长刷机、黑苹果...",
-        en: "Tech enthusiast, expert in custom ROMs, Hackintosh..."
+      "name": "Charles Su",
+      "avatar": "/images/friends/CharlesSu.jpg",
+      "description": {
+        "zh": "乐于折腾，擅长刷机、黑苹果...",
+        "en": "Tech enthusiast, expert in custom ROMs, Hackintosh..."
       },
-      link: "https://charles.su"
+      "link": "https://charles.su"
     },
     {
-      name: "YGeeker",
-      avatar: "/images/friends/YGeeker.png",
-      description: {
-        zh: "创业公司，我在此担任联合创始人",
-        en: "Start-up company. I serve as a co-founder here. "
+      "name": "YGeeker",
+      "avatar": "/images/friends/YGeeker.png",
+      "description": {
+        "zh": "创业公司，我在此担任联合创始人",
+        "en": "Start-up company. I serve as a co-founder here."
       },
-      link: "https://ygeeker.com"
+      "link": "https://ygeeker.com"
     },
     {
-      name: "Apply links",
-      avatar: "/images/friends/github.ico",
-      description: {
-        zh: "点击此处申请友链",
-        en: "Click here to apply friend-links"
+      "name": "Apply links",
+      "avatar": "/images/friends/github.ico",
+      "description": {
+        "zh": "点击此处申请友链",
+        "en": "Click here to apply friend-links"
       },
-      link: "https://github.com/Gloridust/ethanblog/issues/1"
-    },
-    // 添加更多朋友...
+      "link": "https://github.com/Gloridust/ethanblog/issues/1"
+    }
   ]
 
   return {

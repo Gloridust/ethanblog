@@ -53,31 +53,31 @@ The Friends page is written in JSON format within a TSX file: [src/pages/friends
 ```json
 [
     {
-      name: "Rene Wang",
-      avatar: "/images/friends/ReneWang.png",
-      description: {
-        zh: "全栈开发大佬，天才少年，...",
-        en: "Full-stack developer, genius, ..."
+      "name": "Rene Wang",
+      "avatar": "/images/friends/ReneWang.png",
+      "description": {
+        "zh": "全栈开发大佬，天才少年，...",
+        "en": "Full-stack developer, genius, ..."
       },
-      link: "https://rene.wang"
+      "link": "https://rene.wang"
     },
     {
-      name: "Charles Su",
-      avatar: "/images/friends/CharlesSu.jpg",
-      description: {
-        zh: "乐于折腾，擅长刷机、黑苹果...",
-        en: "Tech enthusiast, expert in custom ROMs, Hackintosh..."
+      "name": "Charles Su",
+      "avatar": "/images/friends/CharlesSu.jpg",
+      "description": {
+        "zh": "乐于折腾，擅长刷机、黑苹果...",
+        "en": "Tech enthusiast, expert in custom ROMs, Hackintosh..."
       },
-      link: "https://charles.su"
+      "link": "https://charles.su"
     },
     {
-      name: "YGeeker",
-      avatar: "/images/friends/YGeeker.png",
-      description: {
-        zh: "创业公司，我在此担任联合创始人",
-        en: "Start-up company. I serve as a co-founder here. "
+      "name": "YGeeker",
+      "avatar": "/images/friends/YGeeker.png",
+      "description": {
+        "zh": "创业公司，我在此担任联合创始人",
+        "en": "Start-up company. I serve as a co-founder here."
       },
-      link: "https://ygeeker.com"
+      "link": "https://ygeeker.com"
     },
 ]
 ```

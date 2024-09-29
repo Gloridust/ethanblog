@@ -81,3 +81,36 @@ language: en
     },
 ]
 ```
+
+## 调试
+
+0. 该博客使用 yarn 管理包，如果你没有 yarn，请先下载。
+
+1. Fork 该仓库，并克隆到本地：
+
+```bash
+git clone https://github.com/Gloridust/ethanblog.git
+cd ./ethanblog
+```
+
+2. 初始化项目，下载所需依赖包：
+
+```bash
+yarn
+```
+
+3. 开始调试
+
+```bash
+yarn dev
+```
+
+此时，你可以在 `localhost:3000` 或其它可用端口调试该博客。
+
+## 部署
+
+我们建议使用 [Vercel](https://vercel.com/new/) 一键部署。
+
+## 开源与贡献
+
+该项目采用 MIT 开源协议，并且欢迎所以 issue 和 PR，共同将这个项目变得更好！

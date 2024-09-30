@@ -37,6 +37,15 @@ language: en
 
 中文文章可不填写 `language`，但英文文章必须填写 `language:en`，才能被正常分类。
 
+### 首页个人简介
+
+支持双语，使用 json 文件配置：
+
+- 中文：[src/locales/zh.json](src/locales/zh.json)
+- ENG：[src/locales/en.json](src/locales/en.json)
+
+该文件包含其它 i18n 配置，个人简介仅更改 `name`、`bio`、`blogtitle` 即可。
+
 ### 关于
 
 关于页面由 Markdown 更改，支持中英双语：

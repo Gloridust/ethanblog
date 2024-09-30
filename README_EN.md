@@ -35,7 +35,14 @@ language: en
 ---
 ```
 
-For Chinese articles, the `language` field can be omitted, but English articles must include `language:en` to be properly categorized.
+### Homepage Personal Profile
+
+Bilingual support is available, configured using JSON files:
+
+- Chinese: [src/locales/zh.json](src/locales/zh.json)
+- English: [src/locales/en.json](src/locales/en.json)
+
+These files contain other i18n configurations. To update your personal profile, you only need to modify the `name`, `bio`, and `blogtitle` fields.
 
 ### About
 

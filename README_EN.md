@@ -35,6 +35,8 @@ language: en
 ---
 ```
 
+Chinese articles may not be classified as `language`, but English articles must be classified as `language: en`.
+
 ### Homepage Personal Profile
 
 Bilingual support is available, configured using JSON files:

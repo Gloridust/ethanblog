@@ -17,7 +17,7 @@ export default function AboutPage({ content }: AboutPageProps) {
   return (
     <Layout>
       <Head>
-        <title>{t.aboutTitle}</title>
+        <title>{t('aboutTitle')}</title>
       </Head>
       <div className="max-w-4xl mx-auto mt-12 px-4">
         <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
@@ -32,7 +32,7 @@ export default function AboutPage({ content }: AboutPageProps) {
           </div>
           <div className="p-8">
             <h1 className="text-4xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
-              {t.aboutTitle}
+              {t('aboutTitle')}
             </h1>
             <div className="prose dark:prose-dark">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>

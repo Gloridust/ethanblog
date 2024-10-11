@@ -8,6 +8,10 @@ interface PostGridProps {
 }
 
 const PostGrid: React.FC<PostGridProps> = ({ posts }) => {
+  if (posts.length === 0) {
+    return <p className="text-center text-gray-600 dark:text-gray-300">暂无相关文章。</p>
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {posts.map((post) => (

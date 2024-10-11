@@ -27,8 +27,8 @@ const Layout: React.FC<LayoutProps> = ({
   const { t } = useTranslation()
   const router = useRouter()
 
-  const defaultTitle = t.blogTitle
-  const defaultDescription = t.bio
+  const defaultTitle = t('blogTitle')
+  const defaultDescription = t('bio')
   const defaultKeywords = 'ethan, Ethan Zou, Gloridust, blog, programming, development'
   const defaultImage = 'https://gloridust.xyz/favicon.png'
 

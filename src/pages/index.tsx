@@ -48,8 +48,8 @@ export default function Home({ posts, allTags }: HomeProps) {
   return (
     <Layout>
       <Head>
-        <title>{t.blogTitle}</title>
-        <meta name="description" content={t.bio} />
+        <title>{t('blogTitle')}</title>
+        <meta name="description" content={t('bio')} />
       </Head>
       <div className="max-w-4xl mx-auto">
         <Profile />

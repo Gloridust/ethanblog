@@ -21,9 +21,9 @@ export default function PostPage({ postData }: PostPageProps) {
 
   if (!postData) {
     return (
-      <Layout title={t.postNotFound}>
+      <Layout title={t('postNotFound')}>
         <div className="text-center mt-8">
-          <h1 className="text-2xl font-bold">{t.postNotFound}</h1>
+          <h1 className="text-2xl font-bold">{t('postNotFound')}</h1>
         </div>
       </Layout>
     )
@@ -42,7 +42,7 @@ export default function PostPage({ postData }: PostPageProps) {
     <Layout {...metadata}>
       <article className="max-w-3xl mx-auto mt-8 px-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{postData.title}</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">{t.postedOn}: {postData.date}</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">{t('postedOn')}: {postData.date}</p>
         <div className="prose dark:prose-dark">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {postData.content}

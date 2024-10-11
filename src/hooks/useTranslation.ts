@@ -20,8 +20,13 @@ const useTranslation = () => {
     }
   }
 
+  // 将 t 定义为一个函数
+  const t = (key: keyof typeof translations) => {
+    return translations[key] || key
+  }
+
   return {
-    t: translations,
+    t,
     locale,
     locales,
     defaultLocale,

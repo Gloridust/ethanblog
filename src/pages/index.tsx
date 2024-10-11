@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Layout from '@/components/Layout'
@@ -44,6 +44,11 @@ export default function Home({ posts, allTags }: HomeProps) {
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
+
+  // 新增：在页面变化时滚动到顶部
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [currentPage])
 
   return (
     <Layout>

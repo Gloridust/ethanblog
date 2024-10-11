@@ -11,5 +11,7 @@
     "postedOn": "Posted on",
     "tags": "Tags",
     "postNotFound": "Post Not Found",
-    "language": "Language"
+    "language": "Language",
+    "previous": "Previous",
+    "next": "Next"
   }

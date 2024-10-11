@@ -1,4 +1,5 @@
 import React from 'react'
+import useTranslation from '@/hooks/useTranslation'
 
 interface PaginationProps {
   currentPage: number
@@ -7,6 +8,7 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  const { t } = useTranslation()
   const pages = []
 
   for (let i = 1; i <= totalPages; i++) {
@@ -19,16 +21,16 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`px-3 py-2 ml-0 leading-tight border rounded-l-lg 
+          className={`px-3 py-2 ml-0 leading-tight border rounded-l-lg transition-colors duration-200
             ${currentPage === 1 ? 'text-gray-400 bg-gray-100 cursor-not-allowed' : 'text-blue-500 bg-white hover:bg-gray-100 hover:text-blue-700'}`}
         >
-          上一页
+          {t('previous')}
         </button>
         {pages.map((page) => (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`px-3 py-2 leading-tight border 
+            className={`px-3 py-2 leading-tight border transition-colors duration-200
               ${page === currentPage ? 'text-white bg-blue-500' : 'text-blue-500 bg-white hover:bg-gray-100 hover:text-blue-700'}`}
           >
             {page}
@@ -37,10 +39,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`px-3 py-2 leading-tight border rounded-r-lg 
+          className={`px-3 py-2 leading-tight border rounded-r-lg transition-colors duration-200
             ${currentPage === totalPages ? 'text-gray-400 bg-gray-100 cursor-not-allowed' : 'text-blue-500 bg-white hover:bg-gray-100 hover:text-blue-700'}`}
         >
-          下一页
+          {t('next')}
         </button>
       </nav>
     </div>

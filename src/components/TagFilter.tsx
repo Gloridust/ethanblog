@@ -1,14 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react'
+import useTranslation from '@/hooks/useTranslation' // 导入useTranslation钩子
 
 interface TagFilterProps {
   tags: string[]
   activeTag: string
   onFilterChange: (tag: string) => void
+  filteredPostsCount: number // 新增属性：过滤后的文章数量
 }
 
-const TagFilter: React.FC<TagFilterProps> = ({ tags, activeTag, onFilterChange }) => {
+const TagFilter: React.FC<TagFilterProps> = ({ tags, activeTag, onFilterChange, filteredPostsCount }) => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation() // 使用useTranslation钩子
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -29,52 +32,59 @@ const TagFilter: React.FC<TagFilterProps> = ({ tags, activeTag, onFilterChange }
   }
 
   return (
-    <div className="mb-8 flex justify-center">
-      {/* Mobile dropdown */}
-      <div className="relative md:hidden" ref={dropdownRef}>
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-medium transition-colors duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-        >
-          {activeTag} {isOpen ? '▲' : '▼'}
-        </button>
-        {isOpen && (
-          <div className="absolute z-10 mt-2 w-40 rounded-lg shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden transition-all duration-200 ease-in-out">
-            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-              {tags.map((tag) => (
-                <button
-                  key={tag}
-                  className={`block w-full px-4 py-2 text-sm text-left transition-colors duration-150 ${
-                    activeTag === tag 
-                      ? 'bg-blue-500 text-white' 
-                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
-                  onClick={() => handleTagClick(tag)}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Desktop buttons */}
-      <div className="hidden md:flex flex-wrap gap-2 justify-center">
-        {tags.map((tag) => (
-          <button
-            key={tag}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
-              activeTag === tag 
-                ? 'bg-blue-500 text-white' 
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
-            }`}
-            onClick={() => onFilterChange(tag)}
+    <div className="mb-8">
+      <div className="flex justify-center">
+        {/* Mobile dropdown */}
+        <div className="relative md:hidden" ref={dropdownRef}>
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-medium transition-colors duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
           >
-            {tag}
+            {activeTag} {isOpen ? '▲' : '▼'}
           </button>
-        ))}
+          {isOpen && (
+            <div className="absolute z-10 mt-2 w-40 rounded-lg shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden transition-all duration-200 ease-in-out">
+              <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                {tags.map((tag) => (
+                  <button
+                    key={tag}
+                    className={`block w-full px-4 py-2 text-sm text-left transition-colors duration-150 ${
+                      activeTag === tag 
+                        ? 'bg-blue-500 text-white' 
+                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop buttons */}
+        <div className="hidden md:flex flex-wrap gap-2 justify-center">
+          {tags.map((tag) => (
+            <button
+              key={tag}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+                activeTag === tag 
+                  ? 'bg-blue-500 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+              }`}
+              onClick={() => onFilterChange(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
       </div>
+      
+      {/* 修改这里: */}
+      <p className="text-center mt-4 text-gray-600 dark:text-gray-400">
+        {t('foundPosts', { count: filteredPostsCount })}
+      </p>
     </div>
   )
 }

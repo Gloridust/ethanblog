@@ -10,19 +10,24 @@ const useTranslation = () => {
   const setLocale = (newLocale: string) => {
     const { pathname, asPath, query } = router
     
-    // Check if we're on a blog post page
     if (pathname.startsWith('/blog/')) {
-      // Redirect to home page of the new language
       router.push('/', '/', { locale: newLocale })
     } else {
-      // For other pages, just change the language
       router.push({ pathname, query }, asPath, { locale: newLocale })
     }
   }
 
-  // 将 t 定义为一个函数
-  const t = (key: keyof typeof translations) => {
-    return translations[key] || key
+  // 修改 t 函数以支持参数
+  const t = (key: keyof typeof translations, params?: Record<string, string | number>) => {
+    let translation = translations[key] || key
+
+    if (params) {
+      Object.keys(params).forEach(param => {
+        translation = translation.replace(`{{${param}}}`, String(params[param]))
+      })
+    }
+
+    return translation
   }
 
   return {

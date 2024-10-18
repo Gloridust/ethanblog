@@ -58,7 +58,12 @@ export default function Home({ posts, allTags }: HomeProps) {
       </Head>
       <div className="max-w-4xl mx-auto">
         <Profile />
-        <TagFilter tags={['All', ...allTags]} activeTag={activeTag} onFilterChange={handleFilterChange} />
+        <TagFilter 
+          tags={['All', ...allTags]} 
+          activeTag={activeTag} 
+          onFilterChange={handleFilterChange} 
+          filteredPostsCount={filteredPosts.length} // 传递过滤后的文章数量
+        />
       </div>
       <PostGrid posts={paginatedPosts} />
       {totalPages > 1 && (

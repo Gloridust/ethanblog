@@ -13,5 +13,7 @@
     "postNotFound": "Post Not Found",
     "language": "Language",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "foundPosts": "Found {{count}} posts",
+    "noPostsFound": "No relevant posts found."
 }

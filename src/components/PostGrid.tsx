@@ -2,14 +2,17 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Post } from '@/types'
+import useTranslation from '@/hooks/useTranslation'
 
 interface PostGridProps {
   posts: Post[]
 }
 
 const PostGrid: React.FC<PostGridProps> = ({ posts }) => {
+  const { t } = useTranslation()
+
   if (posts.length === 0) {
-    return <p className="text-center text-gray-600 dark:text-gray-300">暂无相关文章。</p>
+    return <p className="text-center text-gray-600 dark:text-gray-300">{t('noPostsFound')}</p>
   }
 
   return (

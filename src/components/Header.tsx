@@ -4,12 +4,13 @@ import useTranslation from '@/hooks/useTranslation'
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const languageDropdownRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
   const { t, locale, setLocale } = useTranslation()
 
+  // 处理滚动
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -18,10 +19,11 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // 处理移动端菜单点击外部关闭
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
-        setIsLanguageDropdownOpen(false);
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -30,10 +32,11 @@ const Header: React.FC = () => {
     };
   }, []);
 
+  // 处理语言菜单点击外部关闭
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
+      if (languageMenuRef.current && !languageMenuRef.current.contains(event.target as Node)) {
+        setIsLanguageMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -44,7 +47,8 @@ const Header: React.FC = () => {
 
   const handleLanguageChange = (newLocale: string) => {
     setLocale(newLocale);
-    setIsLanguageDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsLanguageMenuOpen(false);
   };
 
   return (
@@ -57,9 +61,9 @@ const Header: React.FC = () => {
         </Link>
 
         {/* 移动端菜单按钮 */}
-        <div className="md:hidden relative" ref={menuRef}>
+        <div className="md:hidden relative" ref={mobileMenuRef}>
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
             aria-label="Toggle menu"
           >
@@ -68,60 +72,47 @@ const Header: React.FC = () => {
             </svg>
           </button>
 
-          {/* 移动端下拉菜单 */}
-          {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
-              <div className="py-1">
-                <Link 
-                  href="/" 
-                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {t('home')}
-                </Link>
-                <Link 
-                  href="/about" 
-                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {t('about')}
-                </Link>
-                <Link 
-                  href="/friends" 
-                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {t('friends')}
-                </Link>
-                <button
-                  onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  {t('language')}
-                </button>
-                {isLanguageDropdownOpen && (
-                  <div className="pl-4">
-                    <button 
-                      onClick={() => {
-                        handleLanguageChange('zh')
-                        setIsMenuOpen(false)
-                      }} 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                      中文
-                    </button>
-                    <button 
-                      onClick={() => {
-                        handleLanguageChange('en')
-                        setIsMenuOpen(false)
-                      }} 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                      English
-                    </button>
-                  </div>
-                )}
-              </div>
+          {/* 移动端菜单 */}
+          {isMobileMenuOpen && (
+            <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 py-1">
+              <Link 
+                href="/" 
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {t('home')}
+              </Link>
+              <Link 
+                href="/about" 
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {t('about')}
+              </Link>
+              <Link 
+                href="/friends" 
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {t('friends')}
+              </Link>
+              <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+              <button
+                onClick={() => handleLanguageChange('zh')}
+                className={`block w-full text-left px-4 py-2 text-sm ${
+                  locale === 'zh' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-200'
+                } hover:bg-gray-100 dark:hover:bg-gray-700`}
+              >
+                中文
+              </button>
+              <button
+                onClick={() => handleLanguageChange('en')}
+                className={`block w-full text-left px-4 py-2 text-sm ${
+                  locale === 'en' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-200'
+                } hover:bg-gray-100 dark:hover:bg-gray-700`}
+              >
+                English
+              </button>
             </div>
           )}
         </div>
@@ -133,24 +124,28 @@ const Header: React.FC = () => {
             <li><Link href="/about" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('about')}</Link></li>
             <li><Link href="/friends" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('friends')}</Link></li>
             <li>
-              <div className="relative" ref={languageDropdownRef}>
+              <div className="relative" ref={languageMenuRef}>
                 <button
-                  onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                  onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
                   className="bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200"
                 >
-                  {t('language')}
+                  {locale === 'zh' ? '中文' : 'English'}
                 </button>
-                {isLanguageDropdownOpen && (
+                {isLanguageMenuOpen && (
                   <div className="absolute right-0 mt-2 py-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-xl z-20">
                     <button
                       onClick={() => handleLanguageChange('zh')}
-                      className={`block w-full text-left px-4 py-2 text-sm ${locale === 'zh' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'} hover:bg-gray-100 dark:hover:bg-gray-700`}
+                      className={`block w-full text-left px-4 py-2 text-sm ${
+                        locale === 'zh' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'
+                      } hover:bg-gray-100 dark:hover:bg-gray-700`}
                     >
                       中文
                     </button>
                     <button
                       onClick={() => handleLanguageChange('en')}
-                      className={`block w-full text-left px-4 py-2 text-sm ${locale === 'en' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'} hover:bg-gray-100 dark:hover:bg-gray-700`}
+                      className={`block w-full text-left px-4 py-2 text-sm ${
+                        locale === 'en' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'
+                      } hover:bg-gray-100 dark:hover:bg-gray-700`}
                     >
                       English
                     </button>

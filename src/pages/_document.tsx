@@ -6,11 +6,11 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* Google AdSense Script */}
-          <script
+          {/* <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6862288297154364"
             crossOrigin="anonymous"
-          />
+          /> */}
         </Head>
         <body>
           <Main />

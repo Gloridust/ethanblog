@@ -96,15 +96,6 @@ const Header: React.FC = () => {
               >
                 {t('friends')}
               </Link>
-              <a
-                href={`/api/rss/${locale}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {t('rssSubscribe')}
-              </a>
               <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
               <button
                 onClick={() => handleLanguageChange('zh')}
@@ -132,19 +123,6 @@ const Header: React.FC = () => {
             <li><Link href="/" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('home')}</Link></li>
             <li><Link href="/about" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('about')}</Link></li>
             <li><Link href="/friends" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('friends')}</Link></li>
-            <li>
-              <a 
-                href={`/api/rss/${locale}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200"
-                title={t('rssSubscribe')}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                </svg>
-              </a>
-            </li>
             <li>
               <div className="relative" ref={languageMenuRef}>
                 <button

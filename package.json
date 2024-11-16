@@ -12,6 +12,7 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
+    "feed": "^4.2.2",
     "gray-matter": "^4.0.3",
     "next": "14.2.7",
     "react": "^18",

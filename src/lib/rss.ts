@@ -2,7 +2,7 @@ import { Feed, FeedOptions, Item } from 'feed'
 import { Post } from '@/types'
 
 export function generateRssFeed(posts: Post[], language: string): Feed {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://isethan.me'
   const author = {
     name: "Ethan",
     email: "contact@isethan.me",

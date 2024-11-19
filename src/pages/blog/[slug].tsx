@@ -33,7 +33,7 @@ export default function PostPage({ postData }: PostPageProps) {
     title: postData.title,
     description: postData.describe || postData.content.slice(0, 160),
     keywords: Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags,
-    image: postData.img || 'https://gloridust.xyz/default-post-image.jpg',
+    image: postData.img || '/default-post-image.jpg',
     date: postData.date,
     type: 'article' as const
   }

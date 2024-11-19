@@ -19,7 +19,7 @@ const Profile: React.FC = () => {
       <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">{t('name')}</h1>
       <p className="text-gray-600 dark:text-gray-300 mb-4 max-w-2xl">{t('bio')}</p>
       <div className="flex justify-center space-x-4">
-        <a href="mailto:contact@gloridust.xyz" aria-label="Email" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200" target="_blank" rel="noopener noreferrer">
+        <a href="mailto:contact@isethan.me" aria-label="Email" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200" target="_blank" rel="noopener noreferrer">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>

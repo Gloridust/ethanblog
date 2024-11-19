@@ -30,9 +30,9 @@ const Layout: React.FC<LayoutProps> = ({
   const defaultTitle = t('blogTitle')
   const defaultDescription = t('bio')
   const defaultKeywords = 'ethan, Ethan Zou, Gloridust, blog, programming, development'
-  const defaultImage = 'https://gloridust.xyz/favicon.png'
+  const defaultImage = '/favicon.png'
 
-  const siteUrl = 'https://gloridust.xyz'
+  const siteUrl = 'https://isethan.me'
   const canonicalUrl = `${siteUrl}${router.asPath}`
 
   return (

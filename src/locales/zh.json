@@ -15,5 +15,7 @@
     "previous": "上一页",
     "next": "下一页",
     "foundPosts": "查询到 {{count}} 篇文章",
-    "noPostsFound": "暂无相关文章。"
+    "noPostsFound": "暂无相关文章。",
+    "followers": "粉丝",
+    "socialTitle": "社交媒体"
 }

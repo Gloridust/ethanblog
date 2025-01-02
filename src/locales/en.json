@@ -15,5 +15,7 @@
     "previous": "Previous",
     "next": "Next",
     "foundPosts": "Found {{count}} posts",
-    "noPostsFound": "No relevant posts found."
+    "noPostsFound": "No relevant posts found.",
+    "followers": "Followers",
+    "socialTitle": "Social Media"
 }

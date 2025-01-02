@@ -1,8 +1,13 @@
 import { GetStaticProps } from 'next'
 import Image from 'next/image'
+import Slider from 'react-slick'
 import Layout from '@/components/Layout'
 import useTranslation from '@/hooks/useTranslation'
 import { getSocialStats } from '@/lib/social'
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import ImagePreview from '@/components/ImagePreview'
+import { useState } from 'react'
 
 interface SocialPlatform {
   name: string
@@ -19,8 +24,68 @@ interface AboutPageProps {
   }
 }
 
+interface GalleryRow {
+  title: string
+  images: string[]
+}
+
+const galleryData: GalleryRow[] = [
+  {
+    title: "2024",
+    images: [
+      "/images/gallery/2024/advx.jpg",
+      "/images/gallery/2024/advx-1.jpg",
+      "/images/gallery/2024/advx-2.jpg",
+      "/images/gallery/2024/1.jpg",
+      "/images/gallery/2024/2.jpg",
+    ]
+  // },
+  // {
+  //   title: "2023",
+  //   images: [
+  //     "/images/gallery/2023-1.jpg",
+  //     "/images/gallery/2023-2.jpg",
+  //     "/images/gallery/2023-3.jpg",
+  //     "/images/gallery/2023-4.jpg",
+  //     "/images/gallery/2023-5.jpg",
+  //   ]
+  }
+]
+
+// 添加自定义箭头组件
+const PrevArrow = (props: any) => {
+  const { onClick } = props
+  return (
+    <button
+      onClick={onClick}
+      className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none"
+      aria-label="Previous"
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+  )
+}
+
+const NextArrow = (props: any) => {
+  const { onClick } = props
+  return (
+    <button
+      onClick={onClick}
+      className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none"
+      aria-label="Next"
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  )
+}
+
 export default function AboutPage({ socialStats }: AboutPageProps) {
   const { t } = useTranslation()
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   const socialPlatforms: SocialPlatform[] = [
     {
@@ -38,6 +103,34 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
       link: 'https://xiaohongshu.com/user/profile/5f1d89a6000000000100ba01'
     }
   ]
+
+  const sliderSettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    swipeToSlide: true,
+    useCSS: true,
+    useTransform: true,
+    waitForAnimate: false,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+        }
+      },
+      {
+        breakpoint: 640,
+        settings: {
+          slidesToShow: 1.5,
+        }
+      }
+    ]
+  }
 
   return (
     <Layout title={t('aboutTitle')}>
@@ -99,6 +192,58 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             </a>
           ))}
         </div>
+
+        {/* Photo Gallery */}
+        <div className="space-y-8">
+          {galleryData.map((row, index) => (
+            <div key={index} className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {row.title}
+              </h2>
+              <div className="relative" 
+                  onWheel={(e) => {
+                    e.preventDefault()
+                    const slider = e.currentTarget.querySelector('.slick-slider');
+                    if (slider) {
+                      if (e.deltaX > 0 || e.deltaY > 0) {
+                        (slider as any).slick?.slickNext();
+                      } else {
+                        (slider as any).slick?.slickPrev();
+                      }
+                    }
+                  }}
+              >
+                <Slider {...sliderSettings}>
+                  {row.images.map((image, imageIndex) => (
+                    <div key={imageIndex} className="px-1">
+                      <div 
+                        className="aspect-w-1 aspect-h-1 cursor-pointer transform transition-transform hover:scale-105"
+                        onClick={() => setSelectedImage(image)}
+                      >
+                        <Image
+                          src={image}
+                          alt={`Gallery image ${imageIndex + 1}`}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Image Preview Modal */}
+        {selectedImage && (
+          <ImagePreview
+            src={selectedImage}
+            alt="Preview"
+            onClose={() => setSelectedImage(null)}
+          />
+        )}
       </div>
     </Layout>
   )

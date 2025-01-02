@@ -31,24 +31,22 @@ interface GalleryRow {
 
 const galleryData: GalleryRow[] = [
   {
-    title: "2024",
+    title: "Me",
     images: [
-      "/images/gallery/2024/advx.jpg",
-      "/images/gallery/2024/advx-1.jpg",
-      "/images/gallery/2024/advx-2.jpg",
-      "/images/gallery/2024/1.jpg",
-      "/images/gallery/2024/2.jpg",
+      "/images/gallery/me/1.jpg",
+      "/images/gallery/me/2.jpg",
+      "/images/gallery/me/3.jpg",
+      "/images/gallery/me/4.jpg"
     ]
-  // },
-  // {
-  //   title: "2023",
-  //   images: [
-  //     "/images/gallery/2023-1.jpg",
-  //     "/images/gallery/2023-2.jpg",
-  //     "/images/gallery/2023-3.jpg",
-  //     "/images/gallery/2023-4.jpg",
-  //     "/images/gallery/2023-5.jpg",
-  //   ]
+  },
+  {
+    title: "AdventureX 2024",
+    images: [
+      "/images/gallery/advx2024/advx.jpg",
+      "/images/gallery/advx2024/advx-0.jpg",
+      "/images/gallery/advx2024/advx-1.jpg",
+      "/images/gallery/advx2024/advx-2.jpg"
+    ]
   }
 ]
 

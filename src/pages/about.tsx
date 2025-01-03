@@ -134,8 +134,8 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
     <Layout title={t('aboutTitle')}>
       <div className="max-w-4xl mx-auto px-4 space-y-8">
         {/* Profile Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex items-center justify-center min-h-[200px]">
+          <div className="flex flex-col md:flex-row items-center gap-6 max-w-2xl">
             <div className="relative w-32 h-32 flex-shrink-0">
               <Image
                 src="/images/avatar.png"

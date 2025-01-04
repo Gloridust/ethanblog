@@ -12,7 +12,7 @@ interface LayoutProps {
   keywords?: string
   image?: string
   date?: string
-  type?: 'website' | 'article'
+  type?: 'website' | 'article' | 'profile'
 }
 
 const Layout: React.FC<LayoutProps> = ({ 
@@ -24,12 +24,12 @@ const Layout: React.FC<LayoutProps> = ({
   date,
   type = 'website'
 }) => {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const router = useRouter()
 
   const defaultTitle = t('blogTitle')
   const defaultDescription = t('bio')
-  const defaultKeywords = 'ethan, Ethan Zou, Gloridust, blog, programming, development'
+  const defaultKeywords = 'Ethan Zou, Gloridust, blog, developer, entrepreneur'
   const defaultImage = '/favicon.png'
 
   const siteUrl = 'https://isethan.me'
@@ -64,6 +64,27 @@ const Layout: React.FC<LayoutProps> = ({
         {/* Additional SEO tags */}
         <meta name="author" content="Ethan Zou" />
         {date && <meta name="date" content={date} />}
+
+        {/* 添加语言相关标签 */}
+        <meta httpEquiv="content-language" content={locale} />
+        <meta name="language" content={locale === 'zh' ? 'Chinese' : 'English'} />
+        
+        {/* 添加替代语言链接 */}
+        <link 
+          rel="alternate" 
+          href={`https://isethan.me${router.pathname}`} 
+          hrefLang="zh" 
+        />
+        <link 
+          rel="alternate" 
+          href={`https://isethan.me/en${router.pathname}`} 
+          hrefLang="en" 
+        />
+        <link 
+          rel="alternate" 
+          href={`https://isethan.me${router.pathname}`} 
+          hrefLang="x-default" 
+        />
       </Head>
       <Header />
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl pt-24">

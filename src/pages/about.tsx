@@ -130,8 +130,18 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
     ]
   }
 
+  // 添加 SEO 元数据
+  const metadata = {
+    title: t('aboutTitle'),
+    description: t('bio'),
+    keywords: 'Ethan Zou, blog,Gloridust, about, profile, developer, entrepreneur',
+    // 可以添加 Open Graph 图片
+    image: '/images/avatar.png',
+    type: 'profile' as const
+  }
+
   return (
-    <Layout title={t('aboutTitle')}>
+    <Layout {...metadata}>
       <div className="max-w-4xl mx-auto px-4 space-y-8">
         {/* Profile Card */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex items-center justify-center min-h-[200px]">

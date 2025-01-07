@@ -1,5 +1,5 @@
 ---
-title: Using Baidu Qianfan Large Model Platform, I Created a Code Diagnostic Tool for Beginners
+title: Using Baidu Qianfan LLM Platform, I Created a Code Diagnostic Tool for Beginners
 tags: Technology
 date: 2023-11-13
 img: /images/posts/2023-11-13/cover.png

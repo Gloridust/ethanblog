@@ -5,7 +5,8 @@ import Layout from '@/components/Layout'
 import Profile from '@/components/Profile'
 import TagFilter from '@/components/TagFilter'
 import PostGrid from '@/components/PostGrid'
-import Pagination from '@/components/Pagination' // 新增
+import Pagination from '@/components/Pagination'
+import LoadingScreen from '@/components/LoadingScreen'
 import { getPostsByLanguage } from '@/lib/posts'
 import { Post } from '@/types'
 import useTranslation from '@/hooks/useTranslation'
@@ -18,8 +19,39 @@ interface HomeProps {
 export default function Home({ posts, allTags }: HomeProps) {
   const { t } = useTranslation()
   const [activeTag, setActiveTag] = useState<string>('All')
-  const [currentPage, setCurrentPage] = useState<number>(1) // 新增
-  const POSTS_PER_PAGE = 12 // 新增
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [isLoading, setIsLoading] = useState(true)
+  const [imagesLoaded, setImagesLoaded] = useState(0)
+  const POSTS_PER_PAGE = 12
+
+  // 计算需要加载的总图片数
+  const totalImages = posts.length
+
+  useEffect(() => {
+    // 预加载所有文章图片
+    const imagePromises = posts.map(post => {
+      return new Promise((resolve) => {
+        const img = new Image()
+        img.src = post.img
+        img.onload = () => {
+          setImagesLoaded(prev => prev + 1)
+          resolve(null)
+        }
+        img.onerror = () => resolve(null) // 处理加载失败的情况
+      })
+    })
+
+    Promise.all(imagePromises).then(() => {
+      setIsLoading(false)
+    })
+
+    // 如果图片加载时间过长，设置一个超时
+    const timeout = setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+
+    return () => clearTimeout(timeout)
+  }, [posts])
 
   const filteredPosts = useMemo(() => {
     if (activeTag === 'All') {
@@ -34,18 +66,17 @@ export default function Home({ posts, allTags }: HomeProps) {
     return filteredPosts.slice(start, end)
   }, [filteredPosts, currentPage])
 
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE) // 新增
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
 
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag)
-    setCurrentPage(1) // 筛选变化时重置到第一页
+    setCurrentPage(1)
   }
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
-  // 新增：在页面变化时滚动到顶部
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [currentPage])
@@ -56,19 +87,28 @@ export default function Home({ posts, allTags }: HomeProps) {
         <title>{t('blogTitle')}</title>
         <meta name="description" content={t('bio')} />
       </Head>
-      <div className="max-w-4xl mx-auto">
-        <Profile />
-        <TagFilter 
-          tags={['All', ...allTags]} 
-          activeTag={activeTag} 
-          onFilterChange={handleFilterChange} 
-          filteredPostsCount={filteredPosts.length} // 传递过滤后的文章数量
-        />
+
+      <LoadingScreen isLoading={isLoading} />
+
+      <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+        <div className="max-w-4xl mx-auto">
+          <Profile />
+          <TagFilter 
+            tags={['All', ...allTags]} 
+            activeTag={activeTag} 
+            onFilterChange={handleFilterChange} 
+            filteredPostsCount={filteredPosts.length}
+          />
+        </div>
+        <PostGrid posts={paginatedPosts} />
+        {totalPages > 1 && (
+          <Pagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={handlePageChange} 
+          />
+        )}
       </div>
-      <PostGrid posts={paginatedPosts} />
-      {totalPages > 1 && (
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-      )}
     </Layout>
   )
 }

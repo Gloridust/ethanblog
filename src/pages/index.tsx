@@ -88,11 +88,14 @@ export default function Home({ posts, allTags }: HomeProps) {
         <meta name="description" content={t('bio')} />
       </Head>
 
+      <div className="max-w-4xl mx-auto">
+        <Profile />
+      </div>
+
       <LoadingScreen isLoading={isLoading} />
 
       <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         <div className="max-w-4xl mx-auto">
-          <Profile />
           <TagFilter 
             tags={['All', ...allTags]} 
             activeTag={activeTag} 

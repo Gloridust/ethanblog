@@ -6,7 +6,12 @@ const nextConfig = {
     defaultLocale: 'zh',
   },
   images: {
-    domains: ['image.coolapk.com'], // 添加 image.coolapk.com 域名
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      }
+    ],
   },
 };
 

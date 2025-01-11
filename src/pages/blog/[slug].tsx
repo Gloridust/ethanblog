@@ -6,6 +6,7 @@ import Layout from '@/components/Layout'
 import { getAllPosts, getPostData } from '@/lib/posts'
 import { Post } from '@/types'
 import useTranslation from '@/hooks/useTranslation'
+import Head from 'next/head'
 
 interface PostPageProps {
   postData: Post | null
@@ -31,15 +32,42 @@ export default function PostPage({ postData }: PostPageProps) {
 
   const metadata = {
     title: postData.title,
-    description: postData.describe || postData.content.slice(0, 160),
-    keywords: Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags,
-    image: postData.img || '/default-post-image.jpg',
+    description: postData.describe || postData.content.slice(0, 160).replace(/[#*`]/g, ''),
+    keywords: `${Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags}, Ethan Zou, Gloridust, blog, developer, entrepreneur`,
+    image: postData.img || '/images/avatar.png',
     date: postData.date,
-    type: 'article' as const
+    type: 'article' as const,
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: postData.title,
+      description: postData.describe,
+      image: postData.img,
+      datePublished: postData.date,
+      author: {
+        '@type': 'Person',
+        name: 'Ethan Zou',
+        url: 'https://isethan.me'
+      }
+    }
   }
 
   return (
     <Layout {...metadata}>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(metadata.structuredData)
+          }}
+        />
+        <meta name="author" content="Ethan Zou" />
+        <meta name="article:published_time" content={postData.date} />
+        <meta name="article:section" content={Array.isArray(postData.tags) ? postData.tags[0] : postData.tags} />
+        {Array.isArray(postData.tags) && postData.tags.map(tag => (
+          <meta key={tag} name="article:tag" content={tag} />
+        ))}
+      </Head>
       <article className="max-w-3xl mx-auto mt-8 px-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{postData.title}</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-4">{t('postedOn')}: {postData.date}</p>

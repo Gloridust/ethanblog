@@ -50,33 +50,24 @@ export default function Home({ posts, allTags }: HomeProps) {
     window.scrollTo(0, 0)
   }, [currentPage])
 
-  // 添加首页专属的 metadata
-  const metadata = {
-    title: t('blogTitle'),
-    description: t('bio'),
-    keywords: 'Ethan Zou, Gloridust, blog, developer, entrepreneur, programming, development, React, NextJS, Flutter',
-    image: '/images/avatar.png',
-    type: 'website' as const
-  }
-
   return (
-    <Layout {...metadata}>
+    <Layout>
+      <Head>
+        <title>{t('blogTitle')}</title>
+        <meta name="description" content={t('bio')} />
+      </Head>
       <div className="max-w-4xl mx-auto">
         <Profile />
         <TagFilter 
           tags={['All', ...allTags]} 
           activeTag={activeTag} 
           onFilterChange={handleFilterChange} 
-          filteredPostsCount={filteredPosts.length}
+          filteredPostsCount={filteredPosts.length} // 传递过滤后的文章数量
         />
       </div>
       <PostGrid posts={paginatedPosts} />
       {totalPages > 1 && (
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={handlePageChange} 
-        />
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       )}
     </Layout>
   )

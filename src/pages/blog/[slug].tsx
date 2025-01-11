@@ -7,9 +7,18 @@ import { getAllPosts, getPostData } from '@/lib/posts'
 import { Post } from '@/types'
 import useTranslation from '@/hooks/useTranslation'
 import Head from 'next/head'
+import LazyImage from '@/components/LazyImage'
 
 interface PostPageProps {
   postData: Post | null
+}
+
+const renderers = {
+  img: (props: React.ComponentPropsWithoutRef<'img'>) => (
+    <div className="my-8">
+      <LazyImage src={props.src || ''} alt={props.alt || ''} />
+    </div>
+  ),
 }
 
 export default function PostPage({ postData }: PostPageProps) {
@@ -72,7 +81,10 @@ export default function PostPage({ postData }: PostPageProps) {
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{postData.title}</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-4">{t('postedOn')}: {postData.date}</p>
         <div className="prose dark:prose-dark">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]}
+            components={renderers}
+          >
             {postData.content}
           </ReactMarkdown>
         </div>

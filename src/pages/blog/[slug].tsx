@@ -8,6 +8,7 @@ import { Post } from '@/types'
 import useTranslation from '@/hooks/useTranslation'
 import Head from 'next/head'
 import LazyImage from '@/components/LazyImage'
+import Comments from '@/components/Comments'
 
 interface PostPageProps {
   postData: Post | null
@@ -88,6 +89,7 @@ export default function PostPage({ postData }: PostPageProps) {
             {postData.content}
           </ReactMarkdown>
         </div>
+        <Comments />
       </article>
     </Layout>
   )

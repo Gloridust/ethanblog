@@ -95,3 +95,32 @@ body {
     @apply text-blue-300;
   }
 }
+
+/* Giscus 样式优化 */
+.giscus-wrapper {
+  background: var(--giscus-background);
+  transition: all 0.3s ease;
+}
+
+.giscus-frame {
+  width: 100% !important;
+  border: none !important;
+  margin: 0 !important;
+}
+
+/* 动画效果 */
+.giscus-wrapper iframe {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.giscus-wrapper iframe.loaded {
+  opacity: 1;
+}
+
+/* 响应式调整 */
+@media (max-width: 640px) {
+  .giscus-wrapper {
+    padding: 1rem;
+  }
+}

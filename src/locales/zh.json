@@ -17,5 +17,7 @@
     "foundPosts": "查询到 {{count}} 篇文章",
     "noPostsFound": "暂无相关文章。",
     "followers": "粉丝",
-    "socialTitle": "社交媒体"
+    "socialTitle": "社交媒体",
+    "leaveMessage": "留言板",
+    "messageBoardWelcome": "欢迎在这里留下你的想法、建议或者只是打个招呼"
 }

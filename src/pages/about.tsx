@@ -8,6 +8,8 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import ImagePreview from '@/components/ImagePreview'
 import { useState } from 'react'
+import Comments from '@/components/Comments'
+import MessageBoard from '@/components/MessageBoard'
 
 interface SocialPlatform {
   name: string
@@ -142,7 +144,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
   return (
     <Layout {...metadata}>
-      <div className="max-w-4xl mx-auto px-4 space-y-8">
+      <div className="max-w-4xl mx-auto px-4 space-y-12">
         {/* Profile Card */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex items-center justify-center min-h-[200px]">
           <div className="flex flex-col md:flex-row items-center gap-6 max-w-2xl">
@@ -252,6 +254,15 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             onClose={() => setSelectedImage(null)}
           />
         )}
+
+        {/* Message Board Section */}
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <span>{t('leaveMessage')}</span>
+            <span className="text-blue-500 dark:text-blue-400">💬</span>
+          </h2>
+          <MessageBoard />
+        </div>
       </div>
     </Layout>
   )

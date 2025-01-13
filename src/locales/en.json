@@ -17,5 +17,7 @@
     "foundPosts": "Found {{count}} posts",
     "noPostsFound": "No relevant posts found.",
     "followers": "Followers",
-    "socialTitle": "Social Media"
+    "socialTitle": "Social Media",
+    "leaveMessage": "Message Board",
+    "messageBoardWelcome": "Feel free to share your thoughts, suggestions, or just say hello"
 }

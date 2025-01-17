@@ -22,7 +22,7 @@ export async function getSocialStats() {
     stats.twitter = formatFollowers(twitterCount)
 
     // 获取小红书粉丝数
-    stats.xiaohongshu = formatFollowers(78) // 暂时写死一个数字，因为小红书API限制
+    stats.xiaohongshu = formatFollowers(90) // 暂时写死一个数字，因为小红书API限制
 
   } catch (error) {
     console.error('Error fetching social stats:', error)

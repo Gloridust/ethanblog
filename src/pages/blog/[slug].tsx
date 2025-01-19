@@ -2,6 +2,8 @@ import { GetStaticProps, GetStaticPaths } from 'next'
 import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import Layout from '@/components/Layout'
 import { getAllPosts, getPostData } from '@/lib/posts'
 import { Post } from '@/types'
@@ -20,6 +22,59 @@ const renderers = {
       <LazyImage src={props.src || ''} alt={props.alt || ''} />
     </span>
   ),
+  code: ({ node, inline, className, children, ...props }: any) => {
+    const match = /language-(\w+)/.exec(className || '')
+    const language = match ? match[1] : ''
+    
+    // 如果是行内代码，使用默认样式
+    if (inline) {
+      return (
+        <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5" {...props}>
+          {children}
+        </code>
+      )
+    }
+
+    // 获取文件名（如果有）
+    const fileMatch = /language-(\w+):(.+)/.exec(className || '')
+    const fileName = fileMatch ? fileMatch[2] : ''
+
+    return (
+      <div className="relative group">
+        {/* 文件名显示 */}
+        {fileName && (
+          <div className="absolute top-0 left-0 right-0 bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-t-lg text-sm text-gray-700 dark:text-gray-300 font-mono">
+            {fileName}
+          </div>
+        )}
+        
+        {/* 复制按钮 */}
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(String(children).replace(/\n$/, ''))
+          }}
+          className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-700 dark:bg-gray-600 text-white dark:text-gray-200 px-2 py-1 rounded text-sm"
+        >
+          复制
+        </button>
+
+        <SyntaxHighlighter
+          language={language}
+          style={tomorrow}
+          customStyle={{
+            margin: 0,
+            marginTop: fileName ? '2.5rem' : 0,
+            padding: '1.5rem',
+            borderRadius: '0.5rem',
+            backgroundColor: 'rgb(30, 41, 59)',
+          }}
+          {...props}
+        >
+          {String(children).replace(/\n$/, '')}
+        </SyntaxHighlighter>
+      </div>
+    )
+  }
 }
 
 export default function PostPage({ postData }: PostPageProps) {

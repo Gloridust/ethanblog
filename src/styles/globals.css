@@ -124,3 +124,33 @@ body {
     padding: 1rem;
   }
 }
+
+/* 代码块样式 */
+.prose pre {
+  @apply p-0 bg-transparent;
+  margin: 0;
+}
+
+.prose code {
+  @apply text-sm;
+}
+
+/* 代码块中的行号样式 */
+.prose pre > div {
+  @apply rounded-lg;
+}
+
+/* 代码块悬停效果 */
+.prose pre:hover button {
+  @apply opacity-100;
+}
+
+/* 暗色模式适配 */
+.dark .prose pre > div {
+  background-color: rgb(30, 41, 59) !important;
+}
+
+/* 代码语言标签样式 */
+.prose pre > div > span {
+  @apply text-xs text-gray-500 dark:text-gray-400;
+}

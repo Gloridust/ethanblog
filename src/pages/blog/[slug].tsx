@@ -16,9 +16,9 @@ interface PostPageProps {
 
 const renderers = {
   img: (props: React.ComponentPropsWithoutRef<'img'>) => (
-    <div className="my-8">
+    <span className="block my-8">
       <LazyImage src={props.src || ''} alt={props.alt || ''} />
-    </div>
+    </span>
   ),
 }
 

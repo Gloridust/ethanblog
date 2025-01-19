@@ -18,7 +18,7 @@ export async function getSocialStats() {
   try {
     // 获取 Twitter 粉丝数
     const twitterResponse = await axios.get(`${SUBSTATS_API}/twitter/Gloridust1024`)
-    const twitterCount = twitterResponse.data?.count || 1314
+    const twitterCount = twitterResponse.data?.count || 1480
     stats.twitter = formatFollowers(twitterCount)
 
     // 获取小红书粉丝数

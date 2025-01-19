@@ -124,6 +124,11 @@ const PostPage = ({ postData }: PostPageProps) => {
     }
   }
 
+  // 构建完整的图片 URL
+  const fullImageUrl = postData.img ? 
+    (postData.img.startsWith('http') ? postData.img : `https://isethan.me${postData.img}`) : 
+    'https://isethan.me/images/avatar.png'
+
   return (
     <Layout {...metadata}>
       <Head>
@@ -139,6 +144,22 @@ const PostPage = ({ postData }: PostPageProps) => {
         {Array.isArray(postData.tags) && postData.tags.map(tag => (
           <meta key={tag} name="article:tag" content={tag} />
         ))}
+
+        {/* Open Graph 标签 */}
+        <meta property="og:title" content={postData.title} />
+        <meta property="og:description" content={metadata.description} />
+        <meta property="og:image" content={fullImageUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Ethan Zou's Blog" />
+        <meta property="og:url" content={`https://isethan.me/blog/${postData.slug}`} />
+
+        {/* Twitter Card 标签 */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@gloridust" />
+        <meta name="twitter:creator" content="@gloridust" />
+        <meta name="twitter:title" content={postData.title} />
+        <meta name="twitter:description" content={metadata.description} />
+        <meta name="twitter:image" content={fullImageUrl} />
       </Head>
       <article className="max-w-3xl mx-auto mt-8 px-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{postData.title}</h1>

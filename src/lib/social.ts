@@ -80,8 +80,25 @@ async function getTwitterFollowers(username: string): Promise<number> {
       }
     }
 
-    // 在生产环境中返回上一次已知的粉丝数
-    return IS_PRODUCTION ? 1467 : 1480
+    // 使用 localStorage 存储最后一次成功获取的粉丝数
+    let lastKnownFollowers: number | null = null
+    
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('lastKnownTwitterFollowers')
+      if (stored) {
+        try {
+          const data = JSON.parse(stored)
+          if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) { // 24小时内的数据
+            lastKnownFollowers = data.value
+          }
+        } catch (e) {
+          console.error('Error parsing stored followers count')
+        }
+      }
+    }
+
+    // 如果有最后已知的粉丝数就使用它，否则返回 1500
+    return lastKnownFollowers || 1500
   }
 }
 
@@ -94,22 +111,41 @@ export async function getSocialStats() {
   }
 
   try {
-    // 获取 Twitter 粉丝数
     const twitterCount = await getTwitterFollowers('Gloridust1024')
     console.log('最终获取到的 Twitter 粉丝数:', twitterCount)
+    
+    // 如果成功获取到数据，存储到 localStorage
+    if (typeof window !== 'undefined' && twitterCount > 0) {
+      localStorage.setItem('lastKnownTwitterFollowers', JSON.stringify({
+        value: twitterCount,
+        timestamp: Date.now()
+      }))
+    }
+    
     stats.twitter = formatFollowers(twitterCount)
-
-    // 获取小红书粉丝数
-    stats.xiaohongshu = formatFollowers(90) // 暂时写死一个数字，因为小红书API限制
-
+    stats.xiaohongshu = formatFollowers(90)
   } catch (error) {
     console.error('获取社交统计数据时发生错误:', error)
     
-    // 如果有缓存，使用缓存值
     if (twitterFollowersCache) {
       stats.twitter = formatFollowers(twitterFollowersCache.value)
     } else {
-      stats.twitter = formatFollowers(IS_PRODUCTION ? 1467 : 1480)
+      // 尝试从 localStorage 获取最后已知的粉丝数
+      let lastKnownFollowers = 1500 // 默认值改为 1500
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('lastKnownTwitterFollowers')
+        if (stored) {
+          try {
+            const data = JSON.parse(stored)
+            if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+              lastKnownFollowers = data.value
+            }
+          } catch (e) {
+            console.error('Error parsing stored followers count')
+          }
+        }
+      }
+      stats.twitter = formatFollowers(lastKnownFollowers)
     }
   }
 

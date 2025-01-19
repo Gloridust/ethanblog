@@ -20,5 +20,7 @@
     "socialTitle": "社交媒体",
     "leaveMessage": "留言板",
     "messageBoardWelcome": "欢迎在这里留下你的想法、建议或者只是打个招呼",
-    "comments": "评论"
+    "comments": "评论",
+    "copy": "复制",
+    "copied": "已复制！"
 }

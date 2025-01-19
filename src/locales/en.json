@@ -20,5 +20,7 @@
     "socialTitle": "Social Media",
     "leaveMessage": "Message Board",
     "messageBoardWelcome": "Feel free to share your thoughts, suggestions, or just say hello",
-    "comments": "Comments"
+    "comments": "Comments",
+    "copy": "Copy",
+    "copied": "Copied!"
 }

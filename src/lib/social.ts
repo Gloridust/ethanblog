@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const TWITTER_API_URL = 'https://api.twitter.com/2/users/by/username'
 const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN
+const IS_PRODUCTION = process.env.VERCEL_ENV === 'production'
 
 // 缓存结构
 interface CacheData {
@@ -27,7 +28,7 @@ async function getTwitterFollowers(username: string): Promise<number> {
     }
 
     if (!TWITTER_BEARER_TOKEN) {
-      throw new Error('Bearer Token not configured')
+      throw new Error('Twitter Bearer Token not configured')
     }
 
     const response = await axios({
@@ -40,11 +41,8 @@ async function getTwitterFollowers(username: string): Promise<number> {
       params: {
         'user.fields': 'public_metrics'
       },
-      timeout: 5000, // 5秒超时
-      maxRedirects: 0,
-      validateStatus: function (status) {
-        return status === 200 // 只接受 200 状态码
-      }
+      timeout: 8000, // 增加超时时间到 8 秒
+      validateStatus: (status) => status === 200
     })
 
     if (response.data?.data?.public_metrics?.followers_count !== undefined) {
@@ -71,15 +69,19 @@ async function getTwitterFollowers(username: string): Promise<number> {
       const status = error.response?.status
       const rateLimitReset = error.response?.headers?.['x-rate-limit-reset']
       
-      if (status === 429 && rateLimitReset) {
-        console.error('Rate limit exceeded, will reset at:', new Date(parseInt(rateLimitReset) * 1000).toISOString())
+      if (status === 429) {
+        console.error('Rate limit exceeded')
+      } else if (status === 401) {
+        console.error('Authentication error - check Bearer Token')
+      } else if (status === 404) {
+        console.error('User not found')
       } else {
-        console.error('Twitter API error:', status)
+        console.error(`API error: ${status}`)
       }
     }
 
-    // 返回一个合理的默认值
-    return 1480 // 使用之前已知的粉丝数作为默认值
+    // 在生产环境中返回上一次已知的粉丝数
+    return IS_PRODUCTION ? 1467 : 1480
   }
 }
 
@@ -106,6 +108,8 @@ export async function getSocialStats() {
     // 如果有缓存，使用缓存值
     if (twitterFollowersCache) {
       stats.twitter = formatFollowers(twitterFollowersCache.value)
+    } else {
+      stats.twitter = formatFollowers(IS_PRODUCTION ? 1467 : 1480)
     }
   }
 

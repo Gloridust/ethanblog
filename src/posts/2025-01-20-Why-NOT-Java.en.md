@@ -23,6 +23,32 @@ However, this is also where the problem lies. The world of computer science is v
 
 Developers proficient in multiple languages can often master Java with ease, appreciating its design choices with a more inclusive mindset. On the other hand, those who focus solely on Java may struggle to understand or value the strengths of other languages.
 
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Print "Hello, World!"
+        System.out.println("Hello, World!");
+        // Calculate the sum of two numbers
+        int a = 5;
+        int b = 10;
+        int sum = add(a, b);
+        System.out.println("Sum: " + sum);
+    }
+    public static int add(int num1, int num2) {
+        return num1 + num2;
+    }
+}
+```
+Compare with
+```python
+# Print "Hello, World!"
+print("Hello, World!")
+# Calculate the sum of two numbers
+def add(num1, num2):
+    return num1 + num2
+print("Sum:", add(5, 10))
+```
+
 Java is indeed a "heavy sword"—clunky but powerful. Yet in the fast-paced world of technology, this characteristic is both an asset and a liability. Emerging languages bring modern features and new ways of thinking, while Java, burdened by its design philosophy and legacy, often lags behind in adopting innovations. The frustration with Java is less about hatred and more about disappointment in its limitations.
 
 ## Legacy Baggage and Modernity Debates  

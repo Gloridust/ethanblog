@@ -19,6 +19,32 @@ describe: “最近看到社媒上很多朋友在讨论「为什么大家对 Jav
 
 然而，问题恰恰出在这里。计算机科学的世界是如此广阔，编程的应用场景更是千变万化。并非所有场景都需要"工业级"的稳定性和规范性。有时候，我们需要的是快速原型，有时候是极致性能，有时候则是优雅的函数式编程体验。Java选择了一条路走到黑—它在工程化这条路上确实走到了极致，但这种选择必然意味着在其他方面有所取舍。那些精通多种编程语言的开发者，往往对Java也能驾轻就熟。这可能是因为他们对不同编程范式和设计理念都有深入理解，能够以更包容的心态看待Java的设计选择。反过来，那些只专注于Java的开发者，往往会局限于Java的思维模式，很难理解或欣赏其他语言的优势。
 
+```java
+public class Main {
+    public static void main(String[] args) {
+        // 打印 "Hello, World!"
+        System.out.println("Hello, World!");
+        // 计算两个数的和
+        int a = 5;
+        int b = 10;
+        int sum = add(a, b);
+        System.out.println("Sum: " + sum);
+    }
+    public static int add(int num1, int num2) {
+        return num1 + num2;
+    }
+}
+```
+对比
+```python
+# 打印 "Hello, World!"
+print("Hello, World!")
+# 计算两个数的和
+def add(num1, num2):
+    return num1 + num2
+print("Sum:", add(5, 10))
+```
+
 Java确实是"大巧不工"，如同一把重剑，笨重但有力。但在这个瞬息万变的技术世界里，这种特质既是优势也是包袱。新兴语言推陈出新，带来了更多现代化的特性和思维方式，而Java由于其设计理念和历史包袱，在追赶这些创新时往往显得力不从心。与其说是对Java的恶意，不如说是对其局限性的无奈。
 
 ## Java的历史包袱与现代性争议

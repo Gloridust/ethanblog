@@ -11,9 +11,9 @@ const Profile: React.FC = () => {
         <Image 
           src="/images/avatar.png" 
           alt="Ethan Zou" 
-          layout="fill" 
+          fill
           className="rounded-full"
-          objectFit="cover"
+          style={{ objectFit: 'cover' }}
         />
       </div>
       <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">{t('name')}</h1>

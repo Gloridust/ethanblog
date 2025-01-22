@@ -26,11 +26,43 @@ const POSTS_PER_PAGE = 12
 
 export default function Home({ initialPosts, allTags }: HomeProps) {
   const router = useRouter()
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [activeTag, setActiveTag] = useState<string>('All')
   const [currentPage, setCurrentPage] = useState<number>(initialPosts.currentPage)
   const [posts, setPosts] = useState<PostPreview[]>(initialPosts.posts)
   const [isLoading, setIsLoading] = useState(false)
+  const [totalPages, setTotalPages] = useState(initialPosts.totalPages)
+  const [totalPosts, setTotalPosts] = useState(initialPosts.totalPosts)
+
+  // 监听语言变化，重置标签和页码
+  useEffect(() => {
+    setActiveTag('All')
+    setCurrentPage(1)
+  }, [locale])
+
+  // 监听数据变化
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setIsLoading(true)
+      try {
+        const response = await fetch(
+          `/api/posts?page=${currentPage}&locale=${locale}${
+            activeTag !== 'All' ? `&tag=${activeTag}` : ''
+          }`
+        )
+        const data = await response.json()
+        setPosts(data.posts)
+        setTotalPages(data.totalPages)
+        setTotalPosts(data.totalPosts)
+      } catch (error) {
+        console.error('Failed to fetch posts:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchPosts()
+  }, [locale, currentPage, activeTag])
 
   const handlePageChange = async (page: number) => {
     setIsLoading(true)
@@ -80,14 +112,14 @@ export default function Home({ initialPosts, allTags }: HomeProps) {
             tags={['All', ...allTags]}
             activeTag={activeTag}
             onFilterChange={handleFilterChange}
-            filteredPostsCount={initialPosts.totalPosts}
+            filteredPostsCount={totalPosts}
           />
         </div>
         <PostGrid posts={posts} />
-        {initialPosts.totalPages > 1 && (
+        {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
-            totalPages={initialPosts.totalPages}
+            totalPages={totalPages}
             onPageChange={handlePageChange}
           />
         )}

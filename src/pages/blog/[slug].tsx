@@ -114,19 +114,26 @@ const PostPage = ({ postData }: PostPageProps) => {
     )
   }
 
+  // 构建完整的图片 URL
+  const fullImageUrl = postData.img ? 
+    (postData.img.startsWith('http') ? postData.img : `https://isethan.me${postData.img}`) : 
+    'https://isethan.me/images/avatar.png'
+
   const metadata = {
     title: postData.title,
     description: postData.describe || postData.content.slice(0, 160).replace(/[#*`]/g, ''),
-    keywords: `${Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags}, Ethan Zou, Gloridust, blog, developer, entrepreneur`,
+    keywords: `${Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags}, Ethan Zou, blog`,
     image: postData.img || '/images/avatar.png',
     date: postData.date,
     type: 'article' as const,
+    locale: router.locale,
+    author: 'Ethan Zou',
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
       headline: postData.title,
       description: postData.describe,
-      image: postData.img,
+      image: fullImageUrl,
       datePublished: postData.date,
       author: {
         '@type': 'Person',
@@ -135,11 +142,6 @@ const PostPage = ({ postData }: PostPageProps) => {
       }
     }
   }
-
-  // 构建完整的图片 URL
-  const fullImageUrl = postData.img ? 
-    (postData.img.startsWith('http') ? postData.img : `https://isethan.me${postData.img}`) : 
-    'https://isethan.me/images/avatar.png'
 
   return (
     <Layout {...metadata}>

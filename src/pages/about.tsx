@@ -84,7 +84,7 @@ const NextArrow = (props: any) => {
 }
 
 export default function AboutPage({ socialStats }: AboutPageProps) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   const socialPlatforms: SocialPlatform[] = [
@@ -136,10 +136,11 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
   const metadata = {
     title: t('aboutTitle'),
     description: t('bio'),
-    keywords: 'Ethan Zou, blog,Gloridust, about, profile, developer, entrepreneur',
-    // 可以添加 Open Graph 图片
+    keywords: 'Ethan Zou, blog, about, profile, developer, entrepreneur',
     image: '/images/avatar.png',
-    type: 'profile' as const
+    type: 'profile' as const,
+    locale: locale,
+    author: 'Ethan Zou'
   }
 
   return (

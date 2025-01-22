@@ -97,7 +97,14 @@ export default function Home({ initialPosts, allTags }: HomeProps) {
   }
 
   return (
-    <Layout>
+    <Layout
+      title={t('blogTitle')}
+      description={t('bio')}
+      keywords="Ethan Zou, blog, developer, entrepreneur, React, NextJS, Flutter, SwiftUI, ML, Python"
+      image="/images/avatar.png"
+      type="website"
+      locale={locale}
+    >
       <Head>
         <title>{t('blogTitle')}</title>
         <meta name="description" content={t('bio')} />

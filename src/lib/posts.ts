@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { Post } from '@/types'
+import { Post, PostPreview } from '@/types'
 
 const postsDirectory = path.join(process.cwd(), 'src/posts')
 
@@ -98,4 +98,46 @@ export function getAllTags(): string[] {
 export function getPostsByTag(tag: string, language: string): Post[] {
   const posts = getPostsByLanguage(language)
   return posts.filter(post => Array.isArray(post.tags) && post.tags.includes(tag))
+}
+
+interface PaginatedPosts {
+  posts: PostPreview[];
+  totalPosts: number;
+  currentPage: number;
+  totalPages: number;
+}
+
+export function getPaginatedPosts(
+  locale: string,
+  page: number = 1,
+  limit: number = 12,
+  tag?: string
+): PaginatedPosts {
+  let allPosts = getPostsByLanguage(locale)
+  
+  // 如果指定了标签且不是 'All'，进行过滤
+  if (tag && tag !== 'All') {
+    allPosts = allPosts.filter(post => 
+      Array.isArray(post.tags) && post.tags.includes(tag)
+    )
+  }
+
+  const start = (page - 1) * limit
+  const end = start + limit
+  
+  const paginatedPosts = allPosts.slice(start, end).map(post => ({
+    slug: post.slug,
+    title: post.title,
+    date: post.date,
+    tags: post.tags,
+    img: post.img,
+    describe: post.describe,
+  }))
+
+  return {
+    posts: paginatedPosts,
+    totalPosts: allPosts.length,
+    currentPage: page,
+    totalPages: Math.ceil(allPosts.length / limit)
+  }
 }

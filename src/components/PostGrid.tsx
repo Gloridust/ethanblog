@@ -1,11 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Post } from '@/types'
+import { PostPreview } from '@/types'
 import useTranslation from '@/hooks/useTranslation'
 
 interface PostGridProps {
-  posts: Post[]
+  posts: PostPreview[]
 }
 
 const PostGrid: React.FC<PostGridProps> = ({ posts }) => {
@@ -20,21 +20,31 @@ const PostGrid: React.FC<PostGridProps> = ({ posts }) => {
       {posts.map((post) => (
         <Link href={`/blog/${post.slug}`} key={post.slug} className="block">
           <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 h-full flex flex-col transform hover:-translate-y-1">
-            <div className="relative h-48 bg-gray-200 dark:bg-gray-700">
+            <div className="relative aspect-[16/9] bg-gray-200 dark:bg-gray-700">
               <Image
                 src={post.img}
                 alt={post.title}
-                layout="fill"
-                objectFit="cover"
+                fill
+                quality={75}
                 loading="lazy"
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkLzYxMC8vMTQ3PEFGODhNPTQ4RklJSkxOTlFRVVFMUVJRSkxJSkn/2wBDAR"
                 className="transition-opacity duration-300"
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                onLoad={(e) => {
+                  const img = e.target as HTMLImageElement
+                  img.style.opacity = '1'
+                }}
               />
             </div>
             <div className="p-6 flex flex-col flex-grow">
-              <h2 className="text-xl font-semibold mb-2 line-clamp-2 text-gray-900 dark:text-white">{post.title}</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 flex-grow">{post.describe}</p>
+              <h2 className="text-xl font-semibold mb-2 line-clamp-2 text-gray-900 dark:text-white">
+                {post.title}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 flex-grow">
+                {post.describe}
+              </p>
               <div className="flex flex-wrap gap-2 mb-2">
                 {Array.isArray(post.tags) ? (
                   post.tags.map((tag) => (

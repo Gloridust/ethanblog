@@ -7,79 +7,62 @@ import TagFilter from '@/components/TagFilter'
 import PostGrid from '@/components/PostGrid'
 import Pagination from '@/components/Pagination'
 import LoadingScreen from '@/components/LoadingScreen'
-import { getPostsByLanguage } from '@/lib/posts'
-import { Post } from '@/types'
+import { getPaginatedPosts } from '@/lib/posts'
+import { PostPreview } from '@/types'
 import useTranslation from '@/hooks/useTranslation'
+import { useRouter } from 'next/router'
 
 interface HomeProps {
-  posts: Post[]
-  allTags: string[]
+  initialPosts: {
+    posts: PostPreview[];
+    totalPosts: number;
+    currentPage: number;
+    totalPages: number;
+  };
+  allTags: string[];
 }
 
-export default function Home({ posts, allTags }: HomeProps) {
+const POSTS_PER_PAGE = 12
+
+export default function Home({ initialPosts, allTags }: HomeProps) {
+  const router = useRouter()
   const { t } = useTranslation()
   const [activeTag, setActiveTag] = useState<string>('All')
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [isLoading, setIsLoading] = useState(true)
-  const [imagesLoaded, setImagesLoaded] = useState(0)
-  const POSTS_PER_PAGE = 12
+  const [currentPage, setCurrentPage] = useState<number>(initialPosts.currentPage)
+  const [posts, setPosts] = useState<PostPreview[]>(initialPosts.posts)
+  const [isLoading, setIsLoading] = useState(false)
 
-  // 计算需要加载的总图片数
-  const totalImages = posts.length
-
-  useEffect(() => {
-    // 预加载所有文章图片
-    const imagePromises = posts.map(post => {
-      return new Promise((resolve) => {
-        const img = new Image()
-        img.src = post.img
-        img.onload = () => {
-          setImagesLoaded(prev => prev + 1)
-          resolve(null)
-        }
-        img.onerror = () => resolve(null) // 处理加载失败的情况
-      })
-    })
-
-    Promise.all(imagePromises).then(() => {
+  const handlePageChange = async (page: number) => {
+    setIsLoading(true)
+    try {
+      // 获取新页面的数据
+      const response = await fetch(`/api/posts?page=${page}&locale=${router.locale}${activeTag !== 'All' ? `&tag=${activeTag}` : ''}`)
+      const data = await response.json()
+      setPosts(data.posts)
+      
+      // 更新 URL
+      router.push({
+        pathname: router.pathname,
+        query: { ...router.query, page },
+      }, undefined, { shallow: true })
+      
+      setCurrentPage(page)
+      window.scrollTo(0, 0)
+    } catch (error) {
+      console.error('Failed to fetch posts:', error)
+    } finally {
       setIsLoading(false)
-    })
-
-    // 如果图片加载时间过长，设置一个超时
-    const timeout = setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-
-    return () => clearTimeout(timeout)
-  }, [posts])
-
-  const filteredPosts = useMemo(() => {
-    if (activeTag === 'All') {
-      return posts
     }
-    return posts.filter((post) => post.tags.includes(activeTag))
-  }, [posts, activeTag])
-
-  const paginatedPosts = useMemo(() => {
-    const start = (currentPage - 1) * POSTS_PER_PAGE
-    const end = start + POSTS_PER_PAGE
-    return filteredPosts.slice(start, end)
-  }, [filteredPosts, currentPage])
-
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
+  }
 
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag)
     setCurrentPage(1)
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: 1, tag },
+    }, undefined, { shallow: true })
   }
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [currentPage])
 
   return (
     <Layout>
@@ -92,20 +75,20 @@ export default function Home({ posts, allTags }: HomeProps) {
 
       <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         <div className="max-w-4xl mx-auto">
-          <Profile /> 
-          <TagFilter 
-            tags={['All', ...allTags]} 
-            activeTag={activeTag} 
-            onFilterChange={handleFilterChange} 
-            filteredPostsCount={filteredPosts.length}
+          <Profile />
+          <TagFilter
+            tags={['All', ...allTags]}
+            activeTag={activeTag}
+            onFilterChange={handleFilterChange}
+            filteredPostsCount={initialPosts.totalPosts}
           />
         </div>
-        <PostGrid posts={paginatedPosts} />
-        {totalPages > 1 && (
-          <Pagination 
-            currentPage={currentPage} 
-            totalPages={totalPages} 
-            onPageChange={handlePageChange} 
+        <PostGrid posts={posts} />
+        {initialPosts.totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={initialPosts.totalPages}
+            onPageChange={handlePageChange}
           />
         )}
       </div>
@@ -115,13 +98,19 @@ export default function Home({ posts, allTags }: HomeProps) {
 
 export const getStaticProps: GetStaticProps<HomeProps> = async (context) => {
   const locale = context.locale || 'zh'
-  const posts = getPostsByLanguage(locale)
-  const allTags = Array.from(new Set(posts.flatMap((post) => post.tags)))
+  const page = 1 // 初始页面
+  const paginatedPosts = getPaginatedPosts(locale, page, POSTS_PER_PAGE)
+  
+  // 获取所有标签
+  const allTags = Array.from(new Set(paginatedPosts.posts.flatMap(post => 
+    Array.isArray(post.tags) ? post.tags : [post.tags]
+  )))
   
   return {
     props: {
-      posts,
+      initialPosts: paginatedPosts,
       allTags,
     },
+    revalidate: 60, // 每分钟重新生成页面
   }
 }

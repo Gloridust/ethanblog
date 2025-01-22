@@ -12,6 +12,7 @@ import Head from 'next/head'
 import LazyImage from '@/components/LazyImage'
 import Comments from '@/components/Comments'
 import { useState } from 'react'
+import Image from 'next/image'
 
 interface PostPageProps {
   postData: Post | null
@@ -82,7 +83,18 @@ const PostPage = ({ postData }: PostPageProps) => {
   const renderers = {
     img: (props: React.ComponentPropsWithoutRef<'img'>) => (
       <span className="block my-8">
-        <LazyImage src={props.src || ''} alt={props.alt || ''} />
+        <Image
+          src={props.src || ''}
+          alt={props.alt || ''}
+          width={800}
+          height={400}
+          className="rounded-lg"
+          style={{ objectFit: 'cover' }}
+          onLoad={(e) => {
+            const img = e.target as HTMLImageElement
+            img.style.opacity = '1'
+          }}
+        />
       </span>
     ),
     code: CodeBlock

@@ -127,9 +127,18 @@ const Header: React.FC = () => {
               <div className="relative" ref={languageMenuRef}>
                 <button
                   onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-                  className="bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200"
+                  className="bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200 flex items-center gap-1"
                 >
-                  {locale === 'zh' ? '中文' : 'English'}
+                  <span>{t('language')}</span>
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className={`h-4 w-4 transition-transform duration-200 ${isLanguageMenuOpen ? 'rotate-180' : ''}`} 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
                 {isLanguageMenuOpen && (
                   <div className="absolute right-0 mt-2 py-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-xl z-20">

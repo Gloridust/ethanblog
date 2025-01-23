@@ -196,7 +196,7 @@ export default PostPage
 
 export const getStaticPaths: GetStaticPaths = async (context) => {
   const posts = getAllPosts()
-  const locales = context.locales || ['zh']
+  const locales = context.locales || ['cn']
 
   const paths = locales.flatMap((locale) => 
     posts.map((post) => ({

@@ -8,7 +8,7 @@ interface Friend {
   name: string
   avatar: string
   description: {
-    zh: string
+    cn: string
     en: string
   }
   link: string
@@ -40,7 +40,7 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
               <div className="overflow-hidden">
                 <h2 className="text-xl font-semibold mb-1 truncate">{friend.name}</h2>
                 <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
-                  {friend.description[locale as 'zh' | 'en']}
+                  {friend.description[locale as 'cn' | 'en']}
                 </p>
               </div>
             </div>
@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps = async () => {
       "name": "Rene Wang",
       "avatar": "/images/friends/ReneWang.png",
       "description": {
-        "zh": "全栈开发大佬，天才少年，...",
+        "cn": "全栈开发大佬，天才少年，...",
         "en": "Full-stack developer, genius, ..."
       },
       "link": "https://rene.wang"
@@ -67,7 +67,7 @@ export const getStaticProps: GetStaticProps = async () => {
       "name": "Charles Su",
       "avatar": "/images/friends/CharlesSu.jpg",
       "description": {
-        "zh": "乐于折腾，擅长刷机、黑苹果...",
+        "cn": "乐于折腾，擅长刷机、黑苹果...",
         "en": "Tech enthusiast, expert in custom ROMs, Hackintosh..."
       },
       "link": "https://charles.su"
@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps = async () => {
       "name": "YGeeker",
       "avatar": "/images/friends/YGeeker.png",
       "description": {
-        "zh": "创业公司，我在此担任联合创始人",
+        "cn": "创业公司，我在此担任联合创始人",
         "en": "Start-up company. I serve as a co-founder here."
       },
       "link": "https://ygeeker.com"
@@ -85,7 +85,7 @@ export const getStaticProps: GetStaticProps = async () => {
       "name": "Apply links",
       "avatar": "/images/friends/github.ico",
       "description": {
-        "zh": "点击此处申请友链",
+        "cn": "点击此处申请友链",
         "en": "Click here to apply friend-links"
       },
       "link": "https://github.com/Gloridust/ethanblog/issues/1"

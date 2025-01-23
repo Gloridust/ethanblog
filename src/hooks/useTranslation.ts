@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
 import en from '../locales/en.json'
-import zh from '../locales/zh.json'
+import cn from '../locales/cn.json'
 
 const useTranslation = () => {
   const router = useRouter()
   const { locale, locales, defaultLocale } = router
-  const translations = locale === 'en' ? en : zh
+  const translations = locale === 'en' ? en : cn
 
   const setLocale = (newLocale: string) => {
     const { pathname, asPath, query } = router

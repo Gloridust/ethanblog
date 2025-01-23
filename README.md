@@ -41,7 +41,7 @@ language: en
 
 支持双语，使用 json 文件配置：
 
-- 中文：[src/locales/zh.json](src/locales/zh.json)
+- 中文：[src/locales/cn.json](src/locales/cn.json)
 - ENG：[src/locales/en.json](src/locales/en.json)
 
 该文件包含其它 i18n 配置，个人简介仅更改 `name`、`bio`、`blogtitle` 即可。
@@ -50,7 +50,7 @@ language: en
 
 关于页面由 Markdown 更改，支持中英双语：
 
-- 中文：[src/content/zh/about.md](src/content/zh/about.md)
+- 中文：[src/content/cn/about.md](src/content/cn/about.md)
 - ENG：[src/content/en/about.md](src/content/en/about.md)
 
 同时，你也可以更改关于页面的横幅：[public/images/about-banner.jpg](public/images/about-banner.jpg)
@@ -65,7 +65,7 @@ language: en
       "name": "Rene Wang",
       "avatar": "/images/friends/ReneWang.png",
       "description": {
-        "zh": "全栈开发大佬，天才少年，...",
+        "cn": "全栈开发大佬，天才少年，...",
         "en": "Full-stack developer, genius, ..."
       },
       "link": "https://rene.wang"
@@ -74,7 +74,7 @@ language: en
       "name": "Charles Su",
       "avatar": "/images/friends/CharlesSu.jpg",
       "description": {
-        "zh": "乐于折腾，擅长刷机、黑苹果...",
+        "cn": "乐于折腾，擅长刷机、黑苹果...",
         "en": "Tech enthusiast, expert in custom ROMs, Hackintosh..."
       },
       "link": "https://charles.su"
@@ -83,7 +83,7 @@ language: en
       "name": "YGeeker",
       "avatar": "/images/friends/YGeeker.png",
       "description": {
-        "zh": "创业公司，我在此担任联合创始人",
+        "cn": "创业公司，我在此担任联合创始人",
         "en": "Start-up company. I serve as a co-founder here."
       },
       "link": "https://ygeeker.com"

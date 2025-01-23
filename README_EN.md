@@ -41,7 +41,7 @@ Chinese articles may not be classified as `language`, but English articles must 
 
 Bilingual support is available, configured using JSON files:
 
-- Chinese: [src/locales/zh.json](src/locales/zh.json)
+- Chinese: [src/locales/cn.json](src/locales/cn.json)
 - English: [src/locales/en.json](src/locales/en.json)
 
 These files contain other i18n configurations. To update your personal profile, you only need to modify the `name`, `bio`, and `blogtitle` fields.
@@ -50,7 +50,7 @@ These files contain other i18n configurations. To update your personal profile, 
 
 The About page is edited in Markdown and supports both Chinese and English:
 
-- Chinese: [src/content/zh/about.md](src/content/zh/about.md)
+- Chinese: [src/content/cn/about.md](src/content/cn/about.md)
 - English: [src/content/en/about.md](src/content/en/about.md)
 
 You can also change the banner image for the About page: [public/images/about-banner.jpg](public/images/about-banner.jpg)
@@ -65,7 +65,7 @@ The Friends page is written in JSON format within a TSX file: [src/pages/friends
       "name": "Rene Wang",
       "avatar": "/images/friends/ReneWang.png",
       "description": {
-        "zh": "全栈开发大佬，天才少年，...",
+        "cn": "全栈开发大佬，天才少年，...",
         "en": "Full-stack developer, genius, ..."
       },
       "link": "https://rene.wang"
@@ -74,7 +74,7 @@ The Friends page is written in JSON format within a TSX file: [src/pages/friends
       "name": "Charles Su",
       "avatar": "/images/friends/CharlesSu.jpg",
       "description": {
-        "zh": "乐于折腾，擅长刷机、黑苹果...",
+        "cn": "乐于折腾，擅长刷机、黑苹果...",
         "en": "Tech enthusiast, expert in custom ROMs, Hackintosh..."
       },
       "link": "https://charles.su"
@@ -83,7 +83,7 @@ The Friends page is written in JSON format within a TSX file: [src/pages/friends
       "name": "YGeeker",
       "avatar": "/images/friends/YGeeker.png",
       "description": {
-        "zh": "创业公司，我在此担任联合创始人",
+        "cn": "创业公司，我在此担任联合创始人",
         "en": "Start-up company. I serve as a co-founder here."
       },
       "link": "https://ygeeker.com"

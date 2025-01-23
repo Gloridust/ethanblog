@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({
         <link rel="canonical" href={canonicalUrl} />
         
         {/* Open Graph / Facebook */}
-        <meta property="og:locale" content={currentLocale === 'zh' ? 'zh_CN' : 'en_US'} />
+        <meta property="og:locale" content={currentLocale === 'cn' ? 'cn_CN' : 'en_US'} />
         <meta property="og:type" content={type} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:site_name" content={defaultTitle} />
@@ -76,13 +76,13 @@ const Layout: React.FC<LayoutProps> = ({
 
         {/* 添加语言相关标签 */}
         <meta httpEquiv="content-language" content={currentLocale} />
-        <meta name="language" content={currentLocale === 'zh' ? 'Chinese' : 'English'} />
+        <meta name="language" content={currentLocale === 'cn' ? 'Chinese' : 'English'} />
         
         {/* 添加替代语言链接 */}
         <link 
           rel="alternate" 
           href={`${siteUrl}${router.pathname}`} 
-          hrefLang="zh" 
+          hrefLang="cn" 
         />
         <link 
           rel="alternate" 

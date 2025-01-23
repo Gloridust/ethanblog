@@ -136,7 +136,7 @@ export default function Home({ initialPosts, allTags }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async (context) => {
-  const locale = context.locale || 'zh'
+  const locale = context.locale || 'cn'
   const page = 1 // 初始页面
   const paginatedPosts = getPaginatedPosts(locale, page, POSTS_PER_PAGE)
   

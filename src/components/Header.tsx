@@ -98,9 +98,9 @@ const Header: React.FC = () => {
               </Link>
               <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
               <button
-                onClick={() => handleLanguageChange('zh')}
+                onClick={() => handleLanguageChange('cn')}
                 className={`block w-full text-left px-4 py-2 text-sm ${
-                  locale === 'zh' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-200'
+                  locale === 'cn' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-200'
                 } hover:bg-gray-100 dark:hover:bg-gray-700`}
               >
                 中文
@@ -143,9 +143,9 @@ const Header: React.FC = () => {
                 {isLanguageMenuOpen && (
                   <div className="absolute right-0 mt-2 py-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-xl z-20">
                     <button
-                      onClick={() => handleLanguageChange('zh')}
+                      onClick={() => handleLanguageChange('cn')}
                       className={`block w-full text-left px-4 py-2 text-sm ${
-                        locale === 'zh' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'
+                        locale === 'cn' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'
                       } hover:bg-gray-100 dark:hover:bg-gray-700`}
                     >
                       中文

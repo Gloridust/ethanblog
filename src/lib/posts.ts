@@ -39,7 +39,7 @@ export function getAllPosts(): Post[] {
         tags,
         img: matterResult.data.img || '',
         describe: matterResult.data.describe || '',
-        language: matterResult.data.language || 'zh',
+        language: matterResult.data.language || 'cn',
         content: matterResult.content
       }
 
@@ -73,7 +73,7 @@ export function getPostData(slug: string, language: string): Post | undefined {
     tags,
     img: matterResult.data.img || '',
     describe: matterResult.data.describe || '',
-    language: matterResult.data.language || 'zh',
+    language: matterResult.data.language || 'cn',
     content: matterResult.content
   }
 

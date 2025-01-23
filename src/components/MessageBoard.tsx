@@ -82,7 +82,7 @@ const MessageBoard: React.FC = () => {
           emitMetadata="1"
           inputPosition="top"
           theme={JSON.stringify(theme === 'dark' ? darkTheme : lightTheme)}
-          lang={locale === 'zh' ? 'zh-CN' : 'en'}
+          lang={locale === 'cn' ? 'cn-CN' : 'en'}
           loading="lazy"
         />
       </div>

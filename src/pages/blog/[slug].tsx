@@ -144,7 +144,19 @@ const PostPage = ({ postData }: PostPageProps) => {
   }
 
   return (
-    <Layout {...metadata}>
+    <Layout
+      title={postData.title}
+      description={metadata.description}
+      keywords={metadata.keywords}
+      image={fullImageUrl}
+      type="article"
+      publishedTime={postData.date}
+      modifiedTime={postData.date}
+      section={Array.isArray(postData.tags) ? postData.tags[0] : postData.tags}
+      tags={Array.isArray(postData.tags) ? postData.tags : [postData.tags]}
+      locale={router.locale}
+      author="Ethan Zou"
+    >
       <Head>
         <script
           type="application/ld+json"

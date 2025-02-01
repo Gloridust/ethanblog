@@ -16,6 +16,10 @@ interface LayoutProps {
   author?: string
   locale?: string
   structuredData?: Record<string, any>
+  publishedTime?: string
+  modifiedTime?: string
+  section?: string
+  tags?: string[]
 }
 
 const Layout: React.FC<LayoutProps> = ({ 
@@ -27,7 +31,11 @@ const Layout: React.FC<LayoutProps> = ({
   date,
   type = 'website',
   author = 'Ethan Zou',
-  locale: pageLocale
+  locale: pageLocale,
+  publishedTime,
+  modifiedTime,
+  section,
+  tags,
 }) => {
   const { t, locale } = useTranslation()
   const router = useRouter()
@@ -41,6 +49,37 @@ const Layout: React.FC<LayoutProps> = ({
   const canonicalUrl = `${siteUrl}${router.asPath}`
   const currentLocale = pageLocale || locale
 
+  // 构建完整的结构化数据
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": type === 'article' ? 'BlogPosting' : 'WebSite',
+    url: canonicalUrl,
+    name: title || defaultTitle,
+    description: description || defaultDescription,
+    author: {
+      "@type": "Person",
+      name: author,
+      url: siteUrl,
+      image: `${siteUrl}/images/avatar.png`,
+      sameAs: [
+        "https://twitter.com/gloridust",
+        "https://github.com/Gloridust"
+      ]
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Ethan Zou's Blog",
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/favicon.png`
+      }
+    },
+    ...(publishedTime && {
+      datePublished: publishedTime,
+      dateModified: modifiedTime || publishedTime
+    })
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
       <Head>
@@ -53,14 +92,21 @@ const Layout: React.FC<LayoutProps> = ({
         <link rel="canonical" href={canonicalUrl} />
         
         {/* Open Graph / Facebook */}
-        <meta property="og:locale" content={currentLocale === 'cn' ? 'cn_CN' : 'en_US'} />
+        <meta property="og:locale" content={currentLocale === 'cn' ? 'zh_CN' : 'en_US'} />
         <meta property="og:type" content={type} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:site_name" content={defaultTitle} />
         <meta property="og:title" content={title || defaultTitle} />
         <meta property="og:description" content={description || defaultDescription} />
         <meta property="og:image" content={`${siteUrl}${image || defaultImage}`} />
-        {date && <meta property="article:published_time" content={date} />}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+        {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+        {section && <meta property="article:section" content={section} />}
+        {tags && tags.map(tag => (
+          <meta key={tag} property="article:tag" content={tag} />
+        ))}
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -82,12 +128,12 @@ const Layout: React.FC<LayoutProps> = ({
         <link 
           rel="alternate" 
           href={`${siteUrl}${router.pathname}`} 
-          hrefLang="cn" 
+          hrefLang="zh-CN" 
         />
         <link 
           rel="alternate" 
           href={`${siteUrl}/en${router.pathname}`} 
-          hrefLang="en" 
+          hrefLang="en-US" 
         />
         <link 
           rel="alternate" 
@@ -99,22 +145,7 @@ const Layout: React.FC<LayoutProps> = ({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": type === 'article' ? 'BlogPosting' : 'WebSite',
-              "url": canonicalUrl,
-              "name": title || defaultTitle,
-              "description": description || defaultDescription,
-              "author": {
-                "@type": "Person",
-                "name": author,
-                "url": siteUrl
-              },
-              ...(date && {
-                "datePublished": date,
-                "dateModified": date
-              })
-            })
+            __html: JSON.stringify(structuredData)
           }}
         />
       </Head>

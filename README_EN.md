@@ -15,14 +15,29 @@ EthanBlog is an open-source blog system based on NextJS, using Markdown format. 
     <img src="public/images/preview.png">
 </p>
 
+Let me translate this README document to English:
+
+## Features
+
+- 🌍 Bilingual support (Chinese and English)
+- 🌓 Adaptive dark mode
+- 📱 Responsive design
+- 📖 Pagination loading
+- 🔍 SEO optimization
+- 🖼️ Image lazy loading and optimization
+- 💬 Giscus comment system
+- 🔗 Social media sharing optimization
+- 📊 Article tag categorization
+- 🗺️ Automatic Sitemap generation
+
 ## Structure
 
 ### Blog
 
-- Article directory: [src/posts/](src/posts/)
+- Articles directory: [src/posts/](src/posts/)
 - Article images: [public/images/posts/](public/images/posts/)
 
-The header format for Markdown files is as follows:
+The Markdown header format is as follows:
 
 ```markdown
 ---
@@ -35,29 +50,34 @@ language: en
 ---
 ```
 
-Chinese articles may not be classified as `language`, but English articles must be classified as `language: en`.
+Chinese articles don't need to fill in `language`, but English articles must specify `language:en` to be properly categorized.
 
 ### Homepage Personal Profile
 
-Bilingual support is available, configured using JSON files:
+Supports bilingual configuration using JSON files:
 
 - Chinese: [src/locales/cn.json](src/locales/cn.json)
 - English: [src/locales/en.json](src/locales/en.json)
 
-These files contain other i18n configurations. To update your personal profile, you only need to modify the `name`, `bio`, and `blogtitle` fields.
+These files contain other i18n configurations; for personal profile, only modify `name`, `bio`, and `blogtitle`.
 
 ### About
 
-The About page is edited in Markdown and supports both Chinese and English:
+The About page includes the following features:
+- Personal profile
+- Social media statistics (supports Twitter, Xiaohongshu, etc.)
+- Image gallery (supports carousel and preview)
+- Message board functionality
 
+Configuration file locations:
 - Chinese: [src/content/cn/about.md](src/content/cn/about.md)
 - English: [src/content/en/about.md](src/content/en/about.md)
 
-You can also change the banner image for the About page: [public/images/about-banner.jpg](public/images/about-banner.jpg)
+Social media configuration is set in `src/lib/social.ts`.
 
-### Friends
+### Friend Links
 
-The Friends page is written in JSON format within a TSX file: [src/pages/friends.tsx](src/pages/friends.tsx). It also supports multiple languages. The format is as follows:
+Friend links are written in JSON within TSX: [src/pages/friends.tsx](src/pages/friends.tsx), also supporting multiple languages. Format as follows:
 
 ```json
 [
@@ -65,31 +85,23 @@ The Friends page is written in JSON format within a TSX file: [src/pages/friends
       "name": "Rene Wang",
       "avatar": "/images/friends/ReneWang.png",
       "description": {
-        "cn": "全栈开发大佬，天才少年，...",
+        "cn": "Full-stack development expert, young genius, ...",
         "en": "Full-stack developer, genius, ..."
       },
       "link": "https://rene.wang"
-    },
-    {
-      "name": "Charles Su",
-      "avatar": "/images/friends/CharlesSu.jpg",
-      "description": {
-        "cn": "乐于折腾，擅长刷机、黑苹果...",
-        "en": "Tech enthusiast, expert in custom ROMs, Hackintosh..."
-      },
-      "link": "https://charles.su"
-    },
-    {
-      "name": "YGeeker",
-      "avatar": "/images/friends/YGeeker.png",
-      "description": {
-        "cn": "创业公司，我在此担任联合创始人",
-        "en": "Start-up company. I serve as a co-founder here."
-      },
-      "link": "https://ygeeker.com"
-    },
+    }
 ]
 ```
+
+### SEO Optimization
+
+The blog has built-in SEO optimization features:
+- Automatic generation of sitemap.xml and robots.txt
+- Complete Open Graph and Twitter Card support
+- Structured data (Schema.org) support
+- Multilingual SEO optimization
+- Image optimization and lazy loading
+- Standard HTML5 semantic tags
 
 ## Debugging
 
@@ -102,7 +114,7 @@ git clone https://github.com/Gloridust/ethanblog.git
 cd ./ethanblog
 ```
 
-2. Initialize the project and install the required dependencies:
+2. Initialize the project and install required dependencies:
 
 ```bash
 yarn
@@ -116,10 +128,28 @@ yarn dev
 
 You can now debug the blog at `localhost:3000` or another available port.
 
+## Environment Variable Configuration
+
+Create a `.env.local` file and add the following configuration:
+
+```env
+TWITTER_BEARER_TOKEN=your_twitter_api_token
+```
+
 ## Deployment
 
-We recommend using [Vercel](https://vercel.com/new/) for one-click deployment.
+1. We recommend using [Vercel](https://vercel.com/new/) for one-click deployment
+2. After deployment, add environment variables in Vercel project settings
 
 ## Open Source and Contributions
 
-This project is open-sourced under the `MIT` license. We welcome all issues and PRs to help improve this project together!
+This project uses the `MIT` license and welcomes all issues and PRs to make this project better!
+
+## Tech Stack
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- React Markdown
+- Giscus
+- next-sitemap

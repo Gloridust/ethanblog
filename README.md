@@ -9,11 +9,24 @@
 
 <div align="center"><p><a href="./README.md">简体中文</a>|<a href="./README_EN.md">English(US)</a></p></div>
 
-EthanBlog 是一套基于 NextJS 的开源博客系统，使用 Markdown 格式，支持 中文/ENG 双语、支持深色模式，具有**博客、关于、友链**页面，使用 Vercel 一键部署。
+EthanBlog 是一套基于 NextJS 的开源博客系统，使用 Markdown 格式，支持 中文/ENG 双语、支持深色模式，具有**博客、关于、友链**页面，使用 Vercel 一键部署。特点包括文章分页加载、SEO 优化、图片优化、社交媒体分享等功能。
 
 <p align="center">
     <img src="public/images/preview.png">
 </p>
+
+## 功能特点
+
+- 🌍 中英文双语支持
+- 🌓 自适应深色模式
+- 📱 响应式设计
+- 📖 分页加载
+- 🔍 SEO 优化
+- 🖼️ 图片懒加载和优化
+- 💬 Giscus 评论系统
+- 🔗 社交媒体分享优化
+- 📊 文章标签分类
+- 🗺️ 自动生成 Sitemap
 
 ## 结构
 
@@ -22,7 +35,7 @@ EthanBlog 是一套基于 NextJS 的开源博客系统，使用 Markdown 格式�
 - 文章目录：[src/posts/](src/posts/)
 - 文章图片：[public/images/posts/](public/images/posts/)
 
-其中，Markdown头部格式如下：
+其中，Markdown 头部格式如下：
 
 ```markdown
 ---
@@ -48,12 +61,17 @@ language: en
 
 ### 关于
 
-关于页面由 Markdown 更改，支持中英双语：
+关于页面包含以下功能：
+- 个人简介
+- 社交媒体统计（支持 Twitter、小红书等）
+- 图片画廊（支持轮播和预览）
+- 留言板功能
 
+配置文件位置：
 - 中文：[src/content/cn/about.md](src/content/cn/about.md)
 - ENG：[src/content/en/about.md](src/content/en/about.md)
 
-同时，你也可以更改关于页面的横幅：[public/images/about-banner.jpg](public/images/about-banner.jpg)
+社交媒体配置在 `src/lib/social.ts` 中设置。
 
 ### 友链
 
@@ -69,27 +87,19 @@ language: en
         "en": "Full-stack developer, genius, ..."
       },
       "link": "https://rene.wang"
-    },
-    {
-      "name": "Charles Su",
-      "avatar": "/images/friends/CharlesSu.jpg",
-      "description": {
-        "cn": "乐于折腾，擅长刷机、黑苹果...",
-        "en": "Tech enthusiast, expert in custom ROMs, Hackintosh..."
-      },
-      "link": "https://charles.su"
-    },
-    {
-      "name": "YGeeker",
-      "avatar": "/images/friends/YGeeker.png",
-      "description": {
-        "cn": "创业公司，我在此担任联合创始人",
-        "en": "Start-up company. I serve as a co-founder here."
-      },
-      "link": "https://ygeeker.com"
-    },
+    }
 ]
 ```
+
+### SEO 优化
+
+博客已内置以下 SEO 优化功能：
+- 自动生成 sitemap.xml 和 robots.txt
+- 完整的 Open Graph 和 Twitter Card 支持
+- 结构化数据（Schema.org）支持
+- 多语言 SEO 优化
+- 图片优化和 lazy loading
+- 规范的 HTML5 语义化标签
 
 ## 调试
 
@@ -108,7 +118,7 @@ cd ./ethanblog
 yarn
 ```
 
-3. 开始调试
+3. 开始调试：
 
 ```bash
 yarn dev
@@ -116,10 +126,28 @@ yarn dev
 
 此时，你可以在 `localhost:3000` 或其它可用端口调试该博客。
 
+## 环境变量配置
+
+创建 `.env.local` 文件，添加以下配置：
+
+```env
+TWITTER_BEARER_TOKEN=your_twitter_api_token
+```
+
 ## 部署
 
-我们建议使用 [Vercel](https://vercel.com/new/) 一键部署。
+1. 我们建议使用 [Vercel](https://vercel.com/new/) 一键部署
+2. 部署后，在 Vercel 项目设置中添加环境变量
 
 ## 开源与贡献
 
 该项目采用 `MIT` 开源协议，并且欢迎所有 issue 和 PR，共同将这个项目变得更好！
+
+## 技术栈
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- React Markdown
+- Giscus
+- next-sitemap

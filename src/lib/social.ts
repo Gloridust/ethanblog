@@ -123,7 +123,7 @@ export async function getSocialStats() {
     }
     
     stats.twitter = formatFollowers(twitterCount)
-    stats.xiaohongshu = formatFollowers(90)
+    stats.xiaohongshu = formatFollowers(101)
   } catch (error) {
     console.error('获取社交统计数据时发生错误:', error)
     

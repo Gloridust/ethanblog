@@ -77,7 +77,7 @@ const Comments: React.FC = () => {
           emitMetadata="1"
           inputPosition="top"
           theme={JSON.stringify(theme === 'dark' ? darkTheme : lightTheme)}
-          lang={locale === 'cn' ? 'cn-CN' : 'en'}
+          lang={locale === 'cn' ? 'zh-CN' : 'en'}
           loading="lazy"
         />
       </div>

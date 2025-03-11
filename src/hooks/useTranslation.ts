@@ -10,11 +10,8 @@ const useTranslation = () => {
   const setLocale = (newLocale: string) => {
     const { pathname, asPath, query } = router
     
-    if (pathname.startsWith('/blog/')) {
-      router.push('/', '/', { locale: newLocale })
-    } else {
-      router.push({ pathname, query }, asPath, { locale: newLocale })
-    }
+    // 使用新的路由结构，确保正确切换语言
+    router.push({ pathname, query }, asPath, { locale: newLocale })
   }
 
   // 修改 t 函数以支持参数

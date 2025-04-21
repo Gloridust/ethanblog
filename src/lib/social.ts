@@ -1,4 +1,5 @@
 import axios from 'axios'
+import * as cheerio from 'cheerio'
 
 const TWITTER_API_URL = 'https://api.twitter.com/2/users/by/username'
 const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN
@@ -12,6 +13,7 @@ interface CacheData {
 
 // 内存缓存
 let twitterFollowersCache: CacheData | null = null
+let xiaohongshuFollowersCache: CacheData | null = null
 const CACHE_DURATION = 1000 * 60 * 15 // 15分钟缓存
 
 function formatFollowers(count: number): string {
@@ -102,6 +104,176 @@ async function getTwitterFollowers(username: string): Promise<number> {
   }
 }
 
+// 将数字文本转换为整数
+function convertNumberText(text: string): number {
+  try {
+    // 移除空白字符
+    text = text.trim();
+    
+    // 处理带"万"或"w"的数字
+    if (text.includes('万') || text.includes('w')) {
+      text = text.replace('万', '').replace('w', '');
+      return Math.round(parseFloat(text) * 10000);
+    }
+    
+    // 处理普通数字
+    return Math.round(parseFloat(text));
+  } catch (error) {
+    console.error(`无法将文本转换为数字: ${text}`, error);
+    return 0;
+  }
+}
+
+async function getXiaohongshuFollowers(userId: string): Promise<number> {
+  try {
+    // 检查缓存
+    const now = Date.now();
+    if (xiaohongshuFollowersCache && (now - xiaohongshuFollowersCache.timestamp < CACHE_DURATION)) {
+      return xiaohongshuFollowersCache.value;
+    }
+
+    // 如果不在生产环境，返回默认值以避免开发环境中的频繁请求
+    if (!IS_PRODUCTION) {
+      return 140; // 开发环境返回默认值
+    }
+
+    const url = `https://www.xiaohongshu.com/user/profile/${userId}`;
+    console.log(`开始请求小红书页面: ${url}`);
+
+    const response = await axios({
+      method: 'get',
+      url,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Cache-Control': 'max-age=0',
+      },
+      timeout: 15000, // 15秒超时
+      validateStatus: (status) => status === 200
+    });
+
+    console.log(`请求成功，状态码: ${response.status}`);
+    
+    // 使用cheerio解析HTML
+    const $ = cheerio.load(response.data);
+    let fansCount = 0;
+    
+    // 尝试多种选择器找粉丝数
+    const possibleSelectors = [
+      // 常见的粉丝数选择器
+      'span:contains("粉丝")',
+      'div:contains("粉丝")',
+      '.count .num',
+      '.follower-count',
+      '.user-stats .follower-count',
+      '.user-data .data'
+    ];
+    
+    for (const selector of possibleSelectors) {
+      const elements = $(selector);
+      if (elements.length > 0) {
+        // 查找粉丝数文本
+        elements.each((_, el) => {
+          const element = $(el);
+          // 如果元素包含"粉丝"字样，查找前面的数字
+          if (element.text().includes('粉丝')) {
+            // 尝试在前一个兄弟元素中找数字
+            const prevSibling = element.prev();
+            if (prevSibling.length && /\d/.test(prevSibling.text())) {
+              fansCount = convertNumberText(prevSibling.text());
+              console.log(`找到粉丝数: ${fansCount}`);
+              return false; // 退出循环
+            }
+            
+            // 或者尝试正则从当前元素文本提取数字
+            const match = element.text().match(/(\d+(?:\.\d+)?(?:万|w)?)\s*粉丝/);
+            if (match) {
+              fansCount = convertNumberText(match[1]);
+              console.log(`从文本中提取粉丝数: ${fansCount}`);
+              return false; // 退出循环
+            }
+          }
+        });
+        
+        if (fansCount > 0) break; // 如果找到了粉丝数，退出选择器循环
+      }
+    }
+    
+    // 如果通过选择器没找到，尝试正则表达式
+    if (fansCount === 0) {
+      console.log('通过选择器未找到粉丝数，尝试正则表达式');
+      const html = response.data;
+      
+      const fansPatterns = [
+        /<span[^>]*>(\d+(?:\.\d+)?(?:万|w)?)<\/span>\s*<span[^>]*>[^<]*粉丝[^<]*<\/span>/,
+        /<div[^>]*>(\d+(?:\.\d+)?(?:万|w)?)<\/div>\s*<div[^>]*>[^<]*粉丝[^<]*<\/div>/,
+        /follower(?:s|Count|Num|_count)["']\s*:\s*(\d+)/i,
+        /fans(?:Count|Num|_count)["']\s*:\s*(\d+)/i,
+        /(\d+(?:\.\d+)?(?:万|w)?)[^<]{0,20}粉丝/
+      ];
+      
+      for (const pattern of fansPatterns) {
+        const match = html.match(pattern);
+        if (match) {
+          fansCount = convertNumberText(match[1]);
+          console.log(`通过正则找到粉丝数: ${fansCount}`);
+          break;
+        }
+      }
+    }
+    
+    // 如果找到了粉丝数，更新缓存
+    if (fansCount > 0) {
+      xiaohongshuFollowersCache = {
+        value: fansCount,
+        timestamp: now
+      };
+      
+      // 存储到localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('lastKnownXiaohongshuFollowers', JSON.stringify({
+          value: fansCount,
+          timestamp: now
+        }));
+      }
+      
+      return fansCount;
+    }
+    
+    throw new Error('未能找到粉丝数');
+    
+  } catch (error) {
+    console.error('获取小红书粉丝数失败:', error);
+    
+    // 如果有缓存，使用缓存
+    if (xiaohongshuFollowersCache?.value) {
+      return xiaohongshuFollowersCache.value;
+    }
+    
+    // 尝试从localStorage获取
+    let lastKnownFollowers = 101; // 默认值
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('lastKnownXiaohongshuFollowers');
+      if (stored) {
+        try {
+          const data = JSON.parse(stored);
+          if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+            lastKnownFollowers = data.value;
+          }
+        } catch (e) {
+          console.error('解析存储的小红书粉丝数出错');
+        }
+      }
+    }
+    
+    return lastKnownFollowers;
+  }
+}
+
 export async function getSocialStats() {
   console.log('开始获取社交媒体统计数据...')
   
@@ -111,8 +283,9 @@ export async function getSocialStats() {
   }
 
   try {
+    // 获取Twitter粉丝数
     const twitterCount = await getTwitterFollowers('Gloridust1024')
-    console.log('最终获取到的 Twitter 粉丝数:', twitterCount)
+    console.log('获取到的 Twitter 粉丝数:', twitterCount)
     
     // 如果成功获取到数据，存储到 localStorage
     if (typeof window !== 'undefined' && twitterCount > 0) {
@@ -123,10 +296,17 @@ export async function getSocialStats() {
     }
     
     stats.twitter = formatFollowers(twitterCount)
-    stats.xiaohongshu = formatFollowers(101)
+    
+    // 获取小红书粉丝数
+    const xiaohongshuId = '5f1d89a6000000000100ba01' // 使用实际的用户ID
+    const xiaohongshuCount = await getXiaohongshuFollowers(xiaohongshuId)
+    console.log('获取到的小红书粉丝数:', xiaohongshuCount)
+    
+    stats.xiaohongshu = formatFollowers(xiaohongshuCount)
   } catch (error) {
     console.error('获取社交统计数据时发生错误:', error)
     
+    // Twitter数据恢复
     if (twitterFollowersCache) {
       stats.twitter = formatFollowers(twitterFollowersCache.value)
     } else {
@@ -146,6 +326,27 @@ export async function getSocialStats() {
         }
       }
       stats.twitter = formatFollowers(lastKnownFollowers)
+    }
+    
+    // 小红书数据恢复
+    if (xiaohongshuFollowersCache) {
+      stats.xiaohongshu = formatFollowers(xiaohongshuFollowersCache.value)
+    } else {
+      let lastKnownFollowers = 101 // 默认值
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('lastKnownXiaohongshuFollowers')
+        if (stored) {
+          try {
+            const data = JSON.parse(stored)
+            if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+              lastKnownFollowers = data.value
+            }
+          } catch (e) {
+            console.error('Error parsing stored xiaohongshu followers count')
+          }
+        }
+      }
+      stats.xiaohongshu = formatFollowers(lastKnownFollowers)
     }
   }
 

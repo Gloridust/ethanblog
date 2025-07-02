@@ -10,8 +10,13 @@ const useTranslation = () => {
   const setLocale = (newLocale: string) => {
     const { pathname, asPath, query } = router
     
-    // 使用新的路由结构，确保正确切换语言
-    router.push({ pathname, query }, asPath, { locale: newLocale })
+    // 如果当前在文章页面，切换语言时跳转到主页
+    if (pathname === '/blog/[slug]') {
+      router.push('/', '/', { locale: newLocale })
+    } else {
+      // 其他页面正常切换语言
+      router.push({ pathname, query }, asPath, { locale: newLocale })
+    }
   }
 
   // 修改 t 函数以支持参数

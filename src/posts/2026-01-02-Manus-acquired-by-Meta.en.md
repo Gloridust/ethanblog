@@ -1,5 +1,5 @@
 ---
-title: Meta Acquires Manus: Techies Scorn, Investors Fawn?
+title: "Meta Acquires Manus: Techies Scorn, Investors Fawn?"
 tags: Essay
 date: 2026-1-2
 img: /images/posts/2026-01-02/cover.png

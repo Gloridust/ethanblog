@@ -42,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({
 
   const defaultTitle = t('blogTitle')
   const defaultDescription = t('bio')
-  const defaultKeywords = 'Ethan Zou, Gloridust, blog, developer, entrepreneur'
+  const defaultKeywords = 'Ethan Zou, Gloridust, blog, developer, 邹怡翔'
   const defaultImage = '/favicon.png'
 
   const siteUrl = 'https://isethan.me'
@@ -62,7 +62,7 @@ const Layout: React.FC<LayoutProps> = ({
       url: siteUrl,
       image: `${siteUrl}/images/avatar.png`,
       sameAs: [
-        "https://twitter.com/gloridust",
+        "https://twitter.com/gloridust1024",
         "https://github.com/Gloridust"
       ]
     },

@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import useTranslation from '@/hooks/useTranslation'
+
+const NAV_ITEMS = [
+  { key: 'home', href: '/' },
+  { key: 'about', href: '/about' },
+  { key: 'friends', href: '/friends' },
+] as const
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -9,8 +16,8 @@ const Header: React.FC = () => {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
   const { t, locale, setLocale } = useTranslation()
+  const router = useRouter()
 
-  // 处理滚动
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -19,7 +26,6 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 处理移动端菜单点击外部关闭
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
@@ -27,12 +33,9 @@ const Header: React.FC = () => {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 处理语言菜单点击外部关闭
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (languageMenuRef.current && !languageMenuRef.current.contains(event.target as Node)) {
@@ -40,9 +43,7 @@ const Header: React.FC = () => {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleLanguageChange = (newLocale: string) => {
@@ -51,16 +52,21 @@ const Header: React.FC = () => {
     setIsLanguageMenuOpen(false);
   };
 
+  const isActive = (href: string) => {
+    if (href === '/') return router.pathname === '/'
+    return router.pathname.startsWith(href)
+  }
+
   return (
     <header className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-5xl transition-all duration-300 ${isScrolled ? 'top-2' : 'top-4'}`}>
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-full px-4 md:px-6 py-2 md:py-3 flex justify-between items-center transition-colors duration-200">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl backdrop-saturate-150 shadow-lg shadow-black/[0.03] dark:shadow-black/[0.15] rounded-full px-4 md:px-5 py-2 md:py-2.5 flex justify-between items-center border border-gray-200/50 dark:border-gray-700/50 transition-colors duration-200">
         <Link href="/" className="flex items-center">
           <span className="font-bold text-base md:text-lg text-gray-900 dark:text-white hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">
             {t('blogTitle')}
           </span>
         </Link>
 
-        {/* 移动端菜单按钮 */}
+        {/* Mobile menu button */}
         <div className="md:hidden relative" ref={mobileMenuRef}>
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -72,44 +78,36 @@ const Header: React.FC = () => {
             </svg>
           </button>
 
-          {/* 移动端菜单 */}
           {isMobileMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 py-1">
-              <Link 
-                href="/" 
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {t('home')}
-              </Link>
-              <Link 
-                href="/about" 
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {t('about')}
-              </Link>
-              <Link 
-                href="/friends" 
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {t('friends')}
-              </Link>
-              <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+            <div className="absolute right-0 mt-2 w-48 rounded-2xl shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl ring-1 ring-black/5 dark:ring-white/10 py-2 overflow-hidden">
+              {NAV_ITEMS.map(({ key, href }) => (
+                <Link
+                  key={key}
+                  href={href}
+                  className={`block px-4 py-2.5 text-sm transition-colors duration-150 ${
+                    isActive(href)
+                      ? 'text-blue-500 bg-blue-50 dark:bg-blue-900/20 font-medium'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {t(key)}
+                </Link>
+              ))}
+              <div className="border-t border-gray-100 dark:border-gray-700 my-1.5 mx-3"></div>
               <button
                 onClick={() => handleLanguageChange('cn')}
                 className={`block w-full text-left px-4 py-2 text-sm ${
-                  locale === 'cn' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-200'
-                } hover:bg-gray-100 dark:hover:bg-gray-700`}
+                  locale === 'cn' ? 'text-blue-500 font-medium' : 'text-gray-700 dark:text-gray-200'
+                } hover:bg-gray-50 dark:hover:bg-gray-700/50`}
               >
                 中文
               </button>
               <button
                 onClick={() => handleLanguageChange('en')}
                 className={`block w-full text-left px-4 py-2 text-sm ${
-                  locale === 'en' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-200'
-                } hover:bg-gray-100 dark:hover:bg-gray-700`}
+                  locale === 'en' ? 'text-blue-500 font-medium' : 'text-gray-700 dark:text-gray-200'
+                } hover:bg-gray-50 dark:hover:bg-gray-700/50`}
               >
                 English
               </button>
@@ -117,44 +115,60 @@ const Header: React.FC = () => {
           )}
         </div>
 
-        {/* 桌面端导航 */}
+        {/* Desktop nav */}
         <nav className="hidden md:block">
-          <ul className="flex space-x-4 items-center">
-            <li><Link href="/" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('home')}</Link></li>
-            <li><Link href="/about" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('about')}</Link></li>
-            <li><Link href="/friends" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">{t('friends')}</Link></li>
-            <li>
+          <ul className="flex items-center gap-1">
+            {/* Nav pills container */}
+            <li className="flex items-center bg-gray-100/80 dark:bg-gray-700/50 rounded-full p-0.5 gap-0.5">
+              {NAV_ITEMS.map(({ key, href }) => (
+                <Link
+                  key={key}
+                  href={href}
+                  className={`relative px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                    isActive(href)
+                      ? 'bg-blue-500 text-white shadow-md shadow-blue-500/25'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-gray-600/40'
+                  }`}
+                >
+                  {isActive(href) && (
+                    <span className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
+                  )}
+                  <span className={isActive(href) ? 'ml-2' : ''}>{t(key)}</span>
+                </Link>
+              ))}
+            </li>
+            <li className="ml-2">
               <div className="relative" ref={languageMenuRef}>
                 <button
                   onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-                  className="bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200 flex items-center gap-1"
+                  className="bg-gray-100/80 dark:bg-gray-700/50 rounded-full px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200 flex items-center gap-1 hover:bg-gray-200/80 dark:hover:bg-gray-600/50"
                 >
                   <span>{t('language')}</span>
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className={`h-4 w-4 transition-transform duration-200 ${isLanguageMenuOpen ? 'rotate-180' : ''}`} 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-3.5 w-3.5 transition-transform duration-200 ${isLanguageMenuOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 {isLanguageMenuOpen && (
-                  <div className="absolute right-0 mt-2 py-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-xl z-20">
+                  <div className="absolute right-0 mt-2 py-1.5 w-32 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 z-20 overflow-hidden">
                     <button
                       onClick={() => handleLanguageChange('cn')}
-                      className={`block w-full text-left px-4 py-2 text-sm ${
-                        locale === 'cn' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'
-                      } hover:bg-gray-100 dark:hover:bg-gray-700`}
+                      className={`block w-full text-left px-4 py-2 text-sm transition-colors ${
+                        locale === 'cn' ? 'text-blue-500 bg-blue-50/50 dark:bg-blue-900/20 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      }`}
                     >
                       中文
                     </button>
                     <button
                       onClick={() => handleLanguageChange('en')}
-                      className={`block w-full text-left px-4 py-2 text-sm ${
-                        locale === 'en' ? 'text-blue-500' : 'text-gray-700 dark:text-gray-300'
-                      } hover:bg-gray-100 dark:hover:bg-gray-700`}
+                      className={`block w-full text-left px-4 py-2 text-sm transition-colors ${
+                        locale === 'en' ? 'text-blue-500 bg-blue-50/50 dark:bg-blue-900/20 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      }`}
                     >
                       English
                     </button>

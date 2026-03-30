@@ -154,3 +154,29 @@ body {
 .prose pre > div > span {
   @apply text-xs text-gray-500 dark:text-gray-400;
 }
+
+/* Resume print styles */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  /* Hide site header, footer, and download button */
+  header:has(nav), footer.bg-gray-100, .print\\:hidden {
+    display: none !important;
+  }
+  /* Remove padding from main content area */
+  main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  /* Reset page background */
+  .flex.flex-col.min-h-screen {
+    background: #fff !important;
+  }
+}

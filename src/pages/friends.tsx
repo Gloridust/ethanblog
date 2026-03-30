@@ -29,12 +29,12 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
           <a href={friend.link} key={friend.name} target="_blank" rel="noopener noreferrer" className="block">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 flex items-center h-32">
               <div className="w-20 h-20 relative flex-shrink-0 mr-4">
-                <Image 
-                  src={friend.avatar} 
-                  alt={friend.name} 
-                  layout="fill" 
-                  className="rounded-full"
-                  objectFit="cover"
+                <Image
+                  src={friend.avatar}
+                  alt={friend.name}
+                  fill
+                  className="rounded-full object-cover"
+                  sizes="80px"
                 />
               </div>
               <div className="overflow-hidden">
@@ -52,7 +52,7 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const friends = 
+  const friends =
   [
     {
       "name": "Rene Wang",
@@ -80,6 +80,15 @@ export const getStaticProps: GetStaticProps = async () => {
         "en": "Start-up company. I serve as a co-founder here."
       },
       "link": "https://ygeeker.com"
+    },
+    {
+      "name": "endpage.net",
+      "avatar": "https://www.endpage.net/logo.png",
+      "description": {
+        "cn": "AI Native 产品开发与软件技术服务商，我创办的公司",
+        "en": "AI Native product development & software services, my company"
+      },
+      "link": "https://www.endpage.net"
     },
     {
       "name": "Apply links",

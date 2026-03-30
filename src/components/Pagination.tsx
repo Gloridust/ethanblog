@@ -17,14 +17,14 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
   return (
     <div className="flex justify-center mt-8 mb-12">
-      <nav className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-gray-800 px-2 py-1 shadow-lg">
+      <nav className="inline-flex items-center gap-0.5 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl px-2 py-1.5 shadow-lg shadow-black/[0.03] dark:shadow-black/[0.15] border border-gray-200/50 dark:border-gray-700/50">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           className={`p-2 rounded-full transition-all duration-200 ${
             currentPage === 1
-              ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400'
+              ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+              : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400'
           }`}
           aria-label="Previous page"
         >
@@ -39,7 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             onClick={() => onPageChange(page)}
             className={`min-w-[2.5rem] h-10 rounded-full text-sm font-medium transition-all duration-200 ${
               page === currentPage
-                ? 'bg-blue-500 text-white shadow-md'
+                ? 'bg-blue-500 text-white shadow-md shadow-blue-500/25'
                 : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400'
             }`}
             aria-label={`Page ${page}`}
@@ -54,8 +54,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
           disabled={currentPage === totalPages}
           className={`p-2 rounded-full transition-all duration-200 ${
             currentPage === totalPages
-              ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400'
+              ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+              : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400'
           }`}
           aria-label="Next page"
         >

@@ -300,7 +300,7 @@ const ResumePage = ({ data }: ResumePageProps) => {
           --rv-bg:#fff;--rv-bg-subtle:#fafafa;--rv-bg-card:#fff;--rv-bg-pill:#f4f4f5;
           --rv-border:#e8e8eb;--rv-border-light:#f0f0f3;
           --rv-text-primary:#18181b;--rv-text-secondary:#52525b;--rv-text-muted:#a1a1aa;
-          --rv-accent:#ff6b2c;--rv-accent-light:#fff1eb;--rv-accent-dim:rgba(255,107,44,.08);
+          --rv-accent:#3b82f6;--rv-accent-light:#eff6ff;--rv-accent-dim:rgba(59,130,246,.08);
           --rv-blue:#3b82f6;--rv-blue-light:#eff6ff;--rv-purple:#8b5cf6;--rv-purple-light:#f5f3ff;
           --rv-font-sans:'Plus Jakarta Sans','Noto Sans SC',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
           --rv-font-mono:'JetBrains Mono','SF Mono',monospace;
@@ -311,7 +311,7 @@ const ResumePage = ({ data }: ResumePageProps) => {
           --rv-bg:#0f0f0f;--rv-bg-subtle:#1a1a1a;--rv-bg-card:#161616;--rv-bg-pill:#262626;
           --rv-border:#2a2a2e;--rv-border-light:#222225;
           --rv-text-primary:#fafafa;--rv-text-secondary:#a1a1aa;--rv-text-muted:#71717a;
-          --rv-accent-light:rgba(255,107,44,.12);--rv-accent-dim:rgba(255,107,44,.08);
+          --rv-accent-light:rgba(59,130,246,.12);--rv-accent-dim:rgba(59,130,246,.08);
           --rv-blue-light:rgba(59,130,246,.1);--rv-purple-light:rgba(139,92,246,.1);
         }}
 
@@ -328,10 +328,10 @@ const ResumePage = ({ data }: ResumePageProps) => {
         .rv-pill{padding:.28rem .75rem;border-radius:var(--rv-radius-pill);font-size:.73rem;font-weight:500;font-family:var(--rv-font-sans);color:var(--rv-text-secondary);transition:all var(--rv-tr);white-space:nowrap;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem}
         .rv-pill:hover{color:var(--rv-text-primary);background:rgba(0,0,0,.04);opacity:1}
         @media(prefers-color-scheme:dark){.rv-pill:hover{background:rgba(255,255,255,.06)}}
-        .rv-pill.active{background:var(--rv-accent);color:#fff;box-shadow:0 1px 4px rgba(255,107,44,.3)}
+        .rv-pill.active{background:var(--rv-accent);color:#fff;box-shadow:0 1px 4px rgba(59,130,246,.3)}
         .rv-pill-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.7);animation:rv-pulse 2s ease-in-out infinite;flex-shrink:0}
         .rv-download-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .85rem;border-radius:var(--rv-radius-pill);font-size:.72rem;font-weight:600;font-family:var(--rv-font-sans);color:#fff;background:var(--rv-accent);border:none;cursor:pointer;transition:all var(--rv-tr);flex-shrink:0}
-        .rv-download-btn:hover{background:#e55a1f;box-shadow:0 2px 8px rgba(255,107,44,.3)}
+        .rv-download-btn:hover{background:#2563eb;box-shadow:0 2px 8px rgba(59,130,246,.3)}
         .rv-unlock-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .85rem;border-radius:var(--rv-radius-pill);font-size:.72rem;font-weight:600;font-family:var(--rv-font-sans);color:var(--rv-text-secondary);background:var(--rv-bg-pill);border:1px solid var(--rv-border);cursor:pointer;transition:all var(--rv-tr)}
         .rv-unlock-btn:hover{background:var(--rv-accent);color:#fff;border-color:var(--rv-accent)}
         .rv-lock-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;color:var(--rv-text-muted);background:none;border:none;cursor:pointer;transition:all var(--rv-tr)}
@@ -351,7 +351,7 @@ const ResumePage = ({ data }: ResumePageProps) => {
         .rv-pw-input:focus{border-color:var(--rv-accent)}
         .rv-pw-error{color:#ef4444;font-size:.75rem;margin-top:.4rem}
         .rv-pw-submit{width:100%;margin-top:.75rem;padding:.65rem;border:none;border-radius:var(--rv-radius-sm);background:var(--rv-accent);color:#fff;font-size:.85rem;font-weight:600;font-family:var(--rv-font-sans);cursor:pointer;transition:background var(--rv-tr)}
-        .rv-pw-submit:hover{background:#e55a1f}
+        .rv-pw-submit:hover{background:#2563eb}
         .rv-pw-submit:disabled{opacity:.6;cursor:not-allowed}
 
         /* PAGE */
@@ -457,7 +457,7 @@ const ResumePage = ({ data }: ResumePageProps) => {
         /* PRINT - forced light, hide UI */
         @media print{
           @page{size:A4;margin:0}
-          :root{--rv-bg:#fff!important;--rv-bg-subtle:#fafafa!important;--rv-bg-card:#fff!important;--rv-bg-pill:#f4f4f5!important;--rv-border:#e8e8eb!important;--rv-border-light:#f0f0f3!important;--rv-text-primary:#18181b!important;--rv-text-secondary:#52525b!important;--rv-text-muted:#a1a1aa!important;--rv-accent-light:#fff1eb!important;--rv-accent-dim:rgba(255,107,44,.08)!important;--rv-blue-light:#eff6ff!important;--rv-purple-light:#f5f3ff!important;color-scheme:light}
+          :root{--rv-bg:#fff!important;--rv-bg-subtle:#fafafa!important;--rv-bg-card:#fff!important;--rv-bg-pill:#f4f4f5!important;--rv-border:#e8e8eb!important;--rv-border-light:#f0f0f3!important;--rv-text-primary:#18181b!important;--rv-text-secondary:#52525b!important;--rv-text-muted:#a1a1aa!important;--rv-accent-light:#eff6ff!important;--rv-accent-dim:rgba(59,130,246,.08)!important;--rv-blue-light:#eff6ff!important;--rv-purple-light:#f5f3ff!important;color-scheme:light}
           html{font-size:11px}
           body{background:#fff!important;color:#18181b!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:14mm 16mm}
           .rv-page{background:#fff!important;color:#18181b!important}

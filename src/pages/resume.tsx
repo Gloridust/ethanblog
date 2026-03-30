@@ -2,6 +2,9 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import type { GetServerSideProps } from 'next'
+import { verifyToken, COOKIE_NAME } from '@/lib/resume-auth'
+import { getResumeData, type ResumeData } from '@/lib/resume-data'
 
 const SECTIONS = [
   { id: 'experience', label: '经历' },
@@ -12,13 +15,29 @@ const SECTIONS = [
   { id: 'ip', label: '知识产权' },
 ]
 
-const ResumePage = () => {
+interface ResumePageProps {
+  data: ResumeData
+}
+
+export const getServerSideProps: GetServerSideProps<ResumePageProps> = async (ctx) => {
+  const secret = process.env.RESUME_PASSWORD || ''
+  const token = ctx.req.cookies[COOKIE_NAME] || ''
+  const authenticated = !!secret && !!token && verifyToken(token, secret)
+  return { props: { data: getResumeData(authenticated) } }
+}
+
+const ResumePage = ({ data }: ResumePageProps) => {
   const [activeSection, setActiveSection] = useState('')
+  const [showPwDialog, setShowPwDialog] = useState(false)
+  const [password, setPassword] = useState('')
+  const [pwError, setPwError] = useState('')
+  const [pwLoading, setPwLoading] = useState(false)
   const router = useRouter()
   const ticking = useRef(false)
   const cachedOffsets = useRef<{ id: string; top: number }[]>([])
 
-  // Cache section offsets, recalculate on resize
+  const { isAuthenticated, hero, experience, skills, awards, projects, papers, ipList } = data
+
   useEffect(() => {
     const cacheOffsets = () => {
       cachedOffsets.current = SECTIONS.map(({ id }) => {
@@ -52,25 +71,48 @@ const ResumePage = () => {
 
   const handleDownloadPDF = useCallback(() => { window.print() }, [])
 
+  const handleUnlock = async () => {
+    setPwError('')
+    setPwLoading(true)
+    try {
+      const res = await fetch('/api/resume-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
+      if (res.ok) {
+        router.reload()
+      } else {
+        setPwError('密码错误')
+      }
+    } catch {
+      setPwError('网络错误')
+    } finally {
+      setPwLoading(false)
+    }
+  }
+
+  const handleLock = async () => {
+    await fetch('/api/resume-auth', { method: 'DELETE' })
+    router.reload()
+  }
+
   const siteUrl = 'https://isethan.me'
   const canonicalUrl = `${siteUrl}${router.asPath}`
 
   return (
     <>
       <Head>
-        <title>邹怡翔 Ethan Zou - Resume</title>
-        <meta name="description" content="邹怡翔 Ethan Zou 的个人简历 - AI Native 全栈开发者，独立创业者" />
-        <meta name="keywords" content="Ethan Zou, 邹怡翔, resume, 简历, developer, AI Native" />
+        <title>{`${isAuthenticated ? `${hero.name} ${hero.nameEn}` : 'Ethan Z.'} - Resume`}</title>
+        <meta name="description" content="AI Native 全栈开发者简历" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content="邹怡翔 Ethan Zou - Resume" />
-        <meta property="og:description" content="AI Native 全栈开发者，独立创业者" />
+        <meta property="og:title" content="Resume - Ethan" />
+        <meta property="og:description" content="AI Native 全栈开发者" />
         <meta property="og:type" content="profile" />
-        <meta property="og:url" content={canonicalUrl} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
       </Head>
 
       {/* Sticky Nav */}
@@ -89,25 +131,73 @@ const ResumePage = () => {
           </div>
           <div className="rv-nav-pills">
             {SECTIONS.map(({ id, label }) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                className={`rv-pill ${activeSection === id ? 'active' : ''}`}
-                onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }) }}
-              >
+              <a key={id} href={`#${id}`} className={`rv-pill ${activeSection === id ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }) }}>
                 {activeSection === id && <span className="rv-pill-dot" />}
                 {label}
               </a>
             ))}
           </div>
-          <button onClick={handleDownloadPDF} className="rv-download-btn">
-            <svg style={{ width: 14, height: 14 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            PDF
-          </button>
+          <div className="rv-nav-right">
+            {!isAuthenticated ? (
+              <button onClick={() => setShowPwDialog(true)} className="rv-unlock-btn" title="输入密码查看完整简历">
+                <svg style={{ width: 14, height: 14 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                解锁
+              </button>
+            ) : (
+              <>
+                <button onClick={handleLock} className="rv-lock-btn" title="锁定简历">
+                  <svg style={{ width: 12, height: 12 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+                  </svg>
+                </button>
+                <button onClick={handleDownloadPDF} className="rv-download-btn">
+                  <svg style={{ width: 14, height: 14 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  PDF
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </nav>
+
+      {/* Password dialog */}
+      {showPwDialog && (
+        <div className="rv-pw-overlay" onClick={() => setShowPwDialog(false)}>
+          <div className="rv-pw-dialog" onClick={(e) => e.stopPropagation()}>
+            <h3>查看完整简历</h3>
+            <p>敏感信息已隐藏，请输入密码解锁</p>
+            <form onSubmit={(e) => { e.preventDefault(); handleUnlock() }}>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="请输入密码"
+                className="rv-pw-input"
+                autoFocus
+              />
+              {pwError && <div className="rv-pw-error">{pwError}</div>}
+              <button type="submit" className="rv-pw-submit" disabled={pwLoading}>
+                {pwLoading ? '验证中...' : '解锁'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Privacy banner when locked */}
+      {!isAuthenticated && (
+        <div className="rv-privacy-banner">
+          <svg style={{ width: 14, height: 14, flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+          </svg>
+          <span>部分敏感信息已隐藏，<button onClick={() => setShowPwDialog(true)} className="rv-privacy-link">输入密码</button>查看完整简历</span>
+        </div>
+      )}
 
       <div className="rv-page">
         <div className="rv-container">
@@ -115,93 +205,79 @@ const ResumePage = () => {
           <header className="rv-hero" id="top">
             <div className="rv-hero-row">
               <div className="rv-hero-main">
-                <img src="https://www.endpage.net/ethan.png" alt="Ethan Zou" style={{ width: 68, height: 68, borderRadius: 12, objectFit: 'cover', border: '2px solid var(--rv-border)', flexShrink: 0 }} />
+                <img src={hero.avatarUrl} alt={hero.nameEn} style={{ width: 68, height: 68, borderRadius: 12, objectFit: 'cover', border: '2px solid var(--rv-border)', flexShrink: 0 }} />
                 <div className="rv-hero-info">
                   <div className="rv-hero-label"><span className="rv-dot" />Open to Opportunities</div>
-                  <h1 className="rv-h1">邹怡翔 <span className="rv-en">Ethan Zou</span></h1>
-                  <p className="rv-hero-desc">AI Native 全栈开发者，独立创业者。2004 年生，宜宾学院数据科学与大数据技术专业 2023 级在读。2025 年创办 endpage.net，专注于将 AI 能力深度融入产品设计与工程实践，学术研究和竞赛领域持续输出。</p>
+                  <h1 className="rv-h1">{hero.name} <span className="rv-en">{hero.nameEn}</span></h1>
+                  <p className="rv-hero-desc">{hero.desc}</p>
                 </div>
               </div>
               <div className="rv-contact-card">
-                <CItem icon="phone">18428389622</CItem>
-                <CItem icon="mail"><a href="mailto:ethan@endpage.net">ethan@endpage.net</a></CItem>
-                <CItem icon="github"><a href="https://github.com/Gloridust" target="_blank" rel="noopener noreferrer">github.com/Gloridust</a></CItem>
-                <CItem icon="web"><a href="https://isethan.me" target="_blank" rel="noopener noreferrer">isethan.me</a>&nbsp;·&nbsp;<a href="https://www.endpage.net" target="_blank" rel="noopener noreferrer">endpage.net</a></CItem>
+                <CItem icon="phone">{hero.phone}</CItem>
+                <CItem icon="mail"><a href={hero.emailHref}>{hero.email}</a></CItem>
+                <CItem icon="github"><a href={hero.githubHref} target="_blank" rel="noopener noreferrer">{hero.github}</a></CItem>
+                <CItem icon="web">
+                  {hero.websiteLinks.map((w, i) => (
+                    <span key={w.label}>{i > 0 && <>&nbsp;·&nbsp;</>}<a href={w.href} target="_blank" rel="noopener noreferrer">{w.label}</a></span>
+                  ))}
+                </CItem>
               </div>
             </div>
           </header>
 
           {/* Experience */}
           <Sec id="experience" icon="🚀" title="创业与工作经历">
-            <div className="rv-exp-card">
-              <div className="rv-exp-head">
-                <div><div className="rv-exp-title"><a href="https://www.endpage.net" target="_blank" rel="noopener noreferrer">宜宾熵析云枢网络科技有限责任公司（endpage.net）</a></div><div className="rv-exp-role">联合创始人 &amp; CTO</div></div>
-                <span className="rv-exp-date">2025.06 — 至今</span>
+            {experience.map((exp, i) => (
+              <div className="rv-exp-card" key={i}>
+                <div className="rv-exp-head">
+                  <div>
+                    <div className="rv-exp-title">
+                      {exp.titleLink ? <a href={exp.titleLink} target="_blank" rel="noopener noreferrer">{exp.title}</a> : exp.title}
+                    </div>
+                    <div className="rv-exp-role">{exp.role}</div>
+                  </div>
+                  <span className="rv-exp-date">{exp.date}</span>
+                </div>
+                {exp.paragraphs.map((p, j) => <p key={j}>{p}</p>)}
+                {exp.tags && (
+                  <div className="rv-exp-tags">
+                    {exp.tags.map((t) => <span key={t.text} className={`rv-tag${t.accent ? ' accent' : ''}`}>{t.text}</span>)}
+                  </div>
+                )}
               </div>
-              <p>2025 年 6 月创办 endpage.net，定位 AI Native 产品开发与软件技术服务商。7 月起承接外包业务，先后交付糕三家连锁店无人售货系统、某企业股东投票系统、某高校校园跑管理平台等商业项目。2026 年初布局自研产品线，上线「摇盒AI」「TikMy」「油迹Pro」三款 AI Native 应用及校企共创项目「宜乐生活」。</p>
-              <p>2026 年 3 月发起面向宜宾学院的 Vibe Coding 实战训练营，招募并培训校园实习生，以 AI 辅助编程为核心进行岗前培训，学员结业后直接加入公司参与企业级开发，实现产教融合闭环。</p>
-              <div className="rv-exp-tags"><span className="rv-tag accent">AI Native</span><span className="rv-tag accent">产品研发</span><span className="rv-tag accent">软件外包</span><span className="rv-tag accent">产教融合</span><span className="rv-tag">团队管理</span></div>
-            </div>
-            <div className="rv-exp-card">
-              <div className="rv-exp-head">
-                <div><div className="rv-exp-title">极云客（成都）科技有限公司（YGeeker）</div><div className="rv-exp-role">联合创始人 / 股东</div></div>
-                <span className="rv-exp-date">早期经历</span>
-              </div>
-              <p>参与创办 YGeeker，在开源领域有一定影响力，开源并运营了在线跨平台工具箱「Geekits」等产品。曾负责官网建设、产品测试、AI 功能开发与数据分析。现已不参与日常运营。</p>
-            </div>
+            ))}
           </Sec>
 
           {/* Skills */}
           <Sec id="skills" icon="⚡" title="技术能力">
             <div className="rv-skills-grid">
-              <SBox color="var(--rv-accent)" title="AI Native 全栈开发" desc="以 AI 为核心的全栈开发流程，覆盖移动端、Web 端与后端，深度使用 AI 编程工具。" tags={['Flutter','SwiftUI','Vite','React','Next.js','FastAPI','Supabase','Claude Code','Cursor','Trae','Codex']} />
-              <SBox color="#8b5cf6" title="AI 创意工具应用" desc="熟悉主流 AI 生成工具，能将创意工具融入产品设计与内容生产流程。" tags={['即梦','可灵','Suno','Nano Banana','NotebookLM','Capcut']} />
-              <SBox color="#3b82f6" title="编程语言与框架" desc="多语言多框架实战，前端到后端到移动端均有完整项目交付。" tags={['Python','TypeScript','Dart','Swift','C','LangChain','Tailwind']} />
-              <SBox color="#22c55e" title="运维、AI/ML 与工具链" desc="独立部署运维，深度学习研究与工程并行，熟练使用设计工具。" tags={['Linux','Nginx','Docker','YOLO','Ollama','RAG','Figma']} />
+              {skills.map((s) => <SBox key={s.title} {...s} />)}
             </div>
           </Sec>
 
           {/* Awards */}
           <Sec id="awards" icon="🏆" title="竞赛与荣誉">
             <div className="rv-awards-list">
-              <ARow year="2025" name="AdventureX 黑客松 · 光速光合赛道" badge="一等奖" level="gold" />
-              <ARow year="2025" name="大学生创新创业训练计划" badge="国家级立项" level="national" />
-              <ARow year="2024" name="AdventureX 黑客松 · 3 个赛道（奖金价值 10w+）" badge="一等奖" level="gold" />
-              <ARow year="2024" name="大学生创新创业训练计划" badge="国家级高水平" level="national" />
-              <ARow year="2024" name="全国大学生电工数学建模竞赛" badge="国家三等奖" level="national" />
-              <ARow year="2024" name="全国大学生数学建模竞赛" badge="国家三等奖" level="national" />
-              <ARow year="2024" name="全国大学生电子商务「创新、创意及创业」挑战赛" badge="省级二等奖" level="provincial" />
-              <ARow year="2024" name="全球校园人工智能算法精英大赛" badge="四川省三等奖" level="provincial" />
-              <ARow year="2024" name="计算机设计大赛" badge="四川省三等奖" level="provincial" />
-              <ARow year="2024" name="中国国际创新大赛（互联网+）" badge="校铜奖" level="school" />
+              {awards.map((a, i) => <ARow key={i} {...a} />)}
             </div>
           </Sec>
 
           {/* Projects */}
           <Sec id="projects" icon="📦" title="代表项目">
             <div className="rv-projects-grid">
-              <PCard title="摇盒AI" sub="自研产品 · 已上线" icon="https://www.endpage.net/products/yaohe-ai.webp" desc="AI 对话 + 实时概率计算，门店科学选盒，支持拍照分析与语音输入。" stack={['Flutter','AI Chat','CV']} />
-              <PCard title="TikMy" sub="自研产品 · SwiftUI" icon="https://www.endpage.net/products/tikmy.webp" desc="本地导入、智能分类、沉浸式刷片，完全私密离线的短视频管理。" stack={['SwiftUI','推荐算法','本地化']} />
-              <PCard title="油迹Pro" sub="自研产品 · SwiftUI" icon="https://www.endpage.net/products/youji-pro.webp" desc="快速录入、智能油耗计算、可视化趋势，无广告的汽车油耗管理。" stack={['SwiftUI','可视化','云同步']} />
-              <PCard title="宜乐生活" sub="校企共创" icon="https://www.endpage.net/products/unischool.png" desc="为宜宾学院校园跑与日常跑量提供服务的运动管理平台。" stack={['校企合作','双端','运动管理']} />
-              <PCard title="MemoirAI · 声命体" sub="AdventureX 2025 一等奖" emoji="🎙️" gradient="linear-gradient(135deg,#667eea,#764ba2)" desc="AI 引导对话式日记，自然语言交互记录生活，数据上链永久存证。" stack={['Flutter','FastAPI','Blockchain']} />
-              <PCard title="UnischoolAI · 小智" sub="校园智能问答" emoji="🤖" gradient="linear-gradient(135deg,#f093fb,#f5576c)" desc="基于 RAG 架构的校园信息智能检索系统，部署于校内网。" stack={['Qdrant','BGE-M3','RAG']} />
+              {projects.map((p) => <PCard key={p.title} {...p} />)}
             </div>
           </Sec>
 
           {/* Academic */}
           <Sec id="academic" icon="📄" title="学术论文">
-            <Paper title="TCGBNet: Tri-branch Conservative Gated Bridge Network for Medical Image Segmentation" meta="Zou Y, Zhou X, Yu M, Li C* · EAI IoTaaS 国际会议 · 第一作者" desc="提出基于 U-Net 的创新分割网络，融合保守三分支增强、动态跨门控桥和多尺度深度卷积，在 ISIC2017/2018 数据集上超越多种主流方法。" />
-            <Paper title="Urban Housing Price Prediction Based on Spatio-Temporal Attention Mixture of Experts System" meta="Zou Y, Zhu Q, Zhu W, Wang Y · EAI IoTaaS 国际会议 · 第一作者" desc="提出 STAMoE 模型，融合状态空间模型、图注意力网络和自适应混合专家框架，R² 达 0.9936，MAE 较最优基线降低 48%。" />
-            <Paper title="Improved ResNet-50 for Face Authenticity Detection Based on Attention Mechanism and Feature Pyramid" meta="Zhou K, Zou Y, Wang Y, Xue Y · 投稿中 · 第二作者" desc="改进 ResNet-50 融合 FPN 与通道注意力机制，在自建多源人脸数据集上达 91.9% 准确率，较原模型提升 3.4%。" />
+            {papers.map((p) => <PPaper key={p.title} {...p} />)}
           </Sec>
 
           {/* IP */}
           <Sec id="ip" icon="🔐" title="知识产权（软件著作权 18 项）">
             <div className="rv-ip-grid">
-              {['TCGBNet 医学图像分割系统','基于时空注意力混合专家的城市房价预测系统','基于 DeiT 视觉注意力的面部情感识别系统','基于 Langchain 的大模型代码处理软件','基于传统数据库的大模型检索增强生成系统','基于机器视觉的电脑标签质量智能检测系统','汽车零件缺陷检测系统','溴化镧探测器能谱自动刻度修正系统','DataViz 数据可视化系统','基于数据可视化的个人财务监管系统','电商数据分析与个性化营销推荐系统','CE-DF-Scanner','BestPet 宠物推荐系统','MailMyNews 新闻邮件系统','ShareScreenNearby','tcctool-plus','熵析云枢订单管理系统','结合 AR/VR 的旅游文创产品体验平台'].map((n) => (
-                <div key={n} className="rv-ip-item"><span className="rv-ip-copy">©</span>{n}</div>
-              ))}
+              {ipList.map((n) => <div key={n} className="rv-ip-item"><span className="rv-ip-copy">©</span>{n}</div>)}
             </div>
           </Sec>
 
@@ -218,6 +294,7 @@ const ResumePage = () => {
       </div>
 
       <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
         .rv-page *,.rv-page *::before,.rv-page *::after,.rv-nav *{box-sizing:border-box;margin:0;padding:0}
         :root{
           --rv-bg:#fff;--rv-bg-subtle:#fafafa;--rv-bg-card:#fff;--rv-bg-pill:#f4f4f5;
@@ -243,6 +320,7 @@ const ResumePage = () => {
         @media(prefers-color-scheme:dark){.rv-nav{background:rgba(15,15,15,.82)}}
         .rv-nav-inner{max-width:900px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:52px;gap:1rem}
         .rv-nav-left{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
+        .rv-nav-right{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
         .rv-back-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;color:var(--rv-text-muted);transition:all var(--rv-tr);text-decoration:none}
         .rv-back-btn:hover{background:var(--rv-bg-pill);color:var(--rv-text-primary);opacity:1}
         .rv-nav-brand{font-family:var(--rv-font-sans);font-weight:700;font-size:.9rem;color:var(--rv-text-primary);display:flex;align-items:center;gap:.4rem;flex-shrink:0}
@@ -254,6 +332,27 @@ const ResumePage = () => {
         .rv-pill-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.7);animation:rv-pulse 2s ease-in-out infinite;flex-shrink:0}
         .rv-download-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .85rem;border-radius:var(--rv-radius-pill);font-size:.72rem;font-weight:600;font-family:var(--rv-font-sans);color:#fff;background:var(--rv-accent);border:none;cursor:pointer;transition:all var(--rv-tr);flex-shrink:0}
         .rv-download-btn:hover{background:#e55a1f;box-shadow:0 2px 8px rgba(255,107,44,.3)}
+        .rv-unlock-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .85rem;border-radius:var(--rv-radius-pill);font-size:.72rem;font-weight:600;font-family:var(--rv-font-sans);color:var(--rv-text-secondary);background:var(--rv-bg-pill);border:1px solid var(--rv-border);cursor:pointer;transition:all var(--rv-tr)}
+        .rv-unlock-btn:hover{background:var(--rv-accent);color:#fff;border-color:var(--rv-accent)}
+        .rv-lock-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;color:var(--rv-text-muted);background:none;border:none;cursor:pointer;transition:all var(--rv-tr)}
+        .rv-lock-btn:hover{background:var(--rv-bg-pill);color:var(--rv-text-primary)}
+
+        /* PRIVACY BANNER */
+        .rv-privacy-banner{position:fixed;top:52px;left:0;right:0;z-index:999;background:var(--rv-accent-light);color:var(--rv-accent);font-size:.75rem;font-weight:500;font-family:var(--rv-font-sans);padding:.45rem 2rem;display:flex;align-items:center;justify-content:center;gap:.4rem}
+        @media(prefers-color-scheme:dark){.rv-privacy-banner{background:rgba(255,107,44,.1)}}
+        .rv-privacy-link{background:none;border:none;color:var(--rv-accent);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.75rem;font-family:var(--rv-font-sans);padding:0}
+
+        /* PASSWORD DIALOG */
+        .rv-pw-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem}
+        .rv-pw-dialog{background:var(--rv-bg);border:1px solid var(--rv-border);border-radius:16px;padding:2rem;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.15);font-family:var(--rv-font-sans)}
+        .rv-pw-dialog h3{font-size:1.1rem;font-weight:700;margin:0 0 .4rem;color:var(--rv-text-primary)}
+        .rv-pw-dialog p{font-size:.82rem;color:var(--rv-text-secondary);margin:0 0 1.2rem}
+        .rv-pw-input{width:100%;padding:.65rem 1rem;border:1px solid var(--rv-border);border-radius:var(--rv-radius-sm);font-size:.85rem;font-family:var(--rv-font-sans);background:var(--rv-bg-subtle);color:var(--rv-text-primary);outline:none;transition:border-color var(--rv-tr)}
+        .rv-pw-input:focus{border-color:var(--rv-accent)}
+        .rv-pw-error{color:#ef4444;font-size:.75rem;margin-top:.4rem}
+        .rv-pw-submit{width:100%;margin-top:.75rem;padding:.65rem;border:none;border-radius:var(--rv-radius-sm);background:var(--rv-accent);color:#fff;font-size:.85rem;font-weight:600;font-family:var(--rv-font-sans);cursor:pointer;transition:background var(--rv-tr)}
+        .rv-pw-submit:hover{background:#e55a1f}
+        .rv-pw-submit:disabled{opacity:.6;cursor:not-allowed}
 
         /* PAGE */
         .rv-page{font-family:var(--rv-font-sans);background:var(--rv-bg);color:var(--rv-text-primary);line-height:1.65;-webkit-font-smoothing:antialiased;min-height:100vh;font-size:15px}
@@ -278,8 +377,7 @@ const ResumePage = () => {
         .rv-contact-item a{color:var(--rv-text-secondary)}.rv-contact-item a:hover{color:var(--rv-accent);opacity:1}
 
         /* SECTIONS */
-        .rv-section{padding:1.75rem 0}
-        .rv-section+.rv-section{border-top:1px solid var(--rv-border-light)}
+        .rv-section{padding:1.75rem 0}.rv-section+.rv-section{border-top:1px solid var(--rv-border-light)}
         .rv-section-head{display:flex;align-items:center;gap:.55rem;margin-bottom:1.25rem}
         .rv-section-icon{width:26px;height:26px;border-radius:var(--rv-radius-sm);display:flex;align-items:center;justify-content:center;font-size:.8rem;background:var(--rv-accent-dim)}
         .rv-section-head h2{font-size:1.05rem;font-weight:700;letter-spacing:-.02em;margin:0;color:var(--rv-text-primary)}
@@ -356,35 +454,25 @@ const ResumePage = () => {
         }
         @media(max-width:480px){.rv-h1{font-size:1.5rem}.rv-projects-grid{grid-template-columns:1fr}}
 
-        /* PRINT - forced light mode */
+        /* PRINT - forced light, hide UI */
         @media print{
           @page{size:A4;margin:0}
-          :root{
-            --rv-bg:#fff!important;--rv-bg-subtle:#fafafa!important;--rv-bg-card:#fff!important;
-            --rv-bg-pill:#f4f4f5!important;--rv-border:#e8e8eb!important;--rv-border-light:#f0f0f3!important;
-            --rv-text-primary:#18181b!important;--rv-text-secondary:#52525b!important;--rv-text-muted:#a1a1aa!important;
-            --rv-accent-light:#fff1eb!important;--rv-accent-dim:rgba(255,107,44,.08)!important;
-            --rv-blue-light:#eff6ff!important;--rv-purple-light:#f5f3ff!important;
-            color-scheme:light;
-          }
+          :root{--rv-bg:#fff!important;--rv-bg-subtle:#fafafa!important;--rv-bg-card:#fff!important;--rv-bg-pill:#f4f4f5!important;--rv-border:#e8e8eb!important;--rv-border-light:#f0f0f3!important;--rv-text-primary:#18181b!important;--rv-text-secondary:#52525b!important;--rv-text-muted:#a1a1aa!important;--rv-accent-light:#fff1eb!important;--rv-accent-dim:rgba(255,107,44,.08)!important;--rv-blue-light:#eff6ff!important;--rv-purple-light:#f5f3ff!important;color-scheme:light}
           html{font-size:11px}
           body{background:#fff!important;color:#18181b!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:14mm 16mm}
           .rv-page{background:#fff!important;color:#18181b!important}
-          .rv-nav{display:none!important}
+          .rv-nav,.rv-privacy-banner,.rv-pw-overlay{display:none!important}
           .rv-hero{padding-top:0!important;padding-bottom:1rem}
-          .rv-hero-row{display:table;width:100%}
-          .rv-hero-main{display:table-cell;vertical-align:top}
+          .rv-hero-row{display:table;width:100%}.rv-hero-main{display:table-cell;vertical-align:top}
           .rv-hero-main img{float:left;margin-right:12px;margin-bottom:4px}
           .rv-contact-card{display:table-cell;vertical-align:top;width:200px;padding-left:12px}
-          .rv-section{padding:.85rem 0}
-          .rv-section+.rv-section{border-top:1px solid #e5e5e5}
+          .rv-section{padding:.85rem 0}.rv-section+.rv-section{border-top:1px solid #e5e5e5}
           .rv-exp-card,.rv-skill-box,.rv-proj-card,.rv-paper-card,.rv-contact-card,.rv-award-row,.rv-section-head{break-inside:avoid;page-break-inside:avoid}
           .rv-exp-card:hover,.rv-proj-card:hover{transform:none;box-shadow:none}
           .rv-exp-card,.rv-skill-box,.rv-proj-card,.rv-paper-card{box-shadow:none!important}
           .rv-page a{color:var(--rv-text-primary)!important}
           .rv-container{max-width:100%;padding:0}
-          .rv-hero-label .rv-dot{animation:none}
-          .rv-pill-dot{animation:none}
+          .rv-hero-label .rv-dot,.rv-pill-dot{animation:none}
           .rv-projects-grid{grid-template-columns:repeat(3,1fr)}.rv-skills-grid{grid-template-columns:1fr 1fr}
           .rv-ip-grid{grid-template-columns:1fr 1fr}.rv-footer{padding:.75rem 0}
           .rv-proj-card img,.rv-proj-card div:first-child{box-shadow:none!important}
@@ -419,13 +507,7 @@ function Sec({ id, icon, title, children }: { id: string; icon: string; title: s
 }
 
 function SBox({ color, title, desc, tags }: { color: string; title: string; desc: string; tags: string[] }) {
-  return (
-    <div className="rv-skill-box">
-      <h3><span className="rv-skill-dot" style={{ background: color }} />{title}</h3>
-      <p>{desc}</p>
-      <div className="rv-skill-tags">{tags.map((t) => <span key={t} className="rv-tag mono">{t}</span>)}</div>
-    </div>
-  )
+  return <div className="rv-skill-box"><h3><span className="rv-skill-dot" style={{ background: color }} />{title}</h3><p>{desc}</p><div className="rv-skill-tags">{tags.map((t) => <span key={t} className="rv-tag mono">{t}</span>)}</div></div>
 }
 
 function ARow({ year, name, badge, level }: { year: string; name: string; badge: string; level: string }) {
@@ -439,15 +521,13 @@ function PCard({ title, sub, icon, emoji, gradient, desc, stack }: { title: stri
         ? <img src={icon} alt={title} style={{ width: 42, height: 42, borderRadius: 10, objectFit: 'cover', flexShrink: 0, marginBottom: '0.65rem', boxShadow: '0 2px 8px rgba(0,0,0,.08)' }} />
         : <div style={{ width: 42, height: 42, borderRadius: 10, flexShrink: 0, marginBottom: '0.65rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', boxShadow: '0 2px 8px rgba(0,0,0,.06)', background: gradient }}>{emoji}</div>
       }
-      <h3>{title}</h3>
-      <div className="rv-proj-sub">{sub}</div>
-      <p>{desc}</p>
+      <h3>{title}</h3><div className="rv-proj-sub">{sub}</div><p>{desc}</p>
       <div className="rv-proj-stack">{stack.map((s) => <span key={s}>{s}</span>)}</div>
     </div>
   )
 }
 
-function Paper({ title, meta, desc }: { title: string; meta: string; desc: string }) {
+function PPaper({ title, meta, desc }: { title: string; meta: string; desc: string }) {
   return <div className="rv-paper-card"><h4>{title}</h4><div className="rv-paper-meta">{meta}</div><p>{desc}</p></div>
 }
 

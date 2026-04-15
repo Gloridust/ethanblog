@@ -80,7 +80,7 @@ const FULL_HERO: ResumeHero = {
     { label: 'isethan.me', href: 'https://isethan.me' },
     { label: 'endpage.net', href: 'https://www.endpage.net' },
   ],
-  desc: 'AI Native 全栈开发者，独立创业者。2004 年生，宜宾学院数据科学与大数据技术专业 2023 级在读。2025 年创办 endpage.net，专注于将 AI 能力深度融入产品设计与工程实践，学术研究和竞赛领域持续输出。',
+  desc: 'AI Native 全栈开发者，独连续创业者，AdventureX 黑客松连续获奖者。2004 年生，宜宾学院数据科学与大数据技术专业 2023 级在读。2024 联合创办 ygeeker.com，重心在开源项目贡献；2025 年创办 endpage.net 打造 AI 产品，专注于将 AI 能力深度融入产品设计与工程实践，学术研究和竞赛领域持续输出。',
   avatarUrl: 'https://www.endpage.net/ethan.png',
 }
 

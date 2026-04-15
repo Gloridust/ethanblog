@@ -54,6 +54,17 @@ export interface ResumeSkill {
   tags: string[]
 }
 
+export interface ResumeOSContribution {
+  title: string
+  repo: string
+  link: string
+  role: string
+  emoji: string
+  gradient: string
+  desc: string
+  stack: string[]
+}
+
 export interface ResumeData {
   isAuthenticated: boolean
   hero: ResumeHero
@@ -61,6 +72,7 @@ export interface ResumeData {
   skills: ResumeSkill[]
   awards: ResumeAward[]
   projects: ResumeProject[]
+  openSource: ResumeOSContribution[]
   papers: ResumePaper[]
   ipList: string[]
 }
@@ -190,6 +202,69 @@ const PROJECTS: ResumeProject[] = [
   { title: 'UnischoolAI · 小智', sub: '校园智能问答', emoji: '🤖', gradient: 'linear-gradient(135deg,#f093fb,#f5576c)', desc: '基于 RAG 架构的校园信息智能检索系统，部署于校内网。', stack: ['Qdrant','BGE-M3','RAG'] },
 ]
 
+const OS_CONTRIBUTIONS: ResumeOSContribution[] = [
+  {
+    title: 'LocalSend',
+    repo: 'localsend/localsend',
+    link: 'https://github.com/localsend/localsend',
+    role: '贡献者',
+    emoji: '📡',
+    gradient: 'linear-gradient(135deg,#06b6d4,#3b82f6)',
+    desc: '为这款开源跨平台局域网文件传输工具贡献 i18n 国际化支持，完善中文相关翻译与本地化体验。',
+    stack: ['Flutter', 'Dart', 'i18n'],
+  },
+  {
+    title: 'whisper_stream',
+    repo: 'Gloridust/whisper_stream',
+    link: 'https://github.com/Gloridust/whisper_stream',
+    role: '作者',
+    emoji: '🎙️',
+    gradient: 'linear-gradient(135deg,#8b5cf6,#ec4899)',
+    desc: '基于 OpenAI Whisper 的实时流式语音转写工具，支持边录边转，便于集成到语音驱动的 AI 应用中。',
+    stack: ['Python', 'Whisper', 'Streaming'],
+  },
+  {
+    title: 'Geekits',
+    repo: 'ygeeker/Geekits',
+    link: 'https://github.com/ygeeker/Geekits',
+    role: '联合作者',
+    emoji: '🧰',
+    gradient: 'linear-gradient(135deg,#f59e0b,#ef4444)',
+    desc: 'YGeeker 旗下开源的在线跨平台工具箱，集成多种日常实用小工具，已服务大量用户。',
+    stack: ['React', 'Next.js', 'TypeScript'],
+  },
+  {
+    title: 'RuijieWIFI-AutoLogin',
+    repo: 'Gloridust/RuijieWIFI-AutoLogin',
+    link: 'https://github.com/Gloridust/RuijieWIFI-AutoLogin',
+    role: '作者',
+    emoji: '📶',
+    gradient: 'linear-gradient(135deg,#10b981,#14b8a6)',
+    desc: '自动登录锐捷校园 WiFi 认证系统，防止意外掉线。理论上支持所有锐捷系统校园网。★36',
+    stack: ['Python', 'Automation', 'Network'],
+  },
+  {
+    title: 'Hackintosh-msi_b760-i5-13490F',
+    repo: 'Gloridust/Hackintosh-msi_b760-i5-13490F',
+    link: 'https://github.com/Gloridust/Hackintosh-msi_b760-i5-13490F',
+    role: '作者',
+    emoji: '🖥️',
+    gradient: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+    desc: '针对 MSI B760 Bomber + i5-13490F 的黑苹果 EFI 配置，含完整中文使用文档。★11',
+    stack: ['OpenCore', 'macOS', 'EFI'],
+  },
+  {
+    title: 'ethanblog',
+    repo: 'Gloridust/ethanblog',
+    link: 'https://github.com/Gloridust/ethanblog',
+    role: '作者',
+    emoji: '✍️',
+    gradient: 'linear-gradient(135deg,#3b82f6,#06b6d4)',
+    desc: '简洁扁平的个人博客系统，支持中英双语，基于 Next.js 与 Markdown 构建，即本站。',
+    stack: ['Next.js', 'TypeScript', 'Tailwind'],
+  },
+]
+
 const PAPERS: ResumePaper[] = [
   { title: 'TCGBNet: Tri-branch Conservative Gated Bridge Network for Medical Image Segmentation', meta: 'Zou Y, Zhou X, Yu M, Li C* · EAI IoTaaS 国际会议 · 第一作者', desc: '提出基于 U-Net 的创新分割网络，融合保守三分支增强、动态跨门控桥和多尺度深度卷积，在 ISIC2017/2018 数据集上超越多种主流方法。' },
   { title: 'Urban Housing Price Prediction Based on Spatio-Temporal Attention Mixture of Experts System', meta: 'Zou Y, Zhu Q, Zhu W, Wang Y · EAI IoTaaS 国际会议 · 第一作者', desc: '提出 STAMoE 模型，融合状态空间模型、图注意力网络和自适应混合专家框架，R² 达 0.9936，MAE 较最优基线降低 48%。' },
@@ -216,6 +291,7 @@ export function getResumeData(authenticated: boolean): ResumeData {
     skills: SKILLS,
     awards: AWARDS,
     projects: PROJECTS,
+    openSource: OS_CONTRIBUTIONS,
     papers: PAPERS,
     ipList: IP_LIST,
   }

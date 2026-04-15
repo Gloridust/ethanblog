@@ -11,6 +11,7 @@ const SECTIONS = [
   { id: 'skills', label: '技术' },
   { id: 'awards', label: '荣誉' },
   { id: 'projects', label: '项目' },
+  { id: 'opensource', label: '开源' },
   { id: 'academic', label: '学术' },
   { id: 'ip', label: '知识产权' },
 ]
@@ -36,7 +37,7 @@ const ResumePage = ({ data }: ResumePageProps) => {
   const ticking = useRef(false)
   const cachedOffsets = useRef<{ id: string; top: number }[]>([])
 
-  const { isAuthenticated, hero, experience, skills, awards, projects, papers, ipList } = data
+  const { isAuthenticated, hero, experience, skills, awards, projects, openSource, papers, ipList } = data
 
   useEffect(() => {
     const cacheOffsets = () => {
@@ -266,6 +267,13 @@ const ResumePage = ({ data }: ResumePageProps) => {
           <Sec id="projects" icon="📦" title="代表项目">
             <div className="rv-projects-grid">
               {projects.map((p) => <PCard key={p.title} {...p} />)}
+            </div>
+          </Sec>
+
+          {/* Open Source */}
+          <Sec id="opensource" icon="🌿" title="开源与贡献">
+            <div className="rv-projects-grid">
+              {openSource.map((o) => <OSCard key={o.title} {...o} />)}
             </div>
           </Sec>
 
@@ -529,6 +537,18 @@ function PCard({ title, sub, icon, emoji, gradient, desc, stack }: { title: stri
 
 function PPaper({ title, meta, desc }: { title: string; meta: string; desc: string }) {
   return <div className="rv-paper-card"><h4>{title}</h4><div className="rv-paper-meta">{meta}</div><p>{desc}</p></div>
+}
+
+function OSCard({ title, repo, link, role, emoji, gradient, desc, stack }: { title: string; repo: string; link: string; role: string; emoji: string; gradient: string; desc: string; stack: string[] }) {
+  return (
+    <div className="rv-proj-card">
+      <div style={{ width: 42, height: 42, borderRadius: 10, flexShrink: 0, marginBottom: '0.65rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', boxShadow: '0 2px 8px rgba(0,0,0,.06)', background: gradient }}>{emoji}</div>
+      <h3><a href={link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--rv-text-primary)' }}>{title}</a></h3>
+      <div className="rv-proj-sub">{role} · {repo}</div>
+      <p>{desc}</p>
+      <div className="rv-proj-stack">{stack.map((s) => <span key={s}>{s}</span>)}</div>
+    </div>
+  )
 }
 
 export default ResumePage

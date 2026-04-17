@@ -206,7 +206,7 @@ const ResumePage = ({ data }: ResumePageProps) => {
           <header className="rv-hero" id="top">
             <div className="rv-hero-row">
               <div className="rv-hero-main">
-                <img src={hero.avatarUrl} alt={hero.nameEn} style={{ width: 68, height: 68, borderRadius: 12, objectFit: 'cover', border: '2px solid var(--rv-border)', flexShrink: 0 }} />
+                <img src={hero.avatarUrl} alt={hero.nameEn} style={{ width: 68, height: 68, borderRadius: 12, objectFit: 'cover', border: 'none', flexShrink: 0 }} />
                 <div className="rv-hero-info">
                   <div className="rv-hero-label"><span className="rv-dot" />Open to Opportunities</div>
                   <h1 className="rv-h1">{hero.name} <span className="rv-en">{hero.nameEn}</span></h1>

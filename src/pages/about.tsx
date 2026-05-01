@@ -322,7 +322,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Telegram */}
           <a
-            href="https://t.me/Gloridust_channel"
+            href="https://t.me/isEthanZou"
             target="_blank"
             rel="noopener noreferrer"
             className="hover-lift"
@@ -348,7 +348,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             </div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>Telegram</div>
-              <div style={{ fontSize: 12, color: 'var(--ink-3)', fontFamily: 'var(--font-mono)' }}>@Gloridust_channel</div>
+              <div style={{ fontSize: 12, color: 'var(--ink-3)', fontFamily: 'var(--font-mono)' }}>@isEthanZou</div>
               <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>频道更新</div>
             </div>
           </a>
@@ -414,25 +414,12 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             </div>
           </div>
 
-          {/* 2024 - Europe */}
-          <div className="tl-item warm">
-            <div className="tl-year">2024</div>
-            <div className="tl-title">第一次去欧洲</div>
-            <div className="tl-body">
-              在 Paris 待了两周。法语 A1 基本不够用，但还是收获了很多 &mdash; 关于自己、关于世界、关于&quot;工程师&quot;以外的身份。
-            </div>
-            <div className="tl-tags">
-              <span className="tl-tag">Travel</span>
-              <span className="tl-tag">Fran&ccedil;ais</span>
-            </div>
-          </div>
-
           {/* 2023 */}
           <div className="tl-item">
             <div className="tl-year">2023</div>
             <div className="tl-title">联合创办 YGeeker · 开源之路</div>
             <div className="tl-body">
-              大一，联合创办 YGeeker，维护 Geekits 等开源项目。次年初正式成立公司。同年高考结束，180 天后才慢慢理解 &mdash; &quot;高考后时代&quot;与长辈描述的、自己幻想的，都不一样。
+              高中到大一，联合创办 YGeeker，维护 Geekits 等开源项目。次年初正式成立公司。
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Open Source</span>
@@ -443,7 +430,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* High school */}
           <div className="tl-item">
-            <div className="tl-year">高中</div>
+            <div className="tl-year">2021·高中</div>
             <div className="tl-title">前端入门 · 黑苹果 · 手搓代码</div>
             <div className="tl-body">
               开始学习前端开发，手搓 HTML/CSS/JS 写页面。折腾黑苹果 Hackintosh，在 PC 上跑 macOS。从&quot;玩数码&quot;正式转向&quot;写代码&quot;。
@@ -456,7 +443,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Junior high */}
           <div className="tl-item warm">
-            <div className="tl-year">初中</div>
+            <div className="tl-year">2018·初中</div>
             <div className="tl-title">Linux 运维 · 折腾装系统</div>
             <div className="tl-body">
               研究 Linux，给各种设备折腾装系统。在不断的 format &amp; reinstall 中理解了操作系统是怎么回事。
@@ -469,7 +456,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Primary school - robotics */}
           <div className="tl-item">
-            <div className="tl-year">小学六年级</div>
+            <div className="tl-year">2017·小学六年级</div>
             <div className="tl-title">机器人编程 · 四川省第二名</div>
             <div className="tl-body">
               参加机器人编程比赛，做红外寻道小车，拿到四川省第二名。第一次感受到&quot;做出来&quot;的成就感。
@@ -482,7 +469,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Primary school - first code */}
           <div className="tl-item">
-            <div className="tl-year">小学五年级</div>
+            <div className="tl-year">2015·小学四年级</div>
             <div className="tl-title">第一次写代码</div>
             <div className="tl-body">
               学习易语言中文编程，虽然后来才知道它本质上是个 C 语言套壳。但那是真正意义上的&quot;第一行代码&quot;。
@@ -495,7 +482,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Primary school - phone */}
           <div className="tl-item warm">
-            <div className="tl-year">小学二年级</div>
+            <div className="tl-year">2014·小学三年级</div>
             <div className="tl-title">研究坏掉的三星手机</div>
             <div className="tl-body">
               拿到一台开不了机的三星 Galaxy S5660，开始研究刷机。从此走上数码圈不归路。

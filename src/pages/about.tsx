@@ -349,23 +349,26 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>Telegram</div>
               <div style={{ fontSize: 12, color: 'var(--ink-3)', fontFamily: 'var(--font-mono)' }}>@isEthanZou</div>
-              <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>频道更新</div>
+              <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>{locale === 'en' ? 'Channel updates' : '频道更新'}</div>
             </div>
           </a>
         </div>
 
         {/* ════════ JOURNEY / 时间线 ════════ */}
         <div className="section-label" style={{ marginTop: '3rem', marginBottom: '1.25rem' }}>
-          JOURNEY &middot; 时间线
+          JOURNEY &middot; {locale === 'en' ? 'Timeline' : '时间线'}
         </div>
 
         <div className="timeline">
           {/* 2026 */}
           <div className="tl-item">
             <div className="tl-year">2026</div>
-            <div className="tl-title">AI 产品矩阵</div>
+            <div className="tl-title">{locale === 'en' ? 'AI Product Matrix' : 'AI 产品矩阵'}</div>
             <div className="tl-body">
-              独立开发「摇盒AI」「TikMy」「油迹Pro」「<a href="https://www.endpage.net/product/augur/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>Augur</a>」等 AI Native 应用。发起 Vibe Coding 实战训练营，带领团队用 AI 重新定义开发流程。
+              {locale === 'en'
+                ? <>Independently built YaoheAI, TikMy, FuelTrace Pro, <a href="https://www.endpage.net/product/augur/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>Augur</a> and other AI Native apps. Launched the Vibe Coding bootcamp, leading a team to redefine development workflows with AI.</>
+                : <>独立开发「摇盒AI」「TikMy」「油迹Pro」「<a href="https://www.endpage.net/product/augur/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>Augur</a>」等 AI Native 应用。发起 Vibe Coding 实战训练营，带领团队用 AI 重新定义开发流程。</>
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">AI</span>
@@ -377,9 +380,12 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
           {/* 2025 - AdventureX */}
           <div className="tl-item">
             <div className="tl-year">2025</div>
-            <div className="tl-title">AdventureX 2025 · 带队夺冠</div>
+            <div className="tl-title">{locale === 'en' ? 'AdventureX 2025 · Team Leader, 1st Place' : 'AdventureX 2025 · 带队夺冠'}</div>
             <div className="tl-body">
-              作为队长带队参加 AdventureX 2025 黑客松，再次斩获一等奖。连续两年在 AdventureX 获得冠军。
+              {locale === 'en'
+                ? 'Led a team at the AdventureX 2025 hackathon and won 1st place again. Two consecutive years as AdventureX champion.'
+                : '作为队长带队参加 AdventureX 2025 黑客松，再次斩获一等奖。连续两年在 AdventureX 获得冠军。'
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Hackathon</span>
@@ -390,9 +396,12 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
           {/* 2025 - Startup */}
           <div className="tl-item">
             <div className="tl-year">2025</div>
-            <div className="tl-title">创办 endpage.net</div>
+            <div className="tl-title">{locale === 'en' ? 'Founded endpage.net' : '创办 endpage.net'}</div>
             <div className="tl-body">
-              成立公司，定位 AI Native 产品开发与软件技术服务商。一边承接外包业务，一边打磨自研产品线。
+              {locale === 'en'
+                ? 'Started a company focused on AI Native product development and software services. Balancing client projects with building our own product line.'
+                : '成立公司，定位 AI Native 产品开发与软件技术服务商。一边承接外包业务，一边打磨自研产品线。'
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Startup</span>
@@ -403,9 +412,12 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
           {/* 2024 - AdventureX */}
           <div className="tl-item">
             <div className="tl-year">2024</div>
-            <div className="tl-title">AdventureX 2024 · 三赛道冠军</div>
+            <div className="tl-title">{locale === 'en' ? 'AdventureX 2024 · 1st in 3 Tracks' : 'AdventureX 2024 · 三赛道冠军'}</div>
             <div className="tl-body">
-              做了 AI 产品 Dali &mdash; 一个替代 Apple Intelligence 的 App，在 AdventureX 黑客松拿下三个赛道的一等奖。
+              {locale === 'en'
+                ? 'Built Dali — an AI app as an alternative to Apple Intelligence. Won 1st place across three tracks at the AdventureX hackathon.'
+                : <>做了 AI 产品 Dali &mdash; 一个替代 Apple Intelligence 的 App，在 AdventureX 黑客松拿下三个赛道的一等奖。</>
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Hackathon</span>
@@ -417,9 +429,12 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
           {/* 2023 */}
           <div className="tl-item">
             <div className="tl-year">2023</div>
-            <div className="tl-title">联合创办 YGeeker · 开源之路</div>
+            <div className="tl-title">{locale === 'en' ? 'Co-founded YGeeker · Open Source' : '联合创办 YGeeker · 开源之路'}</div>
             <div className="tl-body">
-              高中到大一，联合创办 YGeeker，维护 Geekits 等开源项目。次年初正式成立公司。
+              {locale === 'en'
+                ? 'From high school to freshman year, co-founded YGeeker and maintained open-source projects like Geekits. Officially incorporated the following year.'
+                : '高中到大一，联合创办 YGeeker，维护 Geekits 等开源项目。次年初正式成立公司。'
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Open Source</span>
@@ -430,10 +445,13 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* High school */}
           <div className="tl-item">
-            <div className="tl-year">2021·高中</div>
-            <div className="tl-title">前端入门 · 黑苹果 · 手搓代码</div>
+            <div className="tl-year">{locale === 'en' ? '2021 · High School' : '2021·高中'}</div>
+            <div className="tl-title">{locale === 'en' ? 'Front-end · Hackintosh · Hand-coded Pages' : '前端入门 · 黑苹果 · 手搓代码'}</div>
             <div className="tl-body">
-              开始学习前端开发，手搓 HTML/CSS/JS 写页面。折腾黑苹果 Hackintosh，在 PC 上跑 macOS。从&quot;玩数码&quot;正式转向&quot;写代码&quot;。
+              {locale === 'en'
+                ? 'Started learning front-end development, hand-writing HTML/CSS/JS pages. Built a Hackintosh to run macOS on a PC. Shifted from "gadget enthusiast" to "coder."'
+                : <>开始学习前端开发，手搓 HTML/CSS/JS 写页面。折腾黑苹果 Hackintosh，在 PC 上跑 macOS。从&quot;玩数码&quot;正式转向&quot;写代码&quot;。</>
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Frontend</span>
@@ -443,10 +461,13 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Junior high */}
           <div className="tl-item warm">
-            <div className="tl-year">2018·初中</div>
-            <div className="tl-title">Linux 运维 · 折腾装系统</div>
+            <div className="tl-year">{locale === 'en' ? '2018 · Middle School' : '2018·初中'}</div>
+            <div className="tl-title">{locale === 'en' ? 'Linux Ops · OS Tinkering' : 'Linux 运维 · 折腾装系统'}</div>
             <div className="tl-body">
-              研究 Linux，给各种设备折腾装系统。在不断的 format &amp; reinstall 中理解了操作系统是怎么回事。
+              {locale === 'en'
+                ? 'Dove into Linux, constantly reformatting and reinstalling OSes on every device I could find. Learned how operating systems actually work through endless trial and error.'
+                : <>研究 Linux，给各种设备折腾装系统。在不断的 format &amp; reinstall 中理解了操作系统是怎么回事。</>
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Linux</span>
@@ -456,10 +477,13 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Primary school - robotics */}
           <div className="tl-item">
-            <div className="tl-year">2017·小学六年级</div>
-            <div className="tl-title">机器人编程 · 四川省第二名</div>
+            <div className="tl-year">{locale === 'en' ? '2017 · 6th Grade' : '2017·小学六年级'}</div>
+            <div className="tl-title">{locale === 'en' ? 'Robotics · 2nd Place in Sichuan' : '机器人编程 · 四川省第二名'}</div>
             <div className="tl-body">
-              参加机器人编程比赛，做红外寻道小车，拿到四川省第二名。第一次感受到&quot;做出来&quot;的成就感。
+              {locale === 'en'
+                ? 'Competed in a robotics programming contest. Built an infrared line-following car and placed 2nd in Sichuan Province. First taste of the thrill of building something that works.'
+                : <>参加机器人编程比赛，做红外寻道小车，拿到四川省第二名。第一次感受到&quot;做出来&quot;的成就感。</>
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Robotics</span>
@@ -469,10 +493,13 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Primary school - first code */}
           <div className="tl-item">
-            <div className="tl-year">2015·小学四年级</div>
-            <div className="tl-title">第一次写代码</div>
+            <div className="tl-year">{locale === 'en' ? '2015 · 4th Grade' : '2015·小学四年级'}</div>
+            <div className="tl-title">{locale === 'en' ? 'First Lines of Code' : '第一次写代码'}</div>
             <div className="tl-body">
-              学习易语言中文编程，虽然后来才知道它本质上是个 C 语言套壳。但那是真正意义上的&quot;第一行代码&quot;。
+              {locale === 'en'
+                ? 'Learned EPL (Easy Programming Language), a Chinese-language programming tool. Only realized later it was essentially a C wrapper. But those were genuinely my first lines of code.'
+                : <>学习易语言中文编程，虽然后来才知道它本质上是个 C 语言套壳。但那是真正意义上的&quot;第一行代码&quot;。</>
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">EPL</span>
@@ -482,10 +509,13 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
 
           {/* Primary school - phone */}
           <div className="tl-item warm">
-            <div className="tl-year">2014·小学三年级</div>
-            <div className="tl-title">研究坏掉的三星手机</div>
+            <div className="tl-year">{locale === 'en' ? '2014 · 3rd Grade' : '2014·小学三年级'}</div>
+            <div className="tl-title">{locale === 'en' ? 'A Broken Samsung Phone' : '研究坏掉的三星手机'}</div>
             <div className="tl-body">
-              拿到一台开不了机的三星 Galaxy S5660，开始研究刷机。从此走上数码圈不归路。
+              {locale === 'en'
+                ? 'Got my hands on a bricked Samsung Galaxy S5660. Started tinkering with custom ROMs and flashing firmware. Fell down the tech rabbit hole and never came back.'
+                : '拿到一台开不了机的三星 Galaxy S5660，开始研究刷机。从此走上数码圈不归路。'
+              }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Android</span>
@@ -496,16 +526,19 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
           {/* 2004 */}
           <div className="tl-item muted">
             <div className="tl-year">2004</div>
-            <div className="tl-title">出生于中国</div>
+            <div className="tl-title">{locale === 'en' ? 'Born in China' : '出生于中国'}</div>
             <div className="tl-body">
-              一个 04er。INFP。喜欢猫和雨天。
+              {locale === 'en'
+                ? 'A Gen-Z kid. INFP. Loves cats and rainy days.'
+                : '一个 04er。INFP。喜欢猫和雨天。'
+              }
             </div>
           </div>
         </div>
 
         {/* ════════ ME / 一些瞬间 ════════ */}
         <div className="section-label" style={{ marginTop: '3rem', marginBottom: '1.25rem' }}>
-          ME &middot; 一些瞬间
+          ME &middot; {locale === 'en' ? 'Moments' : '一些瞬间'}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>

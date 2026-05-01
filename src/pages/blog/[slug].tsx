@@ -2,6 +2,7 @@ import { GetStaticProps, GetStaticPaths } from 'next'
 import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import Layout from '@/components/Layout'
@@ -191,8 +192,9 @@ const PostPage = ({ postData }: PostPageProps) => {
         <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{postData.title}</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-4">{t('postedOn')}: {postData.date}</p>
         <div className="prose dark:prose-dark">
-          <ReactMarkdown 
+          <ReactMarkdown
             remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
             components={renderers}
           >
             {postData.content}

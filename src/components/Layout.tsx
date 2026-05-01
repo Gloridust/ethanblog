@@ -22,10 +22,10 @@ interface LayoutProps {
   tags?: string[]
 }
 
-const Layout: React.FC<LayoutProps> = ({ 
-  children, 
-  title, 
-  description, 
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  title,
+  description,
   keywords,
   image,
   date,
@@ -81,7 +81,10 @@ const Layout: React.FC<LayoutProps> = ({
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div
+      className="flex flex-col min-h-screen transition-colors duration-200"
+      style={{ background: 'var(--bg)', color: 'var(--ink)' }}
+    >
       <Head>
         <title>{title ? `${title} | ${defaultTitle}` : defaultTitle}</title>
         <meta name="description" content={description || defaultDescription} />
@@ -90,7 +93,15 @@ const Layout: React.FC<LayoutProps> = ({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href={canonicalUrl} />
-        
+
+        {/* Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+          rel="stylesheet"
+        />
+
         {/* Open Graph / Facebook */}
         <meta property="og:locale" content={currentLocale === 'cn' ? 'zh_CN' : 'en_US'} />
         <meta property="og:type" content={type} />
@@ -123,22 +134,22 @@ const Layout: React.FC<LayoutProps> = ({
         {/* 添加语言相关标签 */}
         <meta httpEquiv="content-language" content={currentLocale} />
         <meta name="language" content={currentLocale === 'cn' ? 'Chinese' : 'English'} />
-        
+
         {/* 添加替代语言链接 */}
-        <link 
-          rel="alternate" 
-          href={`${siteUrl}${router.pathname}`} 
-          hrefLang="zh-CN" 
+        <link
+          rel="alternate"
+          href={`${siteUrl}${router.pathname}`}
+          hrefLang="zh-CN"
         />
-        <link 
-          rel="alternate" 
-          href={`${siteUrl}/en${router.pathname}`} 
-          hrefLang="en-US" 
+        <link
+          rel="alternate"
+          href={`${siteUrl}/en${router.pathname}`}
+          hrefLang="en-US"
         />
-        <link 
-          rel="alternate" 
-          href={`${siteUrl}${router.pathname}`} 
-          hrefLang="x-default" 
+        <link
+          rel="alternate"
+          href={`${siteUrl}${router.pathname}`}
+          hrefLang="x-default"
         />
 
         {/* 结构化数据 */}
@@ -149,9 +160,14 @@ const Layout: React.FC<LayoutProps> = ({
           }}
         />
       </Head>
+
+      <div className="ambient" />
+
       <Header />
-      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl pt-24">
-        {/* Added pt-24 class to create space for the fixed header */}
+      <main
+        className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl pt-24"
+        style={{ position: 'relative', zIndex: 2 }}
+      >
         {children}
       </main>
       <Footer />

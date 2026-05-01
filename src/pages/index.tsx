@@ -112,7 +112,13 @@ export default function Home({ initialPosts, allTags }: HomeProps) {
 
       <LoadingScreen isLoading={isLoading} />
 
-      <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+      <div
+        style={{
+          opacity: isLoading ? 0 : 1,
+          transform: isLoading ? 'translateY(8px)' : 'translateY(0)',
+          transition: 'opacity 0.4s ease, transform 0.4s var(--ease-out)',
+        }}
+      >
         <div className="max-w-4xl mx-auto">
           <Profile />
           <TagFilter

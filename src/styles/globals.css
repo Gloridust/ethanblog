@@ -1,182 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ===== DESIGN SYSTEM TOKENS ===== */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --font-sans: "Inter Tight", "PingFang SC", "Hiragino Sans GB", system-ui, -apple-system, sans-serif;
+  --font-serif: "Source Serif 4", "Noto Serif SC", Georgia, serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+
+  /* Surfaces */
+  --bg:       oklch(98.5% 0.008 75);
+  --bg-2:     oklch(96% 0.012 75);
+  --bg-noise: oklch(94% 0.014 75);
+
+  /* Glass */
+  --glass:        oklch(100% 0 0 / 0.55);
+  --glass-strong: oklch(100% 0 0 / 0.78);
+  --glass-border: oklch(100% 0 0 / 0.7);
+  --glass-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.8) inset,
+    0 0 0 0.5px oklch(20% 0.02 70 / 0.08),
+    0 8px 24px -8px oklch(20% 0.02 70 / 0.12),
+    0 24px 48px -16px oklch(20% 0.02 70 / 0.08);
+
+  /* Ink */
+  --ink:   oklch(22% 0.015 70);
+  --ink-2: oklch(40% 0.012 70);
+  --ink-3: oklch(58% 0.01 70);
+  --ink-4: oklch(72% 0.008 70);
+
+  /* Accent */
+  --accent:      oklch(62% 0.18 250);
+  --accent-soft: oklch(62% 0.18 250 / 0.12);
+  --accent-ink:  oklch(38% 0.14 250);
+
+  /* Warm */
+  --warm-1: oklch(88% 0.06 60);
+  --warm-2: oklch(82% 0.08 30);
+  --warm-3: oklch(85% 0.05 90);
+
+  /* Radii */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 36px;
+  --r-pill: 999px;
+
+  /* Easing */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* Dark mode */
+[data-theme="dark"] {
+  --bg:       oklch(18% 0.012 60);
+  --bg-2:     oklch(22% 0.014 60);
+  --bg-noise: oklch(26% 0.016 60);
+
+  --glass:        oklch(100% 0 0 / 0.06);
+  --glass-strong: oklch(100% 0 0 / 0.10);
+  --glass-border: oklch(100% 0 0 / 0.12);
+  --glass-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.08) inset,
+    0 0 0 0.5px oklch(100% 0 0 / 0.06),
+    0 8px 24px -8px oklch(0% 0 0 / 0.4),
+    0 24px 48px -16px oklch(0% 0 0 / 0.5);
+
+  --ink:   oklch(96% 0.005 70);
+  --ink-2: oklch(80% 0.008 70);
+  --ink-3: oklch(62% 0.01 70);
+  --ink-4: oklch(48% 0.012 70);
+
+  --accent:      oklch(72% 0.16 250);
+  --accent-soft: oklch(72% 0.16 250 / 0.18);
+  --accent-ink:  oklch(82% 0.14 250);
+
+  --warm-1: oklch(40% 0.08 60);
+  --warm-2: oklch(38% 0.10 30);
+  --warm-3: oklch(42% 0.06 90);
+}
+
+/* ===== BASE STYLES ===== */
+html {
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+::selection {
+  background: var(--accent);
+  color: white;
 }
 
-/* Custom styles for Markdown content */
-.prose {
-  @apply max-w-none;
+/* ===== AMBIENT BACKGROUND ===== */
+.ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.ambient::before {
+  content: "";
+  position: absolute;
+  top: -20vw;
+  right: -10vw;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--warm-2), transparent 60%);
+  filter: blur(120px);
+  opacity: 0.55;
+}
+.ambient::after {
+  content: "";
+  position: absolute;
+  bottom: -15vw;
+  left: -10vw;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent), transparent 60%);
+  filter: blur(120px);
+  opacity: 0.12;
 }
 
-.prose h2 {
-  @apply text-2xl font-semibold mt-8 mb-4 text-gray-800 dark:text-gray-100;
+/* ===== GLASS SURFACE ===== */
+.glass {
+  background: var(--glass-strong);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.6) inset,
+    0 4px 16px -4px oklch(20% 0.02 70 / 0.06);
+}
+[data-theme="dark"] .glass {
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.06) inset,
+    0 4px 16px -4px oklch(0% 0 0 / 0.3);
 }
 
-.prose h3 {
-  @apply text-xl font-semibold mt-6 mb-3 text-gray-800 dark:text-gray-100;
+/* ===== SECTION LABEL ===== */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--ink-4);
 }
 
-.prose p {
-  @apply mb-4 text-gray-700 dark:text-gray-300;
+/* ===== HOVER LIFT ===== */
+.hover-lift {
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px oklch(20% 0.02 70 / 0.14);
+}
+[data-theme="dark"] .hover-lift:hover {
+  box-shadow: 0 16px 32px -8px oklch(0% 0 0 / 0.5);
 }
 
-.prose ul, .prose ol {
-  @apply mb-4 pl-5 text-gray-700 dark:text-gray-300;
+/* ===== TIMELINE ===== */
+.timeline {
+  padding-left: 32px;
+  position: relative;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--accent), var(--warm-2) 50%, transparent);
+  opacity: 0.5;
+}
+.tl-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+.tl-item::before {
+  content: "";
+  position: absolute;
+  left: -32px;
+  top: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 12px var(--accent-soft);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.tl-item.warm::before {
+  border-color: var(--warm-2);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 12px oklch(82% 0.08 30 / 0.3);
+}
+.tl-item.muted::before {
+  background: var(--ink-4);
+  border-color: var(--ink-4);
+  box-shadow: 0 0 0 4px var(--bg);
+  width: 12px;
+  height: 12px;
+  left: -29px;
+  top: 9px;
+}
+.tl-year {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  letter-spacing: 0.02em;
+}
+.tl-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 2px;
+  letter-spacing: -0.012em;
+}
+.tl-body {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  margin-top: 4px;
+}
+.tl-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.tl-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--glass-border);
+  color: var(--ink-3);
+  background: var(--glass);
 }
 
-.prose li {
-  @apply mb-2;
-}
+/* ===== PROSE (Markdown) ===== */
+.prose { @apply max-w-none; }
+.prose h2 { @apply text-2xl font-semibold mt-8 mb-4; color: var(--ink); }
+.prose h3 { @apply text-xl font-semibold mt-6 mb-3; color: var(--ink); }
+.prose p { @apply mb-4; color: var(--ink-2); }
+.prose ul, .prose ol { @apply mb-4 pl-5; color: var(--ink-2); }
+.prose li { @apply mb-2; }
+.prose a { color: var(--accent); @apply hover:underline; }
+.prose blockquote { @apply border-l-4 pl-4 italic my-4; border-color: var(--ink-4); color: var(--ink-3); }
+.prose code { @apply rounded px-1 py-0.5 text-sm; font-family: var(--font-mono); background: var(--bg-2); color: var(--ink); }
+.prose pre { @apply p-0 bg-transparent; margin: 0; }
+.prose pre > div { @apply rounded-lg; }
+.prose pre:hover button { @apply opacity-100; }
+.prose strong { color: var(--ink); }
+.prose img { @apply rounded-lg shadow-md; }
+[data-theme="dark"] .prose pre > div { background-color: oklch(22% 0.014 60) !important; }
+.prose pre > div > span { @apply text-xs; color: var(--ink-3); }
 
-.prose a {
-  @apply text-blue-600 dark:text-blue-400 hover:underline;
-}
+/* ===== GISCUS ===== */
+.giscus-wrapper { transition: all 0.3s ease; }
+.giscus-frame { width: 100% !important; border: none !important; margin: 0 !important; }
+.giscus-wrapper iframe { opacity: 0; transition: opacity 0.3s ease; }
+.giscus-wrapper iframe.loaded { opacity: 1; }
+@media (max-width: 640px) { .giscus-wrapper { padding: 1rem; } }
 
-.prose blockquote {
-  @apply border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4 text-gray-600 dark:text-gray-400;
-}
-
-.prose code {
-  @apply bg-gray-100 dark:bg-gray-700 rounded px-1 py-0.5 font-mono text-sm text-gray-800 dark:text-gray-200;
-}
-
-.prose pre {
-  @apply bg-gray-100 dark:bg-gray-800 rounded p-4 overflow-x-auto;
-}
-
-.prose strong {
-  @apply text-gray-900 dark:text-gray-100;
-}
-
-.prose img {
-  @apply rounded-lg shadow-md;
-}
-
-/* Additional dark mode optimizations */
-@media (prefers-color-scheme: dark) {
-  .prose {
-    @apply text-gray-300;
-  }
-
-  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-    @apply text-gray-100;
-  }
-
-  .prose a:hover {
-    @apply text-blue-300;
-  }
-}
-
-/* Giscus 样式优化 */
-.giscus-wrapper {
-  background: var(--giscus-background);
-  transition: all 0.3s ease;
-}
-
-.giscus-frame {
-  width: 100% !important;
-  border: none !important;
-  margin: 0 !important;
-}
-
-/* 动画效果 */
-.giscus-wrapper iframe {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.giscus-wrapper iframe.loaded {
-  opacity: 1;
-}
-
-/* 响应式调整 */
-@media (max-width: 640px) {
-  .giscus-wrapper {
-    padding: 1rem;
-  }
-}
-
-/* 代码块样式 */
-.prose pre {
-  @apply p-0 bg-transparent;
-  margin: 0;
-}
-
-.prose code {
-  @apply text-sm;
-}
-
-/* 代码块中的行号样式 */
-.prose pre > div {
-  @apply rounded-lg;
-}
-
-/* 代码块悬停效果 */
-.prose pre:hover button {
-  @apply opacity-100;
-}
-
-/* 暗色模式适配 */
-.dark .prose pre > div {
-  background-color: rgb(30, 41, 59) !important;
-}
-
-/* 代码语言标签样式 */
-.prose pre > div > span {
-  @apply text-xs text-gray-500 dark:text-gray-400;
-}
-
-/* Resume print styles */
+/* ===== PRINT ===== */
 @media print {
-  @page {
-    size: A4;
-    margin: 0;
-  }
-  body {
-    background: #fff !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  /* Hide site header, footer, and download button */
-  header:has(nav), footer.bg-gray-100, .print\\:hidden {
-    display: none !important;
-  }
-  /* Remove padding from main content area */
-  main {
-    padding: 0 !important;
-    max-width: 100% !important;
-  }
-  /* Reset page background */
-  .flex.flex-col.min-h-screen {
-    background: #fff !important;
-  }
+  @page { size: A4; margin: 0; }
+  body { background: #fff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .ambient, header:has(nav), footer { display: none !important; }
+  main { padding: 0 !important; max-width: 100% !important; }
 }

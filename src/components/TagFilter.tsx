@@ -38,21 +38,36 @@ const TagFilter: React.FC<TagFilterProps> = ({ tags, activeTag, onFilterChange, 
         <div className="relative md:hidden" ref={dropdownRef}>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-medium transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-md shadow-blue-500/20"
+            className="px-4 py-2 text-white text-sm font-medium transition-all duration-200 focus:outline-none"
+            style={{
+              background: 'var(--accent)',
+              borderRadius: 'var(--r-pill)',
+              boxShadow: '0 2px 8px -2px var(--accent)',
+            }}
           >
             {activeTag} {isOpen ? '▲' : '▼'}
           </button>
           {isOpen && (
-            <div className="absolute z-10 mt-2 w-44 rounded-2xl shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden py-1.5">
+            <div
+              className="absolute z-10 mt-2 w-44 overflow-hidden py-1.5"
+              style={{
+                background: 'var(--glass-strong)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: 'var(--r-lg)',
+                boxShadow: '0 8px 32px -4px oklch(20% 0.02 70 / 0.12)',
+              }}
+            >
               <div role="menu">
                 {tags.map((tag) => (
                   <button
                     key={tag}
-                    className={`block w-full px-4 py-2 text-sm text-left transition-colors duration-150 ${
-                      activeTag === tag
-                        ? 'bg-blue-500 text-white font-medium'
-                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
-                    }`}
+                    className="block w-full px-4 py-2 text-sm text-left transition-colors duration-150"
+                    style={{
+                      background: activeTag === tag ? 'var(--accent)' : 'transparent',
+                      color: activeTag === tag ? 'white' : 'var(--ink-2)',
+                      fontWeight: activeTag === tag ? 500 : 400,
+                    }}
                     onClick={() => handleTagClick(tag)}
                   >
                     {tag}
@@ -64,24 +79,48 @@ const TagFilter: React.FC<TagFilterProps> = ({ tags, activeTag, onFilterChange, 
         </div>
 
         {/* Desktop pill bar */}
-        <div className="hidden md:flex flex-wrap gap-1.5 justify-center bg-gray-100/80 dark:bg-gray-800/60 rounded-full p-1 backdrop-blur-sm">
-          {tags.map((tag) => (
-            <button
-              key={tag}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeTag === tag
-                  ? 'bg-blue-500 text-white shadow-md shadow-blue-500/25'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-gray-700/40'
-              }`}
-              onClick={() => onFilterChange(tag)}
-            >
-              {tag}
-            </button>
-          ))}
+        <div
+          className="hidden md:flex flex-wrap gap-1.5 justify-center p-[5px]"
+          style={{
+            background: 'var(--bg-2)',
+            borderRadius: 'var(--r-pill)',
+          }}
+        >
+          {tags.map((tag) => {
+            const isActive = activeTag === tag
+            return (
+              <button
+                key={tag}
+                className="px-4 py-1.5 text-sm font-medium transition-all duration-200 relative flex items-center gap-1.5"
+                style={{
+                  borderRadius: 'var(--r-pill)',
+                  background: isActive ? 'var(--accent)' : 'transparent',
+                  color: isActive ? 'white' : 'var(--ink-2)',
+                  boxShadow: isActive ? '0 2px 8px -2px var(--accent)' : 'none',
+                }}
+                onClick={() => onFilterChange(tag)}
+              >
+                {isActive && (
+                  <span
+                    className="inline-block w-1.5 h-1.5 rounded-full bg-white animate-pulse"
+                    style={{ flexShrink: 0 }}
+                  />
+                )}
+                {tag}
+              </button>
+            )
+          })}
         </div>
       </div>
 
-      <p className="text-center mt-4 text-sm text-gray-500 dark:text-gray-400">
+      <p
+        className="text-center mt-4"
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '11px',
+          color: 'var(--ink-4)',
+        }}
+      >
         {t('foundPosts', { count: filteredPostsCount })}
       </p>
     </div>

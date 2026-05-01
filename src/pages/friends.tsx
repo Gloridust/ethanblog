@@ -23,37 +23,113 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => {
 
   return (
     <Layout>
-      <h1 className="text-3xl font-bold mb-6">{t('friendsTitle')}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {friends.map((friend) => (
-          <a href={friend.link} key={friend.name} target="_blank" rel="noopener noreferrer" className="block">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 flex items-center h-32">
-              <div className="w-20 h-20 relative flex-shrink-0 mr-4">
+      <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 1rem' }}>
+
+        <h1 style={{
+          fontSize: 24,
+          fontWeight: 700,
+          color: 'var(--ink)',
+          marginBottom: '0.5rem',
+        }}>
+          {t('friendsTitle')}
+        </h1>
+
+        <div className="section-label" style={{ marginBottom: '1.5rem' }}>
+          LINKS
+        </div>
+
+        <style jsx>{`
+          .friends-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+          }
+          @media (min-width: 640px) {
+            .friends-grid {
+              grid-template-columns: repeat(2, 1fr);
+            }
+          }
+          @media (min-width: 1024px) {
+            .friends-grid {
+              grid-template-columns: repeat(3, 1fr);
+            }
+          }
+        `}</style>
+
+        <div className="friends-grid">
+          {friends.map((friend) => (
+            <a
+              href={friend.link}
+              key={friend.name}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover-lift"
+              style={{
+                background: 'var(--glass-strong)',
+                backdropFilter: 'blur(16px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: 'var(--r-md)',
+                padding: '1rem 1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                textDecoration: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{
+                width: 48,
+                height: 48,
+                flexShrink: 0,
+                borderRadius: 'var(--r-sm)',
+                overflow: 'hidden',
+                position: 'relative',
+                background: 'var(--bg-2)',
+              }}>
                 <Image
                   src={friend.avatar}
                   alt={friend.name}
                   fill
-                  className="rounded-full object-cover"
-                  sizes="80px"
+                  className="object-cover rounded-full"
+                  sizes="48px"
                 />
               </div>
-              <div className="overflow-hidden">
-                <h2 className="text-xl font-semibold mb-1 truncate">{friend.name}</h2>
-                <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
+              <div style={{ overflow: 'hidden', minWidth: 0 }}>
+                <div style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: 'var(--ink)',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}>
+                  {friend.name}
+                </div>
+                <div style={{
+                  fontSize: 13,
+                  color: 'var(--ink-3)',
+                  lineHeight: 1.5,
+                  marginTop: 2,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                }}>
                   {friend.description[locale as 'cn' | 'en']}
-                </p>
+                </div>
               </div>
-            </div>
-          </a>
-        ))}
+            </a>
+          ))}
+        </div>
+
       </div>
     </Layout>
   )
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const friends =
-  [
+  const friends = [
     {
       "name": "Rene Wang",
       "avatar": "/images/friends/ReneWang.png",

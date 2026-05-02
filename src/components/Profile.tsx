@@ -42,8 +42,9 @@ const socialLinks = [
 ]
 
 const Profile: React.FC = () => {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null)
+  const isCn = locale !== 'en'
 
   return (
     <div className="flex flex-col items-center text-center mb-12">
@@ -96,14 +97,16 @@ const Profile: React.FC = () => {
 
       {/* Subtitle */}
       <p className="mb-3 text-base" style={{ color: 'var(--ink-2)' }}>
-        {'开发者 · 项目经理 · '}
-        <span style={{ fontWeight: 700, color: 'var(--accent)' }}>创业者</span>
+        {isCn ? '开发者 · 项目经理 · ' : 'Developer · PM · '}
+        <span style={{ fontWeight: 700, color: 'var(--accent)' }}>
+          {isCn ? '创业者' : 'Entrepreneur'}
+        </span>
       </p>
 
       {/* Bio lines */}
       <div className="mb-5 text-sm leading-relaxed max-w-xl" style={{ color: 'var(--ink-2)' }}>
-        <p>{'🇨🇳 中文 / English / Français(学习中) · 🕐 INFP'}</p>
-        <p>{'🌱 React, NextJS, Flutter, SwiftUI, ML, Python · 🚀 YGeeker 联合创始人'}</p>
+        <p>{isCn ? '🇨🇳 中文 / English / Français(学习中) · 🕐 INFP' : '🇨🇳 中文 / English / Français(learning) · 🕐 INFP'}</p>
+        <p>{isCn ? '🌱 React, NextJS, Flutter, SwiftUI, ML, Python · 🚀 连续创业者' : '🌱 React, NextJS, Flutter, SwiftUI, ML, Python · 🚀 Serial Entrepreneur'}</p>
       </div>
 
       {/* Social icons */}

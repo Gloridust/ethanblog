@@ -395,13 +395,14 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             </div>
             <div className="tl-body">
               {locale === 'en'
-                ? 'Interning at hubitos.ai since June, building the next-generation AI operating system for social media marketing.'
-                : '自 6 月起在 hubitos.ai 实习，参与构造下一代社媒营销 AI 操作系统。'
+                ? <>Interning at <a href="https://hubitos.ai" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>hubitos.ai</a> since June — an all-in-one AI operating system where you give the intent and it handles the execution, autonomously running multi-step tasks across apps instead of just answering. I work on its social-media-marketing capabilities, pushing AI from &quot;assisting&quot; to &quot;delivering results.&quot;</>
+                : <>自 6 月起在 <a href="https://hubitos.ai" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>hubitos.ai</a> 实习。hubitos 是一款「给出意图、交给系统执行」的一体化 AI 操作系统——不止于回答，而是跨应用自动完成多步任务，让 AI 从&quot;辅助&quot;真正走向&quot;交付结果&quot;。</>
               }
             </div>
             <div className="tl-tags">
               <span className="tl-tag">Internship</span>
-              <span className="tl-tag">AI</span>
+              <span className="tl-tag">AI OS</span>
+              <span className="tl-tag">Automation</span>
               <span className="tl-tag">Marketing</span>
             </div>
           </div>

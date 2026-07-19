@@ -264,6 +264,29 @@ body {
   background: var(--glass);
 }
 
+/* ===== Collapse toggle (timeline / gallery) ===== */
+.collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.5rem;
+  padding: 8px 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out), background 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+}
+.collapse-toggle:hover {
+  color: var(--accent-ink);
+  background: var(--glass-strong);
+  transform: translateY(-1px);
+}
+
 /* ===== PROSE (Markdown) ===== */
 .prose { @apply max-w-none; }
 .prose h2 { @apply text-2xl font-semibold mt-8 mb-4; color: var(--ink); }

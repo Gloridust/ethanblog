@@ -5,6 +5,14 @@ const TWITTER_API_URL = 'https://api.twitter.com/2/users/by/username'
 const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN
 const IS_PRODUCTION = process.env.VERCEL_ENV === 'production'
 
+// ── 兜底数据（当在线抓取失败时使用，请手动保持大致准确）──
+const TWITTER_FALLBACK = 2600      // X (Twitter) 粉丝，官方 API 已收费，无 token 时用此值
+const XIAOHONGSHU_FALLBACK = 313   // 小红书粉丝
+const GITHUB_STARS_FALLBACK = 3400 // GitHub 总 star 数
+
+// GitHub 用户名（用于统计所有公开仓库的 star 总数，无需 key）
+const GITHUB_USERNAME = 'Gloridust'
+
 // 缓存结构
 interface CacheData {
   value: number
@@ -14,6 +22,7 @@ interface CacheData {
 // 内存缓存
 let twitterFollowersCache: CacheData | null = null
 let xiaohongshuFollowersCache: CacheData | null = null
+let githubStarsCache: CacheData | null = null
 const CACHE_DURATION = 1000 * 60 * 15 // 15分钟缓存
 
 function formatFollowers(count: number): string {
@@ -99,8 +108,66 @@ async function getTwitterFollowers(username: string): Promise<number> {
       }
     }
 
-    // 如果有最后已知的粉丝数就使用它，否则返回 1500
-    return lastKnownFollowers || 1500
+    // 如果有最后已知的粉丝数就使用它，否则返回兜底值
+    return lastKnownFollowers || TWITTER_FALLBACK
+  }
+}
+
+// ── GitHub：统计用户所有公开仓库的 star 总数（GitHub REST API 无需 key）──
+async function getGithubStars(username: string): Promise<number> {
+  try {
+    const now = Date.now()
+    if (githubStarsCache && (now - githubStarsCache.timestamp < CACHE_DURATION)) {
+      return githubStarsCache.value
+    }
+
+    let totalStars = 0
+    let page = 1
+    const perPage = 100
+
+    // 分页拉取全部公开仓库，累加 stargazers_count
+    // 未认证请求速率上限为 60 次/小时，配合 ISR 缓存足够使用
+    while (page <= 10) {
+      const response = await axios({
+        method: 'get',
+        url: `https://api.github.com/users/${username}/repos`,
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'User-Agent': 'ethanblog-social-stats',
+        },
+        params: {
+          per_page: perPage,
+          page,
+          type: 'owner',
+          sort: 'updated',
+        },
+        timeout: 8000,
+        validateStatus: (status) => status === 200,
+      })
+
+      const repos = Array.isArray(response.data) ? response.data : []
+      for (const repo of repos) {
+        if (!repo.fork && typeof repo.stargazers_count === 'number') {
+          totalStars += repo.stargazers_count
+        }
+      }
+
+      if (repos.length < perPage) break
+      page += 1
+    }
+
+    if (totalStars > 0) {
+      githubStarsCache = { value: totalStars, timestamp: now }
+      return totalStars
+    }
+
+    throw new Error('未能统计到 star 数')
+  } catch (error) {
+    console.error('获取 GitHub star 数失败:', error)
+    if (githubStarsCache?.value) {
+      return githubStarsCache.value
+    }
+    return GITHUB_STARS_FALLBACK
   }
 }
 
@@ -134,7 +201,7 @@ async function getXiaohongshuFollowers(userId: string): Promise<number> {
 
     // 如果不在生产环境，返回默认值以避免开发环境中的频繁请求
     if (!IS_PRODUCTION) {
-      return 140; // 开发环境返回默认值
+      return XIAOHONGSHU_FALLBACK; // 开发环境返回默认值
     }
 
     const url = `https://www.xiaohongshu.com/user/profile/${userId}`;
@@ -255,7 +322,7 @@ async function getXiaohongshuFollowers(userId: string): Promise<number> {
     }
     
     // 尝试从localStorage获取
-    let lastKnownFollowers = 101; // 默认值
+    let lastKnownFollowers = XIAOHONGSHU_FALLBACK; // 默认值
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('lastKnownXiaohongshuFollowers');
       if (stored) {
@@ -279,14 +346,15 @@ export async function getSocialStats() {
   
   const stats = {
     twitter: '0',
-    xiaohongshu: '0'
+    xiaohongshu: '0',
+    github: '0'
   }
 
   try {
     // 获取Twitter粉丝数
     const twitterCount = await getTwitterFollowers('Gloridust1024')
     console.log('获取到的 Twitter 粉丝数:', twitterCount)
-    
+
     // 如果成功获取到数据，存储到 localStorage
     if (typeof window !== 'undefined' && twitterCount > 0) {
       localStorage.setItem('lastKnownTwitterFollowers', JSON.stringify({
@@ -294,15 +362,20 @@ export async function getSocialStats() {
         timestamp: Date.now()
       }))
     }
-    
+
     stats.twitter = formatFollowers(twitterCount)
-    
+
     // 获取小红书粉丝数
     const xiaohongshuId = '5f1d89a6000000000100ba01' // 使用实际的用户ID
     const xiaohongshuCount = await getXiaohongshuFollowers(xiaohongshuId)
     console.log('获取到的小红书粉丝数:', xiaohongshuCount)
-    
+
     stats.xiaohongshu = formatFollowers(xiaohongshuCount)
+
+    // 获取 GitHub star 总数
+    const githubStars = await getGithubStars(GITHUB_USERNAME)
+    console.log('获取到的 GitHub star 数:', githubStars)
+    stats.github = formatFollowers(githubStars)
   } catch (error) {
     console.error('获取社交统计数据时发生错误:', error)
     
@@ -311,7 +384,7 @@ export async function getSocialStats() {
       stats.twitter = formatFollowers(twitterFollowersCache.value)
     } else {
       // 尝试从 localStorage 获取最后已知的粉丝数
-      let lastKnownFollowers = 1500 // 默认值改为 1500
+      let lastKnownFollowers = TWITTER_FALLBACK // 默认兜底值
       if (typeof window !== 'undefined') {
         const stored = localStorage.getItem('lastKnownTwitterFollowers')
         if (stored) {
@@ -332,7 +405,7 @@ export async function getSocialStats() {
     if (xiaohongshuFollowersCache) {
       stats.xiaohongshu = formatFollowers(xiaohongshuFollowersCache.value)
     } else {
-      let lastKnownFollowers = 101 // 默认值
+      let lastKnownFollowers = XIAOHONGSHU_FALLBACK // 默认值
       if (typeof window !== 'undefined') {
         const stored = localStorage.getItem('lastKnownXiaohongshuFollowers')
         if (stored) {
@@ -347,6 +420,13 @@ export async function getSocialStats() {
         }
       }
       stats.xiaohongshu = formatFollowers(lastKnownFollowers)
+    }
+
+    // GitHub 数据恢复
+    if (githubStarsCache) {
+      stats.github = formatFollowers(githubStarsCache.value)
+    } else {
+      stats.github = formatFollowers(GITHUB_STARS_FALLBACK)
     }
   }
 

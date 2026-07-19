@@ -14,6 +14,7 @@ interface AboutPageProps {
   socialStats: {
     twitter: string
     xiaohongshu: string
+    github: string
   }
 }
 
@@ -26,19 +27,19 @@ const galleryData: GalleryRow[] = [
   {
     title: "Me",
     images: [
-      "/images/gallery/me/1.jpg",
-      "/images/gallery/me/2.jpg",
-      "/images/gallery/me/3.jpg",
-      "/images/gallery/me/4.jpg"
+      "/images/gallery/me/1.webp",
+      "/images/gallery/me/2.webp",
+      "/images/gallery/me/3.webp",
+      "/images/gallery/me/4.webp"
     ]
   },
   {
     title: "AdventureX 2024",
     images: [
-      "/images/gallery/advx2024/advx.jpg",
-      "/images/gallery/advx2024/advx-0.jpg",
-      "/images/gallery/advx2024/advx-1.jpg",
-      "/images/gallery/advx2024/advx-2.jpg"
+      "/images/gallery/advx2024/advx.webp",
+      "/images/gallery/advx2024/advx-0.webp",
+      "/images/gallery/advx2024/advx-1.webp",
+      "/images/gallery/advx2024/advx-2.webp"
     ]
   }
 ]
@@ -120,6 +121,10 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
   const { t, locale } = useTranslation()
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({})
+  const [timelineExpanded, setTimelineExpanded] = useState(false)
+  const [galleryExpanded, setGalleryExpanded] = useState(false)
+
+  const TIMELINE_PREVIEW = 3 // 默认展示最近 3 条
 
   const sliderSettings = {
     dots: false,
@@ -316,7 +321,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>GitHub</div>
               <div style={{ fontSize: 12, color: 'var(--ink-3)', fontFamily: 'var(--font-mono)' }}>@Gloridust</div>
-              <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>320 stars</div>
+              <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>{socialStats.github} stars</div>
             </div>
           </a>
 
@@ -360,6 +365,47 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
         </div>
 
         <div className="timeline">
+          {/* 2026 - WechatOnCloud 爆火 */}
+          <div className="tl-item">
+            <div className="tl-year">{locale === 'en' ? '2026 · June' : '2026·六月'}</div>
+            <div className="tl-title">
+              <a href="https://github.com/Gloridust/WechatOnCloud" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>WechatOnCloud</a>
+              {locale === 'en' ? ' Went Viral' : ' 项目爆火'}
+            </div>
+            <div className="tl-body">
+              {locale === 'en'
+                ? <>My open-source project <a href="https://github.com/Gloridust/WechatOnCloud" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>WechatOnCloud</a> blew up in early June — 3.4k GitHub stars in just 50 days.</>
+                : <>开源项目 <a href="https://github.com/Gloridust/WechatOnCloud" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>WechatOnCloud</a> 在六月初爆火，50 天狂揽 3.4k GitHub star。</>
+              }
+            </div>
+            <div className="tl-tags">
+              <span className="tl-tag">Open Source</span>
+              <span className="tl-tag">3.4k Stars</span>
+              <span className="tl-tag">Viral</span>
+            </div>
+          </div>
+
+          {/* 2026 - hubitos.ai 实习 */}
+          <div className="tl-item">
+            <div className="tl-year">{locale === 'en' ? '2026 · Jun – Now' : '2026·6月至今'}</div>
+            <div className="tl-title">
+              {locale === 'en' ? 'Interning at ' : '在 '}
+              <a href="https://hubitos.ai" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>hubitos.ai</a>
+              {locale === 'en' ? '' : ' 实习'}
+            </div>
+            <div className="tl-body">
+              {locale === 'en'
+                ? 'Interning at hubitos.ai since June, building the next-generation AI operating system for social media marketing.'
+                : '自 6 月起在 hubitos.ai 实习，参与构造下一代社媒营销 AI 操作系统。'
+              }
+            </div>
+            <div className="tl-tags">
+              <span className="tl-tag">Internship</span>
+              <span className="tl-tag">AI</span>
+              <span className="tl-tag">Marketing</span>
+            </div>
+          </div>
+
           {/* 2026 */}
           <div className="tl-item">
             <div className="tl-year">2026</div>
@@ -377,6 +423,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             </div>
           </div>
 
+          {timelineExpanded && <>
           {/* 2025 - AdventureX */}
           <div className="tl-item">
             <div className="tl-year">2025</div>
@@ -534,7 +581,23 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
               }
             </div>
           </div>
+          </>}
         </div>
+
+        {/* Timeline expand / collapse toggle */}
+        <button
+          onClick={() => setTimelineExpanded(v => !v)}
+          className="collapse-toggle"
+          aria-expanded={timelineExpanded}
+        >
+          {timelineExpanded
+            ? (locale === 'en' ? 'Show less' : '收起')
+            : (locale === 'en' ? 'Show full timeline' : '展开全部时间线')}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+            style={{ transform: timelineExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s var(--ease-out)' }}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
 
         {/* ════════ ME / 一些瞬间 ════════ */}
         <div className="section-label" style={{ marginTop: '3rem', marginBottom: '1.25rem' }}>
@@ -542,7 +605,7 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          {galleryData.map((row, rowIdx) => (
+          {(galleryExpanded ? galleryData : galleryData.slice(0, 1)).map((row, rowIdx) => (
             <div key={rowIdx}>
               <h3 style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)', marginBottom: '0.75rem' }}>
                 {row.title}
@@ -617,6 +680,23 @@ export default function AboutPage({ socialStats }: AboutPageProps) {
             </div>
           ))}
         </div>
+
+        {/* Gallery expand / collapse toggle */}
+        {galleryData.length > 1 && (
+          <button
+            onClick={() => setGalleryExpanded(v => !v)}
+            className="collapse-toggle"
+            aria-expanded={galleryExpanded}
+          >
+            {galleryExpanded
+              ? (locale === 'en' ? 'Show less' : '收起')
+              : (locale === 'en' ? `Show ${galleryData.length - 1} more` : `展开更多 ${galleryData.length - 1} 组`)}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+              style={{ transform: galleryExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s var(--ease-out)' }}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+        )}
 
         {/* Image Preview Modal */}
         {selectedImage && (

@@ -28,8 +28,13 @@ const PostPage = ({ postData }: PostPageProps) => {
     const [copied, setCopied] = useState(false)
     const match = /language-(\w+)/.exec(className || '')
     const language = match ? match[1] : ''
-    
-    if (inline) {
+
+    // react-markdown v9 起不再传入 inline，需要自行判断：
+    // 没有 language-* 标记且不含换行的，就是行内代码。
+    // 行内代码一旦渲染成 <pre>，就会出现 <p> 套块级元素，浏览器会拆开 DOM，导致 hydration 失败。
+    const isInline = inline ?? (!match && !String(children).includes('\n'))
+
+    if (isInline) {
       return (
         <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5" {...props}>
           {children}

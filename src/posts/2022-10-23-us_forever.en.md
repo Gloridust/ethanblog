@@ -4,6 +4,7 @@ date: 2022-10-23
 tags: Essay
 img: /images/posts/2022-10-23/us_forever.png
 language: en
+hide: true
 ---
 I can't help but sigh how time flies. It seems like the change of term happened just a few days ago. On that day of the acceptance ceremony last year, Minister Wang [ReneWang](https://Rene.wang) said to me, "One year passes quickly. The last time I stood here seemed like just recently." Yes, one year has passed quickly, and I am standing here again. But this time, I am not the one being appointed, but the one appointing others.
 

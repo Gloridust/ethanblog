@@ -5,6 +5,7 @@ date: 2023-12-04
 img: /images/posts/2023-12-04/cover.jpg
 describe: After the college entrance examination, everything seems to have returned to normal. Of course, the "post-college entrance examination era" seems to be quite different from the descriptions of the elders in the past and our own fantasies. So, 180 days after the college entrance examination, how are we doing?
 language: en
+hide: true
 ---
 ## Introduction
 

@@ -5,6 +5,11 @@ import { Post, PostPreview } from '@/types'
 
 const postsDirectory = path.join(process.cwd(), 'src/posts')
 
+// 文章 front matter 中写 `hide: true` 即可隐藏：不出现在列表中，链接访问返回 404
+function isHidden(data: { [key: string]: any }): boolean {
+  return data.hide === true || data.hide === 'true'
+}
+
 function formatDate(dateString: string | undefined): string {
   if (!dateString) return ''
   try {
@@ -29,6 +34,7 @@ export function getAllPosts(): Post[] {
       const fullPath = path.join(postsDirectory, fileName)
       const fileContents = fs.readFileSync(fullPath, 'utf8')
       const matterResult = matter(fileContents)
+      if (isHidden(matterResult.data)) return null
 
       const tags = matterResult.data.tags ? matterResult.data.tags.split(' ') : []
 
@@ -45,6 +51,7 @@ export function getAllPosts(): Post[] {
 
       return post
     })
+    .filter((post): post is Post => post !== null)
 
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1))
 }
@@ -63,6 +70,10 @@ export function getPostData(slug: string, language: string): Post | undefined {
 
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   const matterResult = matter(fileContents)
+
+  if (isHidden(matterResult.data)) {
+    return undefined
+  }
 
   const tags = matterResult.data.tags ? matterResult.data.tags.split(' ') : []
 
@@ -85,8 +96,7 @@ export function getPostData(slug: string, language: string): Post | undefined {
 }
 
 export function getAllPostSlugs(): string[] {
-  const fileNames = fs.readdirSync(postsDirectory)
-  return fileNames.map(fileName => fileName.replace(/\.md$/, ''))
+  return getAllPosts().map(post => post.slug)
 }
 
 export function getAllTags(): string[] {

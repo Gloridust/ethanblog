@@ -25,14 +25,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const isProduction = process.env.NODE_ENV === 'production'
 
     res.setHeader('Set-Cookie', [
-      `${COOKIE_NAME}=${token}; Path=/resume; HttpOnly; SameSite=Strict; Max-Age=86400${isProduction ? '; Secure' : ''}`,
+      `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400${isProduction ? '; Secure' : ''}`,
     ])
     return res.status(200).json({ ok: true })
   }
 
   if (req.method === 'DELETE') {
     res.setHeader('Set-Cookie', [
-      `${COOKIE_NAME}=; Path=/resume; HttpOnly; SameSite=Strict; Max-Age=0`,
+      `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`,
     ])
     return res.status(200).json({ ok: true })
   }
